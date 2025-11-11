@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logo from "../assets/logo.png";
 import { Link, useLocation } from "react-router-dom";
 import LoginPopup from "../components/LoginPopup";
 import SignupPopup from "../components/SignupPopup";
@@ -57,7 +58,7 @@ export default function Header() {
         >
           <Link to="/">
             <img
-              src="/src/assets/logo.png"
+              src={logo}
               alt="logo"
               style={{
                 width: "221px",

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import gemini from '../assets/gemini.png';
 import { motion } from "framer-motion";
 
 export default function SubtleScroll() {
@@ -67,8 +68,8 @@ export default function SubtleScroll() {
       />
           {/* Left Image */}
           <img
-            src="/src/assets/gemini.png"
-            alt="Gemini"
+            src={gemini}
+            alt="gemini"
             style={{
               width: "514px",
               height: "488px",
