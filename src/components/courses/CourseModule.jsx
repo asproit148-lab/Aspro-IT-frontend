@@ -81,107 +81,116 @@ export default function CourseModule({ skills, modules, faqs }) {
       </div>
 
       {/* Modules Section */}
-      <div style={{ padding: "0px 86px", width: "1250px" }}>
-        <h2
+<div style={{ padding: "0px 86px", width: "1250px" }}>
+  <h2
+    style={{
+      fontSize: "36px",
+      fontWeight: 600,
+      color: "#FFFFFF",
+      marginBottom: 0,
+      marginTop: 0,
+    }}
+  >
+    Course Syllabus
+  </h2>
+  <p
+    style={{
+      fontSize: "16px",
+      marginTop: "8px",
+      marginBottom: "12px",
+      color: "rgba(255,255,255,0.8)",
+    }}
+  >
+    Prepare for a new career in the high-growth field of Python programming.
+  </p>
+
+  {modules.map((module, index) => (
+    <div
+      key={index}
+      style={{
+        borderBottom: "1px solid transparent",
+        borderImage: "linear-gradient(90deg, #CB46DB, #8A38F5) 1",
+        padding: "6px 0",
+      }}
+    >
+      <div
+        onClick={() => setOpenModule(openModule === index ? null : index)}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          cursor: "pointer",
+          transition: "0.3s",
+        }}
+      >
+        <h3
           style={{
-            fontSize: "36px",
-            fontWeight: 600,
+            fontSize: "24px",
+            fontWeight: 700,
             color: "#FFFFFF",
-            marginBottom: 0,
-            marginTop: 0,
           }}
         >
-          Course Syllabus
-        </h2>
-        <p
+          {module.module_name}
+        </h3>
+
+        <div
           style={{
-            fontSize: "16px",
-            marginTop: "8px",
-            marginBottom: "12px",
-            color: "rgba(255,255,255,0.8)",
+            width: "36px",
+            height: "36px",
+            borderRadius: "50%",
+            background: "linear-gradient(180deg, #CB46DB 0%, #8A38F5 100%)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 0 10px rgba(138, 56, 245, 0.5)",
           }}
         >
-          Prepare for a new career in the high-growth field of Python programming.
-        </p>
-
-        {modules.map((module, index) => (
-          <div
-            key={index}
-            style={{
-              borderBottom: "1px solid transparent",
-              borderImage: "linear-gradient(90deg, #CB46DB, #8A38F5) 1",
-              padding: "6px 0",
-            }}
-          >
-            <div
-              onClick={() =>
-                setOpenModule(openModule === index ? null : index)
-              }
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                cursor: "pointer",
-                transition: "0.3s",
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: "24px",
-                  fontWeight: 700,
-                  color: "#FFFFFF",
-                }}
-              >
-                {module.title}
-              </h3>
-
-              <div
-                style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "50%",
-                  background:
-                    "linear-gradient(180deg, #CB46DB 0%, #8A38F5 100%)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 0 10px rgba(138, 56, 245, 0.5)",
-                }}
-              >
-                {openModule === index ? (
-                  <ChevronUp size={20} color="#fff" />
-                ) : (
-                  <ChevronDown size={20} color="#fff" />
-                )}
-              </div>
-            </div>
-
-            {openModule === index && (
-              <ul
-                style={{
-                  marginTop: "8px",
-                  marginLeft: "16px",
-                  paddingLeft: "8px",
-                  listStyleType: "disc",
-                }}
-              >
-                {module.topics.map((topic, tIndex) => (
-                  <li
-                    key={tIndex}
-                    style={{
-                      marginBottom: "4px",
-                      fontSize: "18px",
-                      color: "rgba(255,255,255,0.85)",
-                    }}
-                  >
-                    {topic}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
+          {openModule === index ? (
+            <ChevronUp size={20} color="#fff" />
+          ) : (
+            <ChevronDown size={20} color="#fff" />
+          )}
+        </div>
       </div>
+
+      {openModule === index && (
+        <ul
+          style={{
+            marginTop: "8px",
+            marginLeft: "16px",
+            paddingLeft: "8px",
+            listStyleType: "disc",
+          }}
+        >
+          {Array.isArray(module.module_description)
+            ? module.module_description.map((topic, tIndex) => (
+                <li
+                  key={tIndex}
+                  style={{
+                    marginBottom: "4px",
+                    fontSize: "18px",
+                    color: "rgba(255,255,255,0.85)",
+                  }}
+                >
+                  {topic}
+                </li>
+              ))
+            : (
+                <li
+                  style={{
+                    marginBottom: "4px",
+                    fontSize: "18px",
+                    color: "rgba(255,255,255,0.85)",
+                  }}
+                >
+                  {module.module_description}
+                </li>
+              )}
+        </ul>
+      )}
+    </div>
+  ))}
+</div>
 
       {/* Reviews */}
       <div

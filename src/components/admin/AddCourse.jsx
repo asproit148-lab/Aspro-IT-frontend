@@ -96,12 +96,11 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
   };
 
   const addModule = () => {
-    if (!moduleTitle.trim()) {
-      setError("Module title required to add module.");
+    if (!moduleTitle.trim() || !moduleDescriptions[0].trim()) {
+      setError("Module title and desc required to add module.");
       return;
     }
-    const cleanedDescriptions = moduleDescriptions.map((d) => d.trim()).filter(Boolean);
-    const newModule = { id: Date.now(), title: moduleTitle.trim(), descriptions: cleanedDescriptions };
+    const newModule = { id: Date.now(), module_name: moduleTitle.trim(), module_description: moduleDescriptions.join(" • ") };
     setModules((prev) => [...prev, newModule]);
     setModuleTitle("");
     setModuleDescriptions([""]);
@@ -538,13 +537,10 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
                     <div key={m.id} style={{ padding: "10px", background: "#222222", borderRadius: "10px", display: "flex", justifyContent: "space-between", gap: "12px" }}>
                       <div>
                         <div style={{ color: "#FFFFFF", fontWeight: 600 }}>{m.title}</div>
-                        <div style={{ color: "#C9C9C9", marginTop: "6px" }}>
-                          {m.descriptions.map((d, i) => (
-                            <div key={i} style={{ fontSize: "13px", marginBottom: "6px" }}>
-                              • {d}
-                            </div>
-                          ))}
-                        </div>
+                        <div style={{ color: "#C9C9C9", marginTop: "6px", fontSize: "13px" }}>
+  {m.module_description}
+</div>
+
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                         <button
@@ -633,7 +629,7 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
             </div>
           )}
 
-          {/* STEP 4 - FAQS & SKILLS */}
+          {/* STEP 4 - FAQS */}
           {step === 4 && (
             <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
               {/* left - FAQs */}
@@ -769,8 +765,8 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
                     {modules.length === 0 && <div style={{ color: "#C9C9C9" }}>No modules added.</div>}
                     {modules.map((m) => (
                       <div key={m.id} style={{ background: "#222222", padding: "10px", borderRadius: "8px" }}>
-                        <div style={{ color: "#FFFFFF", fontWeight: 600 }}>{m.title}</div>
-                        <div style={{ color: "#C9C9C9", marginTop: "6px" }}>{m.descriptions.join(" • ")}</div>
+                        <div style={{ color: "#FFFFFF", fontWeight: 600 }}>{m.module_name}</div>
+                        <div style={{ color: "#C9C9C9", marginTop: "6px" }}>{m.module_description}</div>
                       </div>
                     ))}
                   </div>
