@@ -16,6 +16,10 @@ export const totalCourse = async () => {
   const res = await axios.get(`${API}/total-courses`, { withCredentials: true });
   return res.data;
 };
+export const totalEnrollments = async () => {
+  const res = await axios.get(`${API}/total-enrollment`, { withCredentials: true });
+  return res.data;
+};
 
 // Get All Courses
 export const getAllCourses = async () => {

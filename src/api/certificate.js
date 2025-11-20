@@ -7,10 +7,36 @@ const config = {
 };
 
 // Generate Certificate
-export const generateCertificate = async (data) => {
-  const res = await axios.post(`${API}/generate`, data, config);
-  return res.data;
+export const downloadCertificate = async (data) => {
+  try {
+    const response = await axios.post(
+      `${API}/download`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        responseType: "blob", // VERY IMPORTANT
+      }
+    );
+
+    // Convert blob to a download link
+    const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+
+    const link = document.createElement("a");
+    link.href = fileURL;
+    link.setAttribute("download", `${data.name}_certificate.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    window.URL.revokeObjectURL(fileURL);
+  } catch (err) {
+    console.error("Certificate download error:", err);
+    alert("Failed to download certificate.");
+  }
 };
+
 
 // Get Logged-in User Certificates
 export const getMyCertificates = async () => {
@@ -18,14 +44,7 @@ export const getMyCertificates = async () => {
   return res.data;
 };
 
-// Download Certificate (gets file blob)
-export const downloadCertificate = async (certificateId) => {
-  const res = await axios.get(`${API}/download/${certificateId}`, {
-    ...config,
-    responseType: "blob",
-  });
-  return res;
-};
+
 
 // Get Certificate by ID
 export const getCertificateById = async (certificateId) => {

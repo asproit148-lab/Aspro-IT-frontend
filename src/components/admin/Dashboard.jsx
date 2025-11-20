@@ -1,22 +1,27 @@
-// src/components/admin/Dashboard.jsx
 import React,{useState,useEffect} from "react";
 import { BookOpen, Megaphone, Users } from "lucide-react";
-import { totalCourse } from "../../api/course";
-export default function Dashboard({ courses = [], campaigns = [], enrollments = [] }) {
+import { totalCourse,totalEnrollments } from "../../api/course";
+import { totalBanners } from "../../api/campaign";
+export default function Dashboard() {
     const [totalCourses, setTotalCourses] = useState(0);
+    const [enrollment, setEnrollment] = useState(0);
+    const [banners, setBanners] = useState(0);
 
-    const fetchTotalCourses = async () => {
+    const fetchDetails = async () => {
       try {
         const data = await totalCourse();
-        console.log("Total courses data:", data);
+        const enrollmentData = await totalEnrollments();
+        const bannersData = await totalBanners();
+        setEnrollment(enrollmentData.total || 0);
         setTotalCourses(data.total || 0);
+        setBanners(bannersData.data.total || 0);
       } catch (err) {
         console.error("Error fetching total courses:", err);
       }
     };
 
     useEffect(() => {
-      fetchTotalCourses();
+      fetchDetails();
     }, []);
   
   const stats = [
@@ -27,12 +32,12 @@ export default function Dashboard({ courses = [], campaigns = [], enrollments = 
     },
     {
       label: "Active Campaigns",
-      value: campaigns.length,
+      value: banners,
       icon: <Megaphone size={22} color="#FFFFFF" />,
     },
     {
       label: "Total Enrollment",
-      value: enrollments.length, 
+      value: enrollment,
       icon: <Users size={22} color="#FFFFFF" />,
     },
   ];

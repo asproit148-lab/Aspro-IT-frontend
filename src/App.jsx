@@ -52,7 +52,7 @@ export default function App() {
           <Route path="/blogs/gen-ai" element={<GenAIBlog />} />
 
           <Route path="/courses/:courseSlug" element={<CourseDetails />} />
-          <Route path="/courses/enrollment" element={<Enrollment />} />
+          <Route path="/  " element={<Enrollment />} />
           <Route path="/courses/enrollment-successful" element={<ConfirmedEnroll />} />
           <Route path="/courses/payment-failed" element={<PaymentFail />} />
 

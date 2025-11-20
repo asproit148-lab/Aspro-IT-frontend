@@ -29,3 +29,11 @@ export const deleteResource = async (resourceId) => {
   const res = await axios.delete(`${API}/delete-resource/${resourceId}`, config);
   return res.data;
 };
+
+export const downloadResource = async (resourceId) => {
+  const res = await axios.get(`${API}/download-resource/${resourceId}`, {
+    ...config,
+    responseType: 'blob', 
+  });
+  return res.data;
+};

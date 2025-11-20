@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import bg from "../assets/homeBg.jpg";
-
+import { downloadCertificate } from "../api/certificate";
 export default function Certificates() {
   const [name, setName] = useState("");
   const [enrollId, setEnrollId] = useState("");
 
-  const handleDownload = () => {
+  const handleDownload = async() => {
     if (!name || !enrollId) {
       alert("Please enter your Name and Enrollment ID.");
       return;
     }
+
+    await downloadCertificate({ name, enrollmentId: enrollId });
   };
 
   return (
