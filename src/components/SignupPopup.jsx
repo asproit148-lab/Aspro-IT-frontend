@@ -234,20 +234,25 @@ export default function SignupPopup({ onClose }) {
         </button>
 
         <GoogleLogin
-          onSuccess={async (res) => {
-            setLoading(true);
-            const token = res.credential;
-            const response = await signInWithGoogle(token);
-            if (!response.success) {
-              alert(response.message || "Google login failed");
-            } else {
-              alert("Signup/Login Successful!");
-              onClose();
-            }
-            setLoading(false);
-          }}
-          onError={() => alert("Google login failed")}
-        />
+  onSuccess={async (res) => {
+    setLoading(true);
+    const googleToken = res.credential;
+
+    const response = await signInWithGoogle(googleToken);
+
+    if (!response.success) {
+      alert(response.message || "Google login failed");
+      setLoading(false);
+      return;
+    }
+
+    alert("Google Login Successful!");
+    onClose();
+    setLoading(false);
+  }}
+  onError={() => alert("Google login failed")}
+/>
+
       </div>
     </div>
   );

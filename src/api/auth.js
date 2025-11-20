@@ -8,7 +8,10 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-
+export const googleAuth = async (googleToken) => {
+  const res = await api.post("/google", {token:googleToken });
+  return res.data;
+};
 // Register
 export const registerUser = async (data) => {
   const res = await api.post("/register", data);

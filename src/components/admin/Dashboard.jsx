@@ -1,12 +1,28 @@
 // src/components/admin/Dashboard.jsx
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { BookOpen, Megaphone, Users } from "lucide-react";
-
+import { totalCourse } from "../../api/course";
 export default function Dashboard({ courses = [], campaigns = [], enrollments = [] }) {
+    const [totalCourses, setTotalCourses] = useState(0);
+
+    const fetchTotalCourses = async () => {
+      try {
+        const data = await totalCourse();
+        console.log("Total courses data:", data);
+        setTotalCourses(data.total || 0);
+      } catch (err) {
+        console.error("Error fetching total courses:", err);
+      }
+    };
+
+    useEffect(() => {
+      fetchTotalCourses();
+    }, []);
+  
   const stats = [
     {
       label: "Active Courses",
-      value: courses.length,
+      value: totalCourses,
       icon: <BookOpen size={22} color="#FFFFFF" />,
     },
     {

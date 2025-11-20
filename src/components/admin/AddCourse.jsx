@@ -158,13 +158,18 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
 
     // Image upload
     if (file) {
-      formData.append("imageUrl", file); 
+      formData.append("imageFile", file); 
     }
 
     try {
+          console.log("Sending course data...");
+
       const res = await addCourse(formData);
 
       alert("Course added successfully!");
+        if (onSave && res.course) {
+      onSave(res.course); // This should include the real imageUrl from Cloudinary
+    }
       onClose();
     } catch (err) {
       console.error("Error adding course:", err);

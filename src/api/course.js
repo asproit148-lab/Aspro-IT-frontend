@@ -12,6 +12,10 @@ export const addCourse = async (data) => {
   const res = await axios.post(`${API}/add-Course`, data, formConfig);
   return res.data;
 };
+export const totalCourse = async () => {
+  const res = await axios.get(`${API}/total-courses`, { withCredentials: true });
+  return res.data;
+};
 
 // Get All Courses
 export const getAllCourses = async () => {
