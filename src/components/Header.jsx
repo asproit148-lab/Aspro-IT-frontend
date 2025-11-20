@@ -20,7 +20,6 @@ import {
 
 export default function Header() {
   const { user, signOut } = useAuth();
-  const slugify = (title) => title.trim().toLowerCase().replace(/\s+/g, "-");
 
   const location = useLocation();
   const isHomePage = location.pathname === "/" || location.pathname === "/home";
@@ -256,8 +255,7 @@ export default function Header() {
   .map((course, index) => (
     <Link
       key={course._id}
-      to={`/courses/${slugify(course.Course_title || "untitled-course")}`}
-      state={{ course }}
+      to={`/courses/${course._id}`}
       style={{
         width: "227px",
         height: "36px",

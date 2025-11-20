@@ -24,10 +24,8 @@ export const getAllCourses = async () => {
 };
 
 // Get Single Course
-export const getCourse = async (courseId) => {
-  const res = await axios.get(`${API}/course-info/${courseId}`, {
-    withCredentials: true,
-  });
+export const getCourseById = async (courseId) => {
+  const res = await axios.get(`${API}/course-info/${courseId}`);
   return res.data;
 };
 
