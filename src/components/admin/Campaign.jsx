@@ -1,28 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Plus, Trash2 } from "lucide-react";
-import blog1 from "../../assets/blog1.png";
-import blog2 from "../../assets/blog2.jpg";
 import AddCampaign from "./AddCampaign";
 
-export default function Campaign() {
-  const [campaigns, setCampaigns] = useState([
-    {img: blog1, title: "Black Friday Sale"},
-    {img: blog2, title: "New Year Career Boost"}
-  ]);
+import { getBanners, deleteBanner } from "../../api/campaign";
 
+export default function Campaign() {
+  const [campaigns, setCampaigns] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
 
+  useEffect(() => {
+  getBanners()
+    .then((res) => {
+      setCampaigns(
+        res.data.banners.map((b) => ({
+          id: b._id,
+          img: b.image,
+          title: b.title,
+        }))
+      );
+    })
+    .catch((err) => console.error("Error loading campaigns:", err));
+}, []);
+
+  // Add new campaign to UI
   const handleAddCampaign = (newCampaign) => {
-    if (!newCampaign.title || !newCampaign.image) return;
     setCampaigns((prev) => [...prev, newCampaign]);
     setShowAddModal(false);
   };
 
-  const handleDelete = (index) => {
-    if (window.confirm("Are you sure you want to delete this Campaign?")) {
-      setCampaigns((prev) => prev.filter((_, i) => i !== index));
-    }
-  };
+  // Delete
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this coupon?")) return;
+  try {
+    await deleteBanner(id);
+    setCampaigns((prev) => prev.filter((c) => c.id !== id));
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   return (
     <div
@@ -130,9 +145,9 @@ export default function Campaign() {
           width: "fit-content",
         }}
       >
-        {campaigns.map((campaign, index) => (
+        {campaigns.map((campaign) => (
           <div
-            key={index}
+            key={campaign.id}
             style={{
               width: "340px",
               height: "320px",
@@ -155,49 +170,45 @@ export default function Campaign() {
                 objectFit: "cover",
               }}
             />
-            <div>
-              <h3
-                style={{
-                  fontSize: "18px",
-                  fontWeight: 500,
-                  marginTop: "4px",
-                  marginBottom: "8px",
-                }}
-              >
-                {campaign.title}
-              </h3>
-            </div>
+
+            <h3
+              style={{
+                fontSize: "18px",
+                fontWeight: 500,
+                marginTop: "4px",
+                marginBottom: "8px",
+              }}
+            >
+              {campaign.title}
+            </h3>
 
             <div
               style={{
                 width: "100%",
                 height: "1px",
                 background: "rgba(255,255,255,0.1)",
-                marginBottom: "0px",
               }}
             ></div>
 
-            <div>
-              <button
-                onClick={() => handleDelete(index)}
-                style={{
-                  width: "80px",
-                  height: "34px",
-                  borderRadius: "10px",
-                  background: "#525252",
-                  color: "#E3E3E3",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "7px",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                <Trash2 size={20} />
-                Delete
-              </button>
-            </div>
+            <button
+              onClick={() => handleDelete(campaign.id)}
+              style={{
+                width: "80px",
+                height: "34px",
+                borderRadius: "10px",
+                background: "#525252",
+                color: "#E3E3E3",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "7px",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <Trash2 size={20} />
+              Delete
+            </button>
           </div>
         ))}
       </div>

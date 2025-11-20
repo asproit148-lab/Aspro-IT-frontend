@@ -257,7 +257,7 @@ export default function LiveLearning() {
                   onMouseLeave={(e) =>
                     (e.target.style.background = "#FFFFFFBF")
                   }
-                  onClick={() => navigate("/courses/enrollment")}
+                  onClick={() => navigate("/courses/enrollment", { state: { course: course.title, courseId: course._id } })}
                 >
                   Buy Now
                 </button>
@@ -275,6 +275,7 @@ export default function LiveLearning() {
           width: "260px",
           height: "60px",
           borderRadius: "20px",
+          border: "none",
           background: "rgba(255,255,255,0.25)",
           fontFamily: "Poppins, sans-serif",
           fontSize: "18px",

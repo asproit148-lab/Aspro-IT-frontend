@@ -237,7 +237,7 @@ export default function CourseModule({ skills, modules, faqs }) {
           alignItems: "center",
           gap: "50px",
           marginTop: "12px",
-          marginBottom: "20px",
+          marginBottom: "0",
         }}
       >
         <img
@@ -256,6 +256,9 @@ export default function CourseModule({ skills, modules, faqs }) {
           </h3>
           <p style={{ fontWeight: 300, fontSize: "14px", margin: "4px 0 0" }}>
             Pune
+          </p>
+          <p style={{ fontWeight: 400, fontSize: "18px", color: "#FFD700", marginTop: "10px" }}>
+            3.5 ⭐
           </p>
         </div>
       </div>
@@ -301,7 +304,7 @@ export default function CourseModule({ skills, modules, faqs }) {
           alignItems: "center",
           gap: "50px",
           marginTop: "12px",    
-          marginBottom: "20px",
+          marginBottom: "0",
         }}
       >
         <img
@@ -320,6 +323,9 @@ export default function CourseModule({ skills, modules, faqs }) {
           </h3>
           <p style={{ fontWeight: 300, fontSize: "14px", margin: "4px 0 0" }}>
             Dubai
+          </p>
+          <p style={{ fontWeight: 400, fontSize: "18px", color: "#FFD700", margin: "10px" }}>
+            4.5 ⭐
           </p>
         </div>
       </div>

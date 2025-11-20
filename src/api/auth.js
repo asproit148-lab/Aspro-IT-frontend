@@ -1,0 +1,42 @@
+// src/api/auth.js
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "http://localhost:3000/api/user", // your backend base
+  withCredentials: true, // **CRITICAL** to send/receive httpOnly cookies
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// Register
+export const registerUser = async (data) => {
+  const res = await api.post("/register", data);
+  return res.data;
+};
+
+// Login (backend sets cookies)
+export const loginUser = async (data) => {
+  const res = await api.post("/login", data);
+  return res.data;
+};
+
+// Get logged-in user info (requires cookie)
+export const getUserInfo = async () => {
+  const res = await api.get("/get-info");
+  return res.data;
+};
+
+// Logout (backend clears cookies). Protected route.
+export const logoutUser = async () => {
+  const res = await api.post("/logout");
+  return res.data;
+};
+
+// Refresh token (if you choose to call it manually)
+export const refreshToken = async () => {
+  const res = await api.post("/refresh-token");
+  return res.data;
+};
+
+export default api;

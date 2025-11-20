@@ -1,32 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Plus, Eye, Trash2 } from "lucide-react";
 import AddResource from "../../components/admin/AddResource";
+import {
+  addResource as addResourceAPI,
+  getAllResources,
+  deleteResource as deleteResourceAPI,
+} from "../../api/resource";
 
 export default function ResourceManagement() {
-  const [resources, setResources] = useState([
-    {
-      id: 1,
-      title: "Python Basics Notes",
-      description: "Comprehensive notes for Python beginners.",
-      link: "https://example.com/python-notes.pdf",
-    },
-    {
-      id: 2,
-      title: "Generative AI Study Guide",
-      description: "Detailed material covering key GenAI concepts.",
-      link: "https://example.com/genai-guide.pdf",
-    },
-  ]);
-
+  const [resources, setResources] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleAddResource = (newResource) => {
-    setResources((prev) => [...prev, newResource]);
+  // Fetch all resources from backend
+  const fetchResources = async () => {
+    try {
+      const allResources = await getAllResources(); // returns array directly
+      setResources(allResources);
+    } catch (err) {
+      console.error("Error fetching resources:", err);
+    }
   };
 
-  const handleDeleteResource = (id) => {
+  useEffect(() => {
+    fetchResources();
+  }, []);
+
+  const handleAddResource = async (newResource) => {
+    try {
+      const formData = new FormData();
+      formData.append("title", newResource.title);
+      formData.append("description", newResource.description);
+      formData.append("filePath", newResource.fileRaw);
+
+      const savedResourceData = await addResourceAPI(formData);
+      const savedResource = savedResourceData.resource; // backend returns { message, resource }
+      setResources((prev) => [...prev, savedResource]);
+    } catch (err) {
+      console.error("Error adding resource:", err);
+    }
+  };
+
+  const handleDeleteResource = async (id) => {
     if (window.confirm("Are you sure you want to delete this resource?")) {
-      setResources((prev) => prev.filter((res) => res.id !== id));
+      try {
+        await deleteResourceAPI(id);
+        setResources((prev) => prev.filter((res) => res._id !== id));
+      } catch (err) {
+        console.error("Error deleting resource:", err);
+      }
     }
   };
 
@@ -48,27 +69,10 @@ export default function ResourceManagement() {
     >
       {/* Heading */}
       <div>
-        <h1
-          style={{
-            fontWeight: 600,
-            fontSize: "36px",
-            color: "#FFFFFF",
-            marginLeft: "24px",
-            marginBottom: 0,
-          }}
-        >
+        <h1 style={{ fontWeight: 600, fontSize: "36px", color: "#FFFFFF", marginLeft: "24px", marginBottom: 0 }}>
           Resources
         </h1>
-        <p
-          style={{
-            fontWeight: 400,
-            fontSize: "16px",
-            color: "#FFFFFF",
-            opacity: 0.9,
-            marginTop: "4px",
-            marginLeft: "24px",
-          }}
-        >
+        <p style={{ fontWeight: 400, fontSize: "16px", color: "#FFFFFF", opacity: 0.9, marginTop: "4px", marginLeft: "24px" }}>
           Manage and access all course-related study materials and notes
         </p>
       </div>
@@ -90,19 +94,8 @@ export default function ResourceManagement() {
         }}
       >
         <div>
-          <p style={{ fontSize: "20px", fontWeight: 400, marginBottom: "2px" }}>
-            Total Resources
-          </p>
-          <p
-            style={{
-              fontSize: "24px",
-              fontWeight: 500,
-              marginTop: "0",
-              marginBottom: "10px",
-            }}
-          >
-            {resources.length}
-          </p>
+          <p style={{ fontSize: "20px", fontWeight: 400, marginBottom: "2px" }}>Total Resources</p>
+          <p style={{ fontSize: "24px", fontWeight: 500, marginTop: "0", marginBottom: "10px" }}>{resources.length}</p>
         </div>
 
         <button
@@ -138,7 +131,7 @@ export default function ResourceManagement() {
       >
         {resources.map((res) => (
           <div
-            key={res.id}
+            key={res._id}
             style={{
               width: "340px",
               minHeight: "150px",
@@ -154,22 +147,14 @@ export default function ResourceManagement() {
             }}
           >
             <div>
-              <h3
-                style={{
-                  fontSize: "18px",
-                  fontWeight: 500,
-                  marginBottom: "8px",
-                }}
-              >
-                {res.title}
-              </h3>
+              <h3 style={{ fontSize: "18px", fontWeight: 500, marginBottom: "8px" }}>{res.title}</h3>
               <p
                 style={{
                   fontSize: "15px",
                   color: "#C9C9C9",
                   lineHeight: "18px",
-                  whiteSpace: "normal", 
-                  wordWrap: "break-word", 
+                  whiteSpace: "normal",
+                  wordWrap: "break-word",
                   overflowWrap: "break-word",
                 }}
               >
@@ -177,16 +162,9 @@ export default function ResourceManagement() {
               </p>
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: "80px",
-                marginTop: "16px",
-              }}
-            >
+            <div style={{ display: "flex", justifyContent: "center", gap: "80px", marginTop: "16px" }}>
               <button
-                onClick={() => handleViewResource(res.link)}
+                onClick={() => handleViewResource(res.url)}
                 style={{
                   width: "130px",
                   height: "36px",
@@ -206,7 +184,7 @@ export default function ResourceManagement() {
               </button>
 
               <button
-                onClick={() => handleDeleteResource(res.id)}
+                onClick={() => handleDeleteResource(res._id)}
                 style={{
                   width: "100px",
                   height: "36px",

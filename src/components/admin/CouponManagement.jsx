@@ -1,39 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Edit3, Trash2, Plus } from "lucide-react";
-import AddCoupon from "./AddCoupon";
+import AddCoupon from "../../components/admin/AddCoupon";
+import { getAllCoupons, deleteCoupon } from "../../api/coupon";
 
 export default function CouponManagement() {
-  const [coupons, setCoupons] = useState([
-    { code: "WELCOME50", discount: "50%", expiry: "2025-12-31",},
-    { code: "HOLIDAY30", discount: "30%", expiry: "2025-11-30",},
-  ]);
+  const [coupons, setCoupons] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingData, setEditingData] = useState(null);
 
-  // Add / Edit Save
-  const handleSaveCoupon = (couponData) => {
-    if (editingIndex !== null) {
-      const updated = [...coupons];
-      updated[editingIndex] = couponData;
-      setCoupons(updated);
-    } else {
-      setCoupons([...coupons, couponData]);
-    }
-    setShowModal(false);
-    setEditingIndex(null);
-  };
-
-  // Delete Coupon
-  const handleDelete = (index) => {
-    if (window.confirm("Are you sure you want to delete this coupon?")) {
-      const updatedCoupons = coupons.filter((_, i) => i !== index);
-      setCoupons(updatedCoupons);
+  const loadCoupons = async () => {
+    try {
+      const res = await getAllCoupons();
+      setCoupons(res.coupons || []);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to load coupons");
     }
   };
 
-  // Edit Coupon
-  const handleEdit = (index) => {
-    setEditingIndex(index);
+  useEffect(() => {
+    loadCoupons();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this coupon?")) return;
+
+    try {
+      await deleteCoupon(id);
+      await loadCoupons();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete coupon");
+    }
+  };
+
+  const handleEdit = (coupon) => {
+    setEditingData(coupon);
     setShowModal(true);
   };
 
@@ -124,7 +126,7 @@ export default function CouponManagement() {
             transition: "all 0.3s ease",
           }}
           onClick={() => {
-            setEditingIndex(null);
+            setEditingData(null);
             setShowModal(true);
           }}
         >
@@ -164,9 +166,9 @@ export default function CouponManagement() {
         </div>
 
         {/* Rows */}
-        {coupons.map((coupon, index) => (
+        {coupons.map((coupon) => (
           <div
-            key={index}
+            key={coupon._id}
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1.5fr 1.5fr 1.5fr",
@@ -178,10 +180,10 @@ export default function CouponManagement() {
             }}
           >
             <span style={{ color: "#3D7EFF", fontWeight: 500 }}>
-              {coupon.code}
+              {coupon.Code}
             </span>
-            <span>{coupon.discount}</span>
-            <span>{coupon.expiry}</span>
+            <span>{coupon.Discount}</span>
+            <span>{coupon.Expiry_date?.split("T")[0]}</span>
 
             <div style={{ display: "flex", gap: "8px" }}>
               <button
@@ -196,7 +198,7 @@ export default function CouponManagement() {
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-                onClick={() => handleEdit(index)}
+                onClick={() => handleEdit(coupon)}
               >
                 <Edit3 size={14} color="#E3E3E3" />
               </button>
@@ -213,7 +215,7 @@ export default function CouponManagement() {
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-                onClick={() => handleDelete(index)}
+                onClick={() => handleDelete(coupon._id)}
               >
                 <Trash2 size={14} color="#E3E3E3" />
               </button>
@@ -227,10 +229,10 @@ export default function CouponManagement() {
         <AddCoupon
           onClose={() => {
             setShowModal(false);
-            setEditingIndex(null);
+            setEditingData(null);
           }}
-          onSave={handleSaveCoupon}
-          existingData={editingIndex !== null ? coupons[editingIndex] : null}
+          existingData={editingData}
+          onSaved={loadCoupons} 
         />
       )}
     </div>

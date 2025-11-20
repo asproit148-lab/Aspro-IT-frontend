@@ -1,10 +1,37 @@
-// src/components/LoginPopup.jsx
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import { useAuth } from "../context/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
 
-export default function LoginPopup({ onClose, onSignup }) {
-  const navigate = useNavigate();
+export default function LoginPopup({ onClose, setToken, onSignup }) {
+  const { signIn, signInWithGoogle } = useAuth();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await signIn({ email, password });
+      if (!res.success) {
+        alert(res.message || "Login failed");
+        return;
+      }
+      alert("Login Successful!");
+      onClose();
+    } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div
       style={{
@@ -68,6 +95,7 @@ export default function LoginPopup({ onClose, onSignup }) {
         >
           Welcome Back
         </h1>
+
         <p
           style={{
             fontFamily: "Poppins, sans-serif",
@@ -83,7 +111,7 @@ export default function LoginPopup({ onClose, onSignup }) {
           Login to your account to continue
         </p>
 
-        {/* Email Label */}
+        {/* Email */}
         <span
           style={{
             width: "100%",
@@ -100,6 +128,8 @@ export default function LoginPopup({ onClose, onSignup }) {
         <input
           type="email"
           placeholder="You@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           style={{
             width: "360px",
             height: "44px",
@@ -115,7 +145,7 @@ export default function LoginPopup({ onClose, onSignup }) {
           }}
         />
 
-        {/* Password Label */}
+        {/* Password */}
         <span
           style={{
             width: "100%",
@@ -132,6 +162,8 @@ export default function LoginPopup({ onClose, onSignup }) {
         <input
           type="password"
           placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           style={{
             width: "360px",
             height: "44px",
@@ -153,7 +185,7 @@ export default function LoginPopup({ onClose, onSignup }) {
             fontFamily: "Poppins, sans-serif",
             fontWeight: 600,
             fontSize: "16px",
-            border: "none", 
+            border: "none",
             cursor: "pointer",
             paddingTop: "8px",
             paddingBottom: "12px",
@@ -165,32 +197,28 @@ export default function LoginPopup({ onClose, onSignup }) {
           }}
           onMouseEnter={(e) => (e.target.style.border = "2px solid #FFFFFF")}
           onMouseLeave={(e) => (e.target.style.border = "1px solid #2A2A2A")}
+          onClick={handleLogin}
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
 
-        <button
-          style={{
-            width: "360px",
-            height: "44px",
-            color: "#434D5B",
-            borderRadius: "3.3px",
-            border: "1px solid #2A2A2A",
-            background: "#142339",
-            paddingTop: "4px",
-            paddingBottom: "16px",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "14px",
-            alignItems: "center",
-            fontWeight: 600,
-            outline: "none",
+        {/* Google login */}
+        <GoogleLogin
+          onSuccess={async (res) => {
+            setLoading(true);
+            const token = res.credential;
+            const response = await signInWithGoogle(token);
+            if (!response.success) {
+              alert(response.message || "Google login failed");
+            } else {
+              alert("Login Successful!");
+              onClose();
+            }
+            setLoading(false);
           }}
-          onMouseEnter={(e) => (e.target.style.border = "2px solid #FFFFFF")}
-          onMouseLeave={(e) => (e.target.style.border = "1px solid #2A2A2A")}
-        >
-          <FcGoogle size={22} />
-          {" "}Continue with Google
-        </button>
+          onError={() => alert("Google login failed")}
+        />
 
         <p
           style={{
@@ -202,12 +230,9 @@ export default function LoginPopup({ onClose, onSignup }) {
           }}
         >
           New user?{" "}
-        <span
-          style={{ color: "#12549C", cursor: "pointer" }}
-          onClick={onSignup}
-        >
-          Signup
-        </span>
+          <span style={{ color: "#12549C", cursor: "pointer" }} onClick={onSignup}>
+            Signup
+          </span>
         </p>
       </div>
     </div>

@@ -1,7 +1,51 @@
-// src/components/LearningExperience.jsx
 import { BookOpen, Clock, MessageCircle, Briefcase, UserCheck } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function LearningExperience() {
+  const navigate = useNavigate();
+
+  const featureItems = [
+    {
+      icon: <BookOpen size={36} color="white" />,
+      label: "Courses",
+      bg: "#8139E6",
+      width: "112px",
+      onClick: () => {
+        document.getElementById("live-learning")?.scrollIntoView({
+          behavior: "smooth",
+        });
+      },
+    },
+    {
+      icon: <Clock size={36} color="white" />,
+      label: "Self Material",
+      bg: "#A539E6",
+      width: "129px",
+      onClick: () => navigate("/resources"),
+    },
+    {
+      icon: <MessageCircle size={36} color="white" />,
+      label: "Mock Interview",
+      bg: "#E65C5C",
+      width: "135px",
+      onClick: () => navigate("/mock-interview"),
+    },
+    {
+      icon: <UserCheck size={36} color="white" />,
+      label: "Internship",
+      bg: "#C539E6",
+      width: "112px",
+      onClick: () => navigate("/internships"),
+    },
+    {
+      icon: <Briefcase size={36} color="white" />,
+      label: "Jobs",
+      bg: "#E63971",
+      width: "90px",
+      onClick: () => navigate("/jobs"),
+    },
+  ];
+
   return (
     <section
       style={{
@@ -69,16 +113,10 @@ export default function LearningExperience() {
           flexWrap: "wrap",
         }}
       >
-        {/* Card Item */}
-        {[
-          { icon: <BookOpen size={36} color="white" />, label: "Courses", bg: "#8139E6", width: "112px" },
-          { icon: <Clock size={36} color="white" />, label: "Self Material", bg: "#A539E6", width: "129px" },
-          { icon: <MessageCircle size={36} color="white" />, label: "Mock Interview", bg: "#E65C5C", width: "135px" },
-          { icon: <UserCheck size={36} color="white" />, label: "Internship", bg: "#C539E6", width: "112px" },
-          { icon: <Briefcase size={36} color="white" />, label: "Jobs", bg: "#E63971", width: "90px" },
-        ].map((item, index) => (
+        {featureItems.map((item, index) => (
           <div
             key={index}
+            onClick={item.onClick}
             style={{
               width: item.width,
               height: "108px",
@@ -87,14 +125,15 @@ export default function LearningExperience() {
               alignItems: "center",
               justifyContent: "center",
               gap: "8px",
-              borderRadius: "35px", 
+              borderRadius: "35px",
+              cursor: "pointer",
             }}
           >
             <div
               style={{
                 width: "70px",
                 height: "70px",
-                borderRadius: "50px", 
+                borderRadius: "50px",
                 background: item.bg,
                 display: "flex",
                 alignItems: "center",

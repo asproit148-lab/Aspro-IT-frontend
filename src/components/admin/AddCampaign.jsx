@@ -1,32 +1,41 @@
 import React, { useState } from "react";
 import { Upload } from "lucide-react";
+import { addBanner } from "../../api/campaign"; // using existing API wrapper
 
-export default function AddCampaign({ onClose, onSave,  }) {
+export default function AddCampaign({ onClose, onSave }) {
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onloadend = () => setImage(reader.result); // base64 stored here
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!title || !image) {
       alert("Please upload an image and enter a title.");
       return;
     }
 
-    const newCampaign = {
-      id: Date.now(),
-      title,
-      image,
-    };
+    try {
+      const payload = {
+        title,
+        image,
+      };
 
-    if (onSave) onSave(newCampaign);
-    onClose(); // close after successful save
+      const banner = await addBanner(payload); // API call
+      onSave(banner); // update parent UI
+      onClose();
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Failed to add campaign");
+    }
   };
 
   return (
@@ -55,21 +64,20 @@ export default function AddCampaign({ onClose, onSave,  }) {
           justifyContent: "space-between",
         }}
       >
-        {/* Heading */}
         <h2
           style={{
             fontFamily: "Poppins, sans-serif",
             fontWeight: 600,
             fontSize: "24px",
             color: "#FFFFFF",
-            textAlign: "left",
             marginBottom: "20px",
           }}
         >
           Add Campaigns
         </h2>
 
-        {/* Upload Image Section */}
+        {/* Upload Area */}
+
         <label
           htmlFor="campaign-image"
           style={{
@@ -123,6 +131,7 @@ export default function AddCampaign({ onClose, onSave,  }) {
         </label>
 
         {/* Title Input */}
+
         <div
           style={{
             width: "97%",
@@ -162,7 +171,6 @@ export default function AddCampaign({ onClose, onSave,  }) {
             marginTop: "30px",
           }}
         >
-          {/* Cancel */}
           <button
             onClick={onClose}
             style={{
@@ -181,7 +189,6 @@ export default function AddCampaign({ onClose, onSave,  }) {
             Cancel
           </button>
 
-          {/* Save */}
           <button
             onClick={handleSubmit}
             style={{

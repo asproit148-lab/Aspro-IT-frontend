@@ -1,27 +1,50 @@
-// src/components/admin/AddCoupon.jsx
 import React, { useState } from "react";
+import { addCoupon, editCoupon } from "../../api/coupon";
 
-export default function AddCoupon({ onClose, onSave, existingData }) {
-  const [code, setCode] = useState(existingData?.code || "");
-  const [discount, setDiscount] = useState(existingData?.discount || "");
-  const [expiry, setExpiry] = useState(existingData?.expiry || "");
+export default function AddCoupon({ onClose, existingData, onSaved }) {
+  const [code, setCode] = useState(existingData?.Code || "");
+  const [discount, setDiscount] = useState(existingData?.Discount || "");
+  const [expiry, setExpiry] = useState(existingData?.Expiry_date || "");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const isEditing = !!existingData?._id;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!code || !discount || !expiry) {
       alert("Please fill all fields.");
       return;
     }
 
-    const newCoupon = {
-      id: Date.now(),
-      code,
-      discount,
-      expiry,
+    const payload = {
+      Code: code,
+      Discount: Number(discount),
+      Expiry_date: expiry,
     };
 
-    if (onSave) onSave(newCoupon);
-    onClose(); // close after save
+    try {
+      setLoading(true);
+
+      if (isEditing) {
+        await editCoupon(existingData._id, payload);
+        alert("Coupon updated successfully!");
+      } else {
+        await addCoupon(payload);
+        alert("Coupon added successfully!");
+      }
+
+      if (typeof onSaved === "function") {
+        await onSaved(); 
+      }
+
+      onClose(); // close modal
+    } catch (error) {
+      console.error(error);
+      alert(error?.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -165,6 +188,7 @@ export default function AddCoupon({ onClose, onSave, existingData }) {
 
           <button
             onClick={handleSubmit}
+            disabled={loading}
             style={{
               width: "120px",
               height: "50px",
@@ -178,7 +202,7 @@ export default function AddCoupon({ onClose, onSave, existingData }) {
               cursor: "pointer",
             }}
           >
-            Save
+            {loading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>

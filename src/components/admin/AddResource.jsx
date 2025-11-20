@@ -3,6 +3,7 @@ import { Upload } from "lucide-react";
 
 export default function AddResource({ onClose, onSave, existingResource }) {
   const [file, setFile] = useState(existingResource?.file || "");
+  const [fileRaw, setFileRaw] = useState(null);
   const [fileName, setFileName] = useState(existingResource?.fileName || "");
   const [title, setTitle] = useState(existingResource?.title || "");
   const [description, setDescription] = useState(existingResource?.description || "");
@@ -11,6 +12,7 @@ export default function AddResource({ onClose, onSave, existingResource }) {
     const uploadedFile = e.target.files[0];
     if (uploadedFile) {
       setFile(URL.createObjectURL(uploadedFile)); // for preview/open
+      setFileRaw(uploadedFile); // raw file to send to backend
       setFileName(uploadedFile.name);
     }
   };
@@ -27,11 +29,11 @@ export default function AddResource({ onClose, onSave, existingResource }) {
       title,
       description,
       link: file,
+      fileRaw,
       fileName,
     };
 
     if (onSave) onSave(newResource);
-    onClose();
   };
 
   return (

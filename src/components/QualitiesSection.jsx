@@ -1,4 +1,48 @@
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { courses } from "../components/courses/CourseData";
+import { sendEnquiry } from "../api/email";
+
 export default function Qualities() {
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [isCoursesOpen, setIsCoursesOpen] = useState(false);
+  const [mode, setMode] = useState("");
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
+
+  const handleSubmit = async () => {
+    if (!name || !email || !mobile || !selectedCourse || !mode) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    try {
+      const data = {
+        name,
+        email,
+        phone_no: mobile,
+        course_name: selectedCourse,
+        Mode_of_training: mode,
+      };
+
+      const res = await sendEnquiry(data);
+
+      if (res.ok) {
+        alert("Enquiry sent successfully!");
+        setName("");
+        setEmail("");
+        setMobile("");
+        setSelectedCourse("");
+        setMode("");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong!");
+    }
+  };
+
   return (
     <section
       style={{
@@ -12,78 +56,7 @@ export default function Qualities() {
         fontFamily: "Poppins, sans-serif",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          gap: "24px",
-          justifyContent: "center",
-        }}
-      >
-        {/* Box 1 */}
-        <div
-          style={{
-            width: "407px",
-            height: "200px",
-            borderRadius: "36px",
-            background: "#BB93EF40",
-            border: "2px solid #BB97E9",
-            color: "#E5BBF4",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
-        <p style={{ fontSize: "40px", fontWeight: "700", lineHeight: "1" }}>
-          1500+ <br />
-          <span style={{ fontSize: "24px", fontWeight: "700" }}> Students Trained </span>
-        </p>
-        </div>
 
-        {/* Box 2 */}
-        <div
-          style={{
-            width: "407px",
-            height: "200px",
-            borderRadius: "36px",
-            background: "#B8159540",
-            border: "2px solid #CD60CC",
-            color: "#F8A1E8",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
-          <p style={{ fontSize: "40px", fontWeight: "700", lineHeight: "1" }}>
-          10+ <br />
-          <span style={{ fontSize: "24px", fontWeight: "700" }}> Hiring Partners </span>
-        </p>
-        </div>
-
-        {/* Box 3 */}
-        <div
-          style={{
-            width: "407px",
-            height: "200px",
-            borderRadius: "36px",
-            background: "#CB0E6040",
-            border: "2px solid #F64E9D",
-            color: "#E66896",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
-        <p style={{ fontSize: "40px", fontWeight: "700", lineHeight: "1" }}>
-          150+ <br />
-          <span style={{ fontSize: "24px", fontWeight: "700" }}> Courses Delivered </span>
-        </p>
-        </div>
-      </div>
-
-      {/* Section */}
       <div
         style={{
           display: "flex",
@@ -93,7 +66,7 @@ export default function Qualities() {
           gap: "60px",
         }}
       >
-        {/* Left Text */}
+        {/* Left Content */}
         <div
           style={{
             width: "622px",
@@ -109,7 +82,7 @@ export default function Qualities() {
           Ready to Transform Your Career with AsproIT?
         </div>
 
-        {/* Right Form Box */}
+        {/* Right Form */}
         <div
           style={{
             width: "622px",
@@ -134,7 +107,7 @@ export default function Qualities() {
             style={{
               fontSize: "32px",
               fontWeight: 600,
-              marginBottom: "25px",
+              marginBottom: "10px",
               marginLeft: "28px",
             }}
           >
@@ -143,10 +116,11 @@ export default function Qualities() {
 
           {/* Inputs */}
           <div style={{ display: "flex", gap: "18px" }}>
-            
             <input
               type="text"
               placeholder="Name:"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               style={{
                 width: "257px",
                 height: "45px",
@@ -156,9 +130,12 @@ export default function Qualities() {
                 outline: "none",
               }}
             />
+
             <input
               type="email"
               placeholder="Email:"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               style={{
                 width: "263px",
                 height: "45px",
@@ -172,8 +149,10 @@ export default function Qualities() {
 
           <div style={{ display: "flex", gap: "16px" }}>
             <input
-              type="text"
+              type="tel"
               placeholder="Mobile No:"
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
               style={{
                 width: "257px",
                 height: "45px",
@@ -183,39 +162,99 @@ export default function Qualities() {
                 outline: "none",
               }}
             />
-            <input
-              type="text"
-              placeholder="Course Name:"
-              style={{
-                width: "263px",
-                height: "45px",
-                borderRadius: "18px",
-                padding: "0 15px",
-                border: "none",
-                outline: "none",
-              }}
-            />
+
+            {/* Course Dropdown */}
+            <div style={{ position: "relative", width: "263px" }}>
+              <div
+                onClick={() => setIsCoursesOpen(!isCoursesOpen)}
+                style={{
+                  width: "263px",
+                  height: "45px",
+                  borderRadius: "18px",
+                  padding: "0 15px",
+                  border: "2px solid",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                }}
+              >
+                {selectedCourse || "Select a course"}
+                {isCoursesOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </div>
+
+              {isCoursesOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50px",
+                    width: "100%",
+                    background: "#343434",
+                    borderRadius: "8px",
+                    zIndex: 100,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {courses.map((course, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        setSelectedCourse(course.title);
+                        setIsCoursesOpen(false);
+                      }}
+                      style={{
+                        padding: "10px 15px",
+                        cursor: "pointer",
+                        color: "white",
+                        fontSize: "14px",
+                        borderBottom:
+                          index !== courses.length - 1 ? "1px solid #555" : "none",
+                      }}
+                    >
+                      {course.title}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
-          <input
-            type="text"
-            placeholder="Mode of Training:"
-            style={{
-              width: "555px",
-              height: "45px",
-              borderRadius: "18px",
-              padding: "0 15px",
-              border: "none",
-              outline: "none",
-            }}
-          />
+          {/* Mode Selection */}
+          <label style={{ fontWeight: 500, fontSize: "16px" }}>Mode of Training</label>
 
+          <div style={{ display: "flex", gap: "20px" }}>
+            <label style={{ display: "flex", gap: "5px", fontSize: "18px" }}>
+              <input
+                type="radio"
+                name="mode"
+                value="Online"
+                checked={mode === "Online"}
+                onChange={(e) => setMode(e.target.value)}
+              />
+              Online
+            </label>
+
+            <label style={{ display: "flex", gap: "5px", fontSize: "18px" }}>
+              <input
+                type="radio"
+                name="mode"
+                value="Offline"
+                checked={mode === "Offline"}
+                onChange={(e) => setMode(e.target.value)}
+              />
+              Offline
+            </label>
+          </div>
+
+          {/* Submit Button */}
           <button
+            onClick={handleSubmit}
             style={{
               width: "238px",
               height: "60px",
               borderRadius: "36px",
-              marginTop: "20px",
               border: "3px solid #FFFFFF",
               background: "transparent",
               color: "#FFFFFF",
@@ -223,27 +262,9 @@ export default function Qualities() {
               fontWeight: 500,
               cursor: "pointer",
               alignSelf: "center",
-              transition: "all 150ms linear",
-              padding: "18px 36px",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.width = "250px";
-              e.target.style.height = "68px";
-              e.target.style.fontSize = "18px";
-              e.target.style.padding = "22px 40px";
-              e.target.style.border = "3px solid #A86AFF";
-              e.target.style.boxShadow = "0px 0px 20px 0px #494949";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.width = "238px";
-              e.target.style.height = "60px";
-              e.target.style.fontSize = "16px";
-              e.target.style.padding = "18px 36px";
-              e.target.style.border = "3px solid #FFFFFF";
-              e.target.style.boxShadow = "none";
             }}
           >
-          Join Free Trial Class
+            Join Free Trial Class
           </button>
         </div>
       </div>

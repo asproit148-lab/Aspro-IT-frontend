@@ -1,54 +1,44 @@
-import React, { useState } from "react";
-import { Plus, Edit3, TagIcon, Trash2 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Plus, Edit3, Trash2 } from "lucide-react";
 import AddCourse from "../admin/AddCourse";
-import course1 from "../../assets/course1.png";
-import course2 from "../../assets/course2.png";
+import { getAllCourses, deleteCourse } from "../../api/course";
 
 export default function CourseManagement() {
-  const [courses, setCourses] = useState([
-    { image: course1, title: "Generative AI", cost: "2999", discount: "0", status: "active", type: "Live" },
-    { image: course2, title: "Data Analytics", cost: "2499", discount: "10", status: "active", type: "Recorded" },
-  ]);
-
+  const [courses, setCourses] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [editCourse, setEditCourse] = useState(null);
 
-  // Add or Update Course
-  const handleSaveCourse = (newCourse) => {
-    if (editCourse) {
-      // Update existing
-      setCourses((prev) =>
-        prev.map((course) =>
-          course.title === editCourse.title ? { ...course, ...newCourse } : course
-        )
-      );
-    } else {
-      // Add new
-      setCourses((prev) => [
-        ...prev,
-        {
-          ...newCourse,
-          image: newCourse.image || course1,
-          status: "active",
-        },
-      ]);
+  const fetchCourses = async () => {
+    try {
+      const data = await getAllCourses();
+      setCourses(data.courses || []);
+    } catch (err) {
+      console.error("Error loading courses:", err);
     }
-
-    setEditCourse(null);
-    setShowPopup(false);
   };
 
-  // Edit Course
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  // Edit
   const handleEditCourse = (course) => {
     setEditCourse(course);
     setShowPopup(true);
   };
 
-  // Delete Course
-  const handleDeleteCourse = (title) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this course?");
-    if (confirmDelete) {
-      setCourses((prev) => prev.filter((c) => c.title !== title));
+  // Delete from backend
+  const handleDeleteCourse = async (courseId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this course?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteCourse(courseId);
+      fetchCourses();
+    } catch (err) {
+      console.error("Delete error:", err);
     }
   };
 
@@ -162,10 +152,10 @@ export default function CourseManagement() {
       >
         {courses.map((course, index) => (
           <div
-            key={index}
+            key={course._id}
             style={{
               width: "340px",
-              height: "350px",
+              minHeight: "350px",
               background: "#343434",
               borderRadius: "20px",
               padding: "20px",
@@ -176,8 +166,8 @@ export default function CourseManagement() {
             }}
           >
             <img
-              src={course.image}
-              alt={course.title}
+              src={course.imageUrl}
+              alt={course.Course_title}
               style={{
                 width: "345px",
                 height: "179px",
@@ -185,6 +175,7 @@ export default function CourseManagement() {
                 objectFit: "cover",
               }}
             />
+
             <div>
               <div
                 style={{
@@ -200,7 +191,7 @@ export default function CourseManagement() {
                     marginBottom: "5px",
                   }}
                 >
-                  {course.title}
+                  {course.Course_title}
                 </h3>
                 <p
                   style={{
@@ -210,9 +201,10 @@ export default function CourseManagement() {
                     marginBottom: "5px",
                   }}
                 >
-                  ₹{course.cost}
+                  ₹{course.Course_cost}
                 </p>
               </div>
+
               <p
                 style={{
                   fontSize: "14px",
@@ -221,10 +213,10 @@ export default function CourseManagement() {
                   marginBottom: "12px",
                 }}
               >
-                {course.type} Course
+                {course.Course_type} Course
               </p>
 
-              {/* Status & Type */}
+              {/* Status (default active since backend doesn't send it) */}
               <div
                 style={{
                   display: "flex",
@@ -238,8 +230,7 @@ export default function CourseManagement() {
                     width: "60px",
                     height: "28px",
                     borderRadius: "10px",
-                    background:
-                      course.status === "active" ? "#129551" : "#373D48",
+                    background: "#129551",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -253,7 +244,7 @@ export default function CourseManagement() {
                       color: "#FFFFFF",
                     }}
                   >
-                    {course.status === "active" ? "Active" : "Ended"}
+                    Active
                   </span>
                 </div>
 
@@ -263,7 +254,7 @@ export default function CourseManagement() {
                     height: "28px",
                     borderRadius: "10px",
                     background:
-                      course.type === "Live" ? "#951212" : "#375B91",
+                      course.Course_type === "Online" ? "#951212" : "#375B91",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -277,7 +268,7 @@ export default function CourseManagement() {
                       color: "#FFFFFF",
                     }}
                   >
-                    {course.type}
+                    {course.Course_type}
                   </span>
                 </div>
               </div>
@@ -298,62 +289,61 @@ export default function CourseManagement() {
                   justifyContent: "space-between",
                 }}
               >
+                <button
+                  onClick={() => handleEditCourse(course)}
+                  style={{
+                    width: "80px",
+                    height: "34px",
+                    borderRadius: "10px",
+                    background: "#525252",
+                    color: "#E3E3E3",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "7px",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Edit3 size={20} />
+                  Edit
+                </button>
 
-                  <button
-                    onClick={() => handleEditCourse(course)}
-                    style={{
-                      width: "80px",
-                      height: "34px",
-                      borderRadius: "10px",
-                      background: "#525252",
-                      color: "#E3E3E3",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "7px",
-                      border: "none",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <Edit3 size={20} />
-                    Edit
-                  </button>
-
-                  <button
-                    onClick={() => handleDeleteCourse(course.title)}
-                    style={{
-                      width: "80px",
-                      height: "34px",
-                      borderRadius: "10px",
-                      background: "#525252",
-                      color: "#E3E3E3",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "7px",
-                      border: "none",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <Trash2 size={18} />
-                    Delete
-                  </button>
-                </div>
+                <button
+                  onClick={() => handleDeleteCourse(course._id)}
+                  style={{
+                    width: "80px",
+                    height: "34px",
+                    borderRadius: "10px",
+                    background: "#525252",
+                    color: "#E3E3E3",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "7px",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Trash2 size={18} />
+                  Delete
+                </button>
               </div>
             </div>
+          </div>
         ))}
       </div>
 
       {/* Popup */}
       {showPopup && (
         <AddCourse
-          onClose={() => {
-            setShowPopup(false);
-            setEditCourse(null);
-          }}
-          onSave={handleSaveCourse}
-          existingCourse={editCourse}
-        />
+  onClose={() => {
+    setShowPopup(false);
+    setEditCourse(null);
+    fetchCourses();   // 🔥 refresh after saving
+  }}
+  existingCourse={editCourse}
+/>
       )}
     </div>
   );

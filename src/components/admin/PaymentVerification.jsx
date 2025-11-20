@@ -1,26 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CircleCheckBig, CircleX } from "lucide-react";
-import blog1 from "../../assets/blog1.png";
-import blog2 from "../../assets/blog2.jpg";
+import { getPendingPayments, approvePayment, rejectPayment } from "../../api/payment";
 
 export default function PaymentVerification() {
-  const [pending, setPending] = useState([
-    { id: 1, image: blog1, course: "Python Bootcamp", ID: "STU1234" },
-    { id: 2, image: blog2, course: "AI & ML Foundations", ID: "STU5678" },
-  ]);
+  const [pending, setPending] = useState([]);
 
-  const [approved, setApproved] = useState([]);
+  useEffect(() => {
+    loadPending();
+  }, []);
 
-  const handleApprove = (student) => {
-    if (window.confirm("Confirm to approve payment?")) {
-      setApproved((prev) => [...prev, student]);
-      setPending((prev) => prev.filter((p) => p.id !== student.id));
-    }    
+  const loadPending = async () => {
+    try {
+      const res = await getPendingPayments();
+      setPending(res.payments || []);
+    } catch (err) {
+      console.log("Error fetching pending payments:", err);
+    }
   };
 
-  const handleReject = (id) => {
-    if (window.confirm("Reject this student's payment?")) {
-      setPending((prev) => prev.filter((p) => p.id !== id));
+  const handleApprove = async (paymentId) => {
+    if (!window.confirm("Confirm to approve payment?")) return;
+
+    try {
+      await approvePayment(paymentId);
+      loadPending();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to approve");
+    }
+  };
+
+  const handleReject = async (paymentId) => {
+    if (!window.confirm("Reject this student's payment?")) return;
+
+    try {
+      await rejectPayment(paymentId);
+      loadPending();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to reject");
     }
   };
 
@@ -80,12 +96,12 @@ export default function PaymentVerification() {
           paddingLeft: "30px",
         }}
       >
-          <div>
-            <p style={{ fontSize: "20px", marginBottom: "1px" }}>Pending Verifications</p>
-            <p style={{ fontSize: "24px", fontWeight: 500, margin: 0 }}>
-              {pending.length}
-            </p>
-          </div>
+        <div>
+          <p style={{ fontSize: "20px", marginBottom: "1px" }}>Pending Verifications</p>
+          <p style={{ fontSize: "24px", fontWeight: 500, margin: 0 }}>
+            {pending.length}
+          </p>
+        </div>
       </div>
 
       {/* Pending Cards */}
@@ -99,9 +115,9 @@ export default function PaymentVerification() {
           marginBottom: "100px",
         }}
       >
-        {pending.map((enroll) => (
+        {pending.map((item) => (
           <div
-            key={enroll.id}
+            key={item._id}
             style={{
               width: "340px",
               height: "350px",
@@ -115,8 +131,8 @@ export default function PaymentVerification() {
             }}
           >
             <img
-              src={enroll.image}
-              alt={enroll.course}
+              src={item.paymentScreenshot}
+              alt="proof"
               style={{
                 width: "100%",
                 height: "179px",
@@ -124,6 +140,7 @@ export default function PaymentVerification() {
                 objectFit: "cover",
               }}
             />
+
             <div>
               <h3
                 style={{
@@ -133,7 +150,7 @@ export default function PaymentVerification() {
                   marginBottom: "8px",
                 }}
               >
-                {enroll.course}
+                {item.courseId?.Course_title}
               </h3>
               <p
                 style={{
@@ -143,7 +160,7 @@ export default function PaymentVerification() {
                   margin: 0,
                 }}
               >
-                Enrollment ID: {enroll.ID}
+                Student: {item.userId?.name}
               </p>
             </div>
 
@@ -163,7 +180,7 @@ export default function PaymentVerification() {
               }}
             >
               <button
-                onClick={() => handleApprove(enroll)}
+                onClick={() => handleApprove(item._id)}
                 style={{
                   width: "100px",
                   height: "34px",
@@ -183,7 +200,7 @@ export default function PaymentVerification() {
               </button>
 
               <button
-                onClick={() => handleReject(enroll.id)}
+                onClick={() => handleReject(item._id)}
                 style={{
                   width: "100px",
                   height: "34px",

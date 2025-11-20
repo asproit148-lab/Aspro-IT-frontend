@@ -14,7 +14,7 @@ export const courses = [
     price: 8999,
     mode: "Live",
     originalPrice: 14999,
-    discount: "40% OFF",
+    discount: "40",
     skills: ["Python", "OOPs", "Data Structures", "APIs", "Error Handling", "File I/O"],
     modules: [
       {
@@ -48,7 +48,7 @@ export const courses = [
     price: 10999,
     mode: "Recorded",
     originalPrice: 17999,
-    discount: "39% OFF",
+    discount: "39",
     skills: ["Network Security", "Ethical Hacking", "Cryptography", "Firewalls"],
     modules: [
       {
@@ -78,7 +78,7 @@ export const courses = [
     subtitle: "Mastery Bootcamp",
     price: 10999,
     originalPrice: 17999,
-    discount: "39% OFF",
+    discount: "39",
     skills: ["Network Security", "Ethical Hacking", "Cryptography", "Firewalls"],
     modules: [
       {
@@ -108,7 +108,7 @@ export const courses = [
     subtitle: "Mastery Bootcamp",
     price: 10999,
     originalPrice: 17999,
-    discount: "39% OFF",
+    discount: "39",
     skills: ["Network Security", "Ethical Hacking", "Cryptography", "Firewalls"],
     modules: [
       {
@@ -137,7 +137,7 @@ export const courses = [
     subtitle: "Mastery Bootcamp",
     price: 10999,
     originalPrice: 17999,
-    discount: "39% OFF",
+    discount: "39",
     skills: ["Network Security", "Ethical Hacking", "Cryptography", "Firewalls"],
     modules: [
       {
@@ -167,7 +167,7 @@ export const courses = [
     subtitle: "Mastery Bootcamp",
     price: 10999,
     originalPrice: 17999,
-    discount: "39% OFF",
+    discount: "39",
     skills: ["Network Security", "Ethical Hacking", "Cryptography", "Firewalls"],
     modules: [
       {
@@ -197,7 +197,7 @@ export const courses = [
     subtitle: "Mastery Bootcamp",
     price: 10999,
     originalPrice: 17999,
-    discount: "39% OFF",
+    discount: "39",
     skills: ["Network Security", "Ethical Hacking", "Cryptography", "Firewalls"],
     modules: [
       {
@@ -227,7 +227,7 @@ export const courses = [
     subtitle: "Mastery Bootcamp",
     price: 10999,
     originalPrice: 17999,
-    discount: "39% OFF",
+    discount: "39",
     skills: ["Network Security", "Ethical Hacking", "Cryptography", "Firewalls"],
     modules: [
       {

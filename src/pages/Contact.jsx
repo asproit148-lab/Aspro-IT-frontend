@@ -2,22 +2,38 @@ import React, { useState } from "react";
 import Header from "../components/Header";
 import bg from "../assets/homeBg.jpg";
 import contactImg from "../assets/contact.png";
+import Footer from "../components/Footer";
+import { sendContact } from "../api/email";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
-    mobile: "",
+    phone_no: "",
     message: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Message sent successfully!");
-    setFormData({ name: "", mobile: "", message: "" });
+    setLoading(true);
+
+    try {
+      const res = await sendContact(formData);
+
+      alert(res.message || "Message sent successfully!");
+
+      setFormData({ name: "", mobile: "", message: "" });
+    } catch (error) {
+      console.error(error);
+      alert("Failed to send message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -89,6 +105,7 @@ export default function Contact() {
               placeholder="Name"
               value={formData.name}
               onChange={handleChange}
+              required
               style={{
                 width: "80%",
                 height: "50px",
@@ -103,11 +120,12 @@ export default function Contact() {
             />
 
             <input
-              type="text"
-              name="mobile"
+              type="tel"
+              name="phone_no"
               placeholder="Mobile Number"
-              value={formData.mobile}
+              value={formData.phone_no}
               onChange={handleChange}
+              required
               style={{
                 width: "80%",
                 height: "50px",
@@ -126,6 +144,7 @@ export default function Contact() {
               placeholder="Message"
               value={formData.message}
               onChange={handleChange}
+              required
               style={{
                 width: "78%",
                 height: "100px",
@@ -142,26 +161,28 @@ export default function Contact() {
 
             <button
               type="submit"
+              disabled={loading}
               style={{
                 width: "50%",
                 height: "50px",
                 borderRadius: "25px",
                 border: "none",
-                background: "#00A8FF",
+                background: loading ? "#555" : "#00A8FF",
                 color: "#FFFFFF",
                 fontSize: "18px",
                 fontWeight: 600,
-                cursor: "pointer",
+                cursor: loading ? "not-allowed" : "pointer",
                 transition: "0.3s",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "#0090DD")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "#00A8FF")}
+              onMouseEnter={(e) => !loading && (e.currentTarget.style.background = "#0090DD")}
+              onMouseLeave={(e) => !loading && (e.currentTarget.style.background = "#00A8FF")}
             >
-              Send Message
+              {loading ? "Sending..." : "Send Message"}
             </button>
           </form>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

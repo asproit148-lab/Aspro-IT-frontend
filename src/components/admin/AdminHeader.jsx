@@ -11,6 +11,7 @@ import {
   Tag,
   NotebookPen,
   FileText,
+  Briefcase,
   SquareUserRound,
 } from "lucide-react";
 
@@ -21,13 +22,14 @@ export default function AdminHeader() {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const navItems = [
-    { label: "Dashboard", icon: <LayoutDashboard size={22} />, path: "/admin/dashboard" },
-    { label: "Campaigns", icon: <Megaphone size={22} />, path: "/admin/campaigns" },
-    { label: "Course Listings", icon: <BookOpen size={22} />, path: "/admin/course-management" },
-    { label: "Coupons Management", icon: <Tag size={22} />, path: "/admin/coupon-management" },
-    { label: "Blogs Management", icon: <NotebookPen size={22} />, path: "/admin/blog-management" },
-    { label: "Payment Verification", icon: <BadgeIndianRupee size={22} />, path: "/admin/payment-verification"},
-    { label: "Resources", icon: <FileText size={22} />, path: "/admin/resource-management"},
+    { label: "Dashboard", icon: <LayoutDashboard size={25} />, path: "/admin/dashboard" },
+    { label: "Campaigns", icon: <Megaphone size={25} />, path: "/admin/campaigns" },
+    { label: "Course Listings", icon: <BookOpen size={25} />, path: "/admin/course-management" },
+    { label: "Coupons Management", icon: <Tag size={25} />, path: "/admin/coupon-management" },
+    { label: "Blogs Management", icon: <NotebookPen size={25} />, path: "/admin/blog-management" },
+    { label: "Payment Verification", icon: <BadgeIndianRupee size={25} />, path: "/admin/payment-verification"},
+    { label: "Resources", icon: <FileText size={25} />, path: "/admin/resource-management"},
+    { label: "Jobs & Internships", icon: <Briefcase size={25} />, path: "/admin/job-management"},
   ];
 
   return (
@@ -53,7 +55,7 @@ export default function AdminHeader() {
             left: "105px",
           }}
         >
-          <Link to="/">
+          <Link>
             <img
               src={logo}
               alt="logo"
@@ -143,16 +145,21 @@ export default function AdminHeader() {
           position: "fixed",
           top: "105px",
           left: 0,
-          width: "95px",
+          width: "100px",
           height: "calc(100vh - 105px)",
           backgroundColor: "#000000",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          paddingTop: "50px",
+          paddingTop: "40px",
+          paddingBottom: "60px",
+          gap: "8px",
           borderRight: "1px solid rgba(255,255,255,0.08)",
           boxShadow: "0px 0px 15px rgba(61, 150, 224, 0.4)",
           zIndex: 900,
+          overflowY: "auto",
+          scrollbarWidth: "thin",
+          scrollbarColor: "#25A2E1 rgba(255,255,255,0.1)",
         }}
       >
         {navItems.map((item, index) => {

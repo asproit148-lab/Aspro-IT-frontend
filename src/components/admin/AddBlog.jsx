@@ -1,35 +1,43 @@
-// src/components/admin/AddBlog.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Upload } from "lucide-react";
 
 export default function AddBlog({ onClose, onSave, existingBlog }) {
-  const [image, setImage] = useState(existingBlog?.image || "");
-  const [title, setTitle] = useState(existingBlog?.title || "");
-  const [description, setDescription] = useState(existingBlog?.description || "");
-  const [url, setUrl] = useState(existingBlog?.url || "");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (existingBlog) {
+      setTitle(existingBlog.title || "");
+      setDescription(existingBlog.description || "");
+      setPreview(existingBlog.image || "");
+    }
+  }, [existingBlog]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) setImage(URL.createObjectURL(file));
+    if (file) {
+      setSelectedFile(file);
+      setPreview(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title || !image || !description || !url) {
+
+    if (!title || !description || (!selectedFile && !existingBlog)) {
       alert("Please fill all fields.");
       return;
     }
 
-    const newBlog = {
-      id: Date.now(),
+    const blogData = {
       title,
       description,
-      image,
-      url
+      file: selectedFile,
     };
 
-    if (onSave) onSave(newBlog);
-    onClose();
+    onSave(blogData);
   };
 
   return (
@@ -52,13 +60,11 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
           background: "#1B1B1B",
           borderRadius: "20px",
           padding: "30px 40px",
-          boxShadow: "0px 8px 24px rgba(0,0,0,0.5)",
           display: "flex",
           flexDirection: "column",
           gap: "24px",
         }}
       >
-        {/* Heading */}
         <h2
           style={{
             fontFamily: "Poppins, sans-serif",
@@ -68,10 +74,9 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
             textAlign: "left",
           }}
         >
-          Add Blog
+          {existingBlog ? "Edit Blog" : "Add Blog"}
         </h2>
 
-        {/* Upload Image */}
         <label
           htmlFor="blog-image"
           style={{
@@ -88,9 +93,9 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
             overflow: "hidden",
           }}
         >
-          {image ? (
+          {preview ? (
             <img
-              src={image}
+              src={preview}
               alt="Preview"
               style={{
                 width: "100%",
@@ -115,6 +120,7 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
               </p>
             </>
           )}
+
           <input
             id="blog-image"
             type="file"
@@ -124,7 +130,6 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
           />
         </label>
 
-        {/* Title */}
         <input
           type="text"
           placeholder="Blog Title"
@@ -144,9 +149,8 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
           }}
         />
 
-        {/* Description */}
         <textarea
-          placeholder="Short Description"
+          placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           style={{
@@ -164,27 +168,6 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
           }}
         />
 
-        {/* URL */}
-        <input
-          type="text"
-          placeholder="URL"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          style={{
-            width: "96%",
-            height: "50px",
-            borderRadius: "30px",
-            border: "1px solid rgba(255,255,255,0.1)",
-            background: "#2E2E2E",
-            color: "#FFFFFF",
-            fontSize: "18px",
-            paddingLeft: "20px",
-            fontFamily: "Poppins, sans-serif",
-            outline: "none",
-          }}
-        />
-
-        {/* Buttons */}
         <div
           style={{
             display: "flex",

@@ -1,10 +1,32 @@
-// src/components/SignupPopup.jsx
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import { registerUser } from "../api/auth";
+import { useAuth } from "../context/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function SignupPopup({ onClose }) {
-  const navigate = useNavigate();
+  const { signInWithGoogle } = useAuth();
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = async () => {
+    if (!fullName || !email || !password) {
+      alert("Please fill all fields");
+      return;
+    }
+    try {
+      setLoading(true);
+      await registerUser({ name: fullName, email, password });
+      alert("Signup Successful! Please login.");
+      onClose();
+    } catch (err) {
+      alert(err?.response?.data?.message || err?.message || "Signup failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -38,7 +60,9 @@ export default function SignupPopup({ onClose }) {
           gap: "8px",
           boxSizing: "border-box",
         }}
+        onClick={(e) => e.stopPropagation()}
       >
+        {/* Close Button */}
         <span
           style={{
             position: "absolute",
@@ -53,6 +77,7 @@ export default function SignupPopup({ onClose }) {
         >
           ×
         </span>
+
         <h1
           style={{
             fontFamily: "Poppins, sans-serif",
@@ -60,22 +85,20 @@ export default function SignupPopup({ onClose }) {
             fontSize: "32px",
             color: "#FFFFFF",
             width: "360px",
-            height: "36px",
             textAlign: "center",
             marginTop: "10px",
-            marginBottom: "0",
+            marginBottom: 0,
           }}
         >
           welcome to Aspro IT
         </h1>
+
         <p
           style={{
             fontFamily: "Poppins, sans-serif",
             fontWeight: 600,
             fontSize: "16px",
             color: "#6D829F",
-            width: "286px",
-            height: "18px",
             textAlign: "center",
             marginTop: 0,
           }}
@@ -83,7 +106,7 @@ export default function SignupPopup({ onClose }) {
           signup to explore the courses
         </p>
 
-        {/* Name Field */}
+        {/* Full Name */}
         <p
           style={{
             fontFamily: "Poppins, sans-serif",
@@ -93,7 +116,6 @@ export default function SignupPopup({ onClose }) {
             alignSelf: "flex-start",
             marginLeft: "24px",
             marginBottom: 0,
-            marginTop: 0,
           }}
         >
           Full Name
@@ -101,6 +123,8 @@ export default function SignupPopup({ onClose }) {
         <input
           type="text"
           placeholder="Enter your full name"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
           style={{
             width: "360px",
             height: "44px",
@@ -116,7 +140,7 @@ export default function SignupPopup({ onClose }) {
           }}
         />
 
-        {/* Email Field */}
+        {/* Email */}
         <p
           style={{
             fontFamily: "Poppins, sans-serif",
@@ -133,6 +157,8 @@ export default function SignupPopup({ onClose }) {
         <input
           type="email"
           placeholder="You@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           style={{
             width: "360px",
             height: "44px",
@@ -148,7 +174,7 @@ export default function SignupPopup({ onClose }) {
           }}
         />
 
-        {/* Password Field */}
+        {/* Password */}
         <p
           style={{
             fontFamily: "Poppins, sans-serif",
@@ -165,6 +191,8 @@ export default function SignupPopup({ onClose }) {
         <input
           type="password"
           placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           style={{
             width: "360px",
             height: "44px",
@@ -180,7 +208,6 @@ export default function SignupPopup({ onClose }) {
           }}
         />
 
-        {/* Signup Button */}
         <button
           style={{
             width: "363px",
@@ -200,32 +227,27 @@ export default function SignupPopup({ onClose }) {
           }}
           onMouseEnter={(e) => (e.target.style.border = "2px solid #FFFFFF")}
           onMouseLeave={(e) => (e.target.style.border = "1px solid #2A2A2A")}
+          onClick={handleSignup}
+          disabled={loading}
         >
-          Signup
+          {loading ? "Signing up..." : "Signup"}
         </button>
 
-        <button
-          style={{
-            width: "360px",
-            height: "48px",
-            color: "#434D5B",
-            borderRadius: "3.3px",
-            border: "1px solid #2A2A2A",
-            background: "#142339",
-            paddingTop: "4px",
-            paddingBottom: "16px",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "14px",
-            alignItems: "center",
-            fontWeight: 600,
-            outline: "none",
+        <GoogleLogin
+          onSuccess={async (res) => {
+            setLoading(true);
+            const token = res.credential;
+            const response = await signInWithGoogle(token);
+            if (!response.success) {
+              alert(response.message || "Google login failed");
+            } else {
+              alert("Signup/Login Successful!");
+              onClose();
+            }
+            setLoading(false);
           }}
-          onMouseEnter={(e) => (e.target.style.border = "2px solid #FFFFFF")}
-          onMouseLeave={(e) => (e.target.style.border = "1px solid #2A2A2A")}
-        >
-          <FcGoogle size={22} />
-          {" "}Continue with Google
-        </button>
+          onError={() => alert("Google login failed")}
+        />
       </div>
     </div>
   );

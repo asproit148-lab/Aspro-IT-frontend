@@ -64,55 +64,7 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Subscribe */}
-        <div
-          style={{
-            width: "410px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
-          }}
-        >
-          <h3
-            style={{
-              fontWeight: 600,
-              fontSize: "24px",
-              color: "#FFFFFF",
-              margin: 0,
-            }}
-          >
-            Subscribe to Newsletter
-          </h3>
-          <div style={{ position: "relative", width: "100%" }}>
-            <input
-              type="email"
-              placeholder="Your email address"
-              style={{
-                width: "100%",
-                height: "56px",
-                borderRadius: "10px",
-                padding: "0 20px",
-                fontSize: "16px",
-                border: "3px solid #FFFFFF40",
-                background: "transparent",
-                color: "#FFFFFF",
-                outline: "none",
-              }}
-            />
-            <button
-              style={{
-                width: "105px", 
-                height: "40px", 
-                borderRadius: "36px", 
-                marginTop: "10px",
-                padding: "8px 12px", 
-                border: "1px solid #FFFFFF", background: "transparent", color: "#FFFFFF", fontWeight: 500, cursor: "pointer", transition: "all 0.3s ease",
-              }}
-            >
-              Submit
-            </button>
-          </div>
-        </div>
+        
       </div>
 
       {/* RIGHT SIDE (Address, Company, Contacts) */}

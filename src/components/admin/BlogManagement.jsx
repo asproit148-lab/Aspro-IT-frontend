@@ -1,31 +1,100 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Plus, Edit3, Trash2 } from "lucide-react";
 import AddBlog from "../../components/admin/AddBlog";
-import blog1 from "../../assets/blog1.png";
-import blog2 from "../../assets/blog2.jpg";
+
+// API
+import { addBlog, updateBlog, deleteBlog, getBlogs } from "../../api/blog";
 
 export default function BlogManagement() {
-  const [blogs, setBlogs] = useState([
-    { image: blog1, title: "Top 10 Skills in 2025", description: "Discover the most in-demand skills to future-proof your career.",},
-    { image: blog1, title: "Generative AI for Beginners", description: "A beginner’s guide to understanding and using Generative AI.",}
-  ]);
-
+  const [blogs, setBlogs] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [editingBlog, setEditingBlog] = useState(null);
 
-  const handleAddBlog = (newBlog) => {
-    setBlogs((prev) => [...prev, newBlog]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await getBlogs();
+
+        // Map backend fields to frontend UI fields
+        const formatted = (data.blogs || []).map((b) => ({
+          _id: b._id,
+          title: b.Blog_title,
+          description: b.Blog_content,
+          image: b.BlogImage || null,
+        }));
+
+        setBlogs(formatted);
+      } catch (err) {
+        console.error("Fetch blogs failed:", err);
+      }
+    })();
+  }, []);
+
+  // ADD BLOG
+  const handleAddBlog = async (blogData) => {
+    try {
+      const formData = new FormData();
+      formData.append("title", blogData.title);
+      formData.append("content", blogData.description);
+      formData.append("BlogImage", blogData.file);
+
+      const newBlog = await addBlog(formData);
+      const b = newBlog.Blog;
+
+      // Convert backend → frontend format
+      const formatted = {
+        _id: b._id,
+        title: b.Blog_title,
+        description: b.Blog_content,
+        image: b.BlogImage,
+      };
+
+      setBlogs((prev) => [...prev, formatted]);
+      setShowPopup(false);
+    } catch (err) {
+      alert("Blog creation failed");
+    }
   };
 
-  const handleEditBlog = (updatedBlog) => {
-    setBlogs((prev) =>
-      prev.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
-    );
+  // EDIT BLOG
+  const handleEditBlog = async (updatedBlog) => {
+    try {
+      const formData = new FormData();
+      formData.append("title", updatedBlog.title);
+      formData.append("content", updatedBlog.description);
+
+      if (updatedBlog.file) {
+        formData.append("BlogImage", updatedBlog.file);
+      }
+
+      const updated = await updateBlog(updatedBlog.id, formData);
+      const b = updated.blog;
+
+      const formatted = {
+        _id: b._id,
+        title: b.Blog_title,
+        description: b.Blog_content,
+        image: b.BlogImage,
+      };
+
+      setBlogs((prev) =>
+        prev.map((x) => (x._id === updatedBlog.id ? formatted : x))
+      );
+      setShowPopup(false);
+    } catch (err) {
+      alert("Blog update failed");
+    }
   };
 
-  const handleDeleteBlog = (id) => {
-    if (window.confirm("Are you sure you want to delete this blog?")) {
-      setBlogs((prev) => prev.filter((blog) => blog.id !== id));
+  // DELETE BLOG
+  const handleDeleteBlog = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this blog?")) return;
+
+    try {
+      await deleteBlog(id);
+      setBlogs((prev) => prev.filter((b) => b._id !== id));
+    } catch (err) {
+      alert("Blog deletion failed");
     }
   };
 
@@ -51,7 +120,6 @@ export default function BlogManagement() {
         minHeight: "100vh",
       }}
     >
-      {/* Heading */}
       <div>
         <h1
           style={{
@@ -79,7 +147,6 @@ export default function BlogManagement() {
         </p>
       </div>
 
-      {/* Top Bar */}
       <div
         style={{
           width: "1160px",
@@ -96,9 +163,19 @@ export default function BlogManagement() {
         }}
       >
         <div>
-          <p style={{ fontSize: "20px", fontWeight: 400, marginBottom: "2px" }}>Total Blogs</p>
-          <p style={{ fontSize: "24px", fontWeight: 500, marginTop: "0",
-              marginBottom: "10px", }}>{blogs.length}</p>
+          <p style={{ fontSize: "20px", fontWeight: 400, marginBottom: "2px" }}>
+            Total Blogs
+          </p>
+          <p
+            style={{
+              fontSize: "24px",
+              fontWeight: 500,
+              marginTop: 0,
+              marginBottom: "10px",
+            }}
+          >
+            {blogs.length}
+          </p>
         </div>
 
         <button
@@ -121,7 +198,7 @@ export default function BlogManagement() {
         </button>
       </div>
 
-      {/* Blog Cards */}
+      {/* CARDS */}
       <div
         style={{
           display: "grid",
@@ -134,7 +211,7 @@ export default function BlogManagement() {
       >
         {blogs.map((blog) => (
           <div
-            key={blog.id}
+            key={blog._id}
             style={{
               width: "340px",
               height: "350px",
@@ -148,7 +225,7 @@ export default function BlogManagement() {
             }}
           >
             <img
-              src={blog.image}
+              src={blog.image || "/fallback.jpg"}
               alt={blog.title}
               style={{
                 width: "100%",
@@ -157,6 +234,7 @@ export default function BlogManagement() {
                 objectFit: "cover",
               }}
             />
+
             <div>
               <h3
                 style={{
@@ -170,14 +248,19 @@ export default function BlogManagement() {
               </h3>
               <p
                 style={{
-                  fontSize: "13px",
-                  color: "#C9C9C9",
-                  marginBottom: "10px",
-                  lineHeight: "18px",
-                  whiteSpace: "normal", 
-                  wordWrap: "break-word", 
-                  overflowWrap: "break-word",
-                }}
+    fontSize: "13px",
+    color: "#C9C9C9",
+    marginBottom: "10px",
+    lineHeight: "18px",
+    whiteSpace: "normal",
+    overflow: "hidden",
+    display: "-webkit-box",
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: "vertical",
+    textOverflow: "ellipsis",
+    wordWrap: "break-word",
+    overflowWrap: "break-word",
+  }}
               >
                 {blog.description}
               </p>
@@ -219,7 +302,7 @@ export default function BlogManagement() {
               </button>
 
               <button
-                onClick={() => handleDeleteBlog(blog.id)}
+                onClick={() => handleDeleteBlog(blog._id)}
                 style={{
                   width: "80px",
                   height: "34px",
@@ -242,17 +325,15 @@ export default function BlogManagement() {
         ))}
       </div>
 
-      {/* Popup for Add/Edit */}
       {showPopup && (
         <AddBlog
           onClose={() => setShowPopup(false)}
           onSave={(blogData) => {
             if (editingBlog) {
-              handleEditBlog({ ...blogData, id: editingBlog.id });
+              handleEditBlog({ ...blogData, id: editingBlog._id });
             } else {
               handleAddBlog(blogData);
             }
-            setShowPopup(false);
           }}
           existingBlog={editingBlog}
         />

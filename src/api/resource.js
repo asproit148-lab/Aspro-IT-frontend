@@ -1,0 +1,31 @@
+import axios from "axios";
+
+const API = "http://localhost:3000/api/resources";
+const config = {
+  withCredentials: true,
+};
+
+// Add Resource
+export const addResource = async (data) => {
+  // data should be FormData for file upload
+  const res = await axios.post(`${API}/add-resource`, data, config);
+  return res.data;
+};
+
+// Get All Resources
+export const getAllResources = async () => {
+  const res = await axios.get(`${API}/all-resources`, config);
+  return res.data.resources; // return array directly
+};
+
+// Get Single Resource
+export const getResource = async (resourceId) => {
+  const res = await axios.get(`${API}/resource-info/${resourceId}`, config);
+  return res.data.resource; // return object directly
+};
+
+// Delete Resource
+export const deleteResource = async (resourceId) => {
+  const res = await axios.delete(`${API}/delete-resource/${resourceId}`, config);
+  return res.data;
+};

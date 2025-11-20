@@ -150,13 +150,13 @@ export default function CourseInfo({ course }) {
                 fontWeight: 500,
               }}
             >
-              {course.discount}
+              {course.discount}% OFF
             </div>
           </div>
 
           {/* Button */}
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <Link to="/courses/enrollment" style={{ textDecoration: "none" }}>
+            <Link to="/courses/enrollment" state={{ course: course.title, courseId: course._id }} style={{ textDecoration: "none" }}>
             <button
               style={{
                 width: "545px",
