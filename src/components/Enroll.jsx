@@ -9,6 +9,9 @@ export default function Enroll() {
   const navigate = useNavigate();
   const courseName = location.state?.course || "";
   const courseId = location.state?.courseId || "";
+  const price = location.state?.price || 0;
+  const originalPrice = location.state?.originalPrice || 0;
+const discount = location.state?.discount || 0;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -302,9 +305,9 @@ export default function Enroll() {
         <div style={{ width: "400px", height: "557px", borderRadius: "16px", background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)", boxShadow: "0px 4px 16px 0px #FFFFFF40", padding: "20px", display: "flex", flexDirection: "column" }}>
           {/* Prices */}
           <div style={{ display: "flex", alignItems: "baseline", gap: "20px", marginBottom: "5px", marginTop: "40px" }}>
-            <div style={{ fontSize: "48px", fontWeight: 700, color: "#FFFFFF" }}>₹2499</div>
-            <div style={{ fontSize: "24px", fontWeight: 700, color: "rgba(255,255,255,0.5)", textDecoration: "line-through" }}>₹3500</div>
-            <div style={{ marginLeft: "auto", width: "81px", height: "32px", borderRadius: "25px", color: "#0DA745", background: "#0DA74540", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", fontWeight: 700 }}>29% OFF</div>
+            <div style={{ fontSize: "48px", fontWeight: 700, color: "#FFFFFF" }}>₹{price}</div>
+            <div style={{ fontSize: "24px", fontWeight: 700, color: "rgba(255,255,255,0.5)", textDecoration: "line-through" }}>₹{originalPrice}</div>
+            <div style={{ marginLeft: "auto", width: "81px", height: "32px", borderRadius: "25px", color: "#0DA745", background: "#0DA74540", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", fontWeight: 700 }}>{discount}% OFF</div>
           </div>
 
           <p style={{ fontSize: "16px", fontWeight: 500, color: "#FF6969", marginBottom: "30px" }}>Sale ends in 24 hours!</p>
@@ -335,6 +338,7 @@ export default function Enroll() {
   open={showPaymentPopup}
   onClose={() => setShowPaymentPopup(false)}
   courseId={courseId}
+  price={price}
 />
     </div>
   );

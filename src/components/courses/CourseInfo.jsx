@@ -6,6 +6,7 @@ import project from '../../assets/project.png';
 import liveclass from '../../assets/liveclass.png';
 
 export default function CourseInfo({ course }) {
+  console.log("Course Info:", course);
   return (
     <div
       style={{
@@ -156,7 +157,16 @@ export default function CourseInfo({ course }) {
 
           {/* Button */}
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <Link to="/courses/enrollment" state={{ course: course.title, courseId: course._id }} style={{ textDecoration: "none" }}>
+            <Link
+  to="/courses/enrollment"
+  state={{
+    course: course.title,
+    courseId: course._id,
+    price: course.price,                  // final cost
+    originalPrice: course.originalPrice,  // original price
+    discount: course.discount            // discount
+  }}
+>
             <button
               style={{
                 width: "545px",

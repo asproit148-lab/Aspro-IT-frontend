@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import qrImg from "../assets/qr.jpeg";
 import loadingImg from "../assets/loading.png";
+import { applyCoupon } from "../api/coupon";
 
-export default function PaymentFlow({ open, onClose }) {
-  const [stage, setStage] = useState("qr"); // qr → proof → loading
+export default function PaymentFlow({ open, onClose, price }) {
+  const [stage, setStage] = useState("qr"); 
   const [coupon, setCoupon] = useState("");
   const [paymentFile, setPaymentFile] = useState(null);
+
+  const [finalPrice, setFinalPrice] = useState(price);
+  const [discountPercent, setDiscountPercent] = useState(0);
+  const [couponError, setCouponError] = useState("");
 
   if (!open) return null;
 
@@ -13,10 +18,33 @@ export default function PaymentFlow({ open, onClose }) {
     setStage("qr");
     setCoupon("");
     setPaymentFile(null);
+    setDiscountPercent(0);
+    setFinalPrice(price);
+    setCouponError("");
     onClose && onClose();
   };
 
-  // X BUTTON STYLE
+  const handleApply = async () => {
+  if (!coupon) return;
+
+  try {
+    const res = await applyCoupon({
+      Code: coupon,
+      amount: price,
+    });
+
+    if (res.success) {
+      setDiscountPercent(res.discountPercent);   // percentage
+      setFinalPrice(res.finalAmount);            // final price after discount
+      setCouponError("");
+    } else {
+      setCouponError(res.message || "Invalid coupon");
+    }
+  } catch (err) {
+    setCouponError("Invalid or expired coupon");
+  }
+};
+
   const closeBtn = (
     <button
       onClick={closeAll}
@@ -53,6 +81,7 @@ export default function PaymentFlow({ open, onClose }) {
         zIndex: 9999,
       }}
     >
+
       {/* ================= QR POPUP ================= */}
       {stage === "qr" && (
         <div
@@ -72,10 +101,33 @@ export default function PaymentFlow({ open, onClose }) {
 
           <h2 style={{ fontSize: "24px", fontWeight: 600 }}>Scan to Proceed</h2>
 
+          {/* PRICE SECTION */}
+          <p style={{ marginTop: "10px", fontSize: "18px", fontWeight: 600 }}>
+            Price: ₹{price}
+          </p>
+
+          {discountPercent > 0 && (
+            <p
+              style={{
+                marginTop: "6px",
+                fontSize: "18px",
+                fontWeight: 600,
+                color: "#4CAF50",
+              }}
+            >
+              After Discount ({discountPercent}%): ₹{finalPrice}
+            </p>
+          )}
+
           <img
             src={qrImg}
             alt="QR Code"
-            style={{ width: "244px", height: "237px", borderRadius: "30px", margin: "25px auto" }}
+            style={{
+              width: "244px",
+              height: "237px",
+              borderRadius: "30px",
+              margin: "25px auto",
+            }}
           />
 
           <p
@@ -97,7 +149,7 @@ export default function PaymentFlow({ open, onClose }) {
               height: "39px",
               borderRadius: "10px",
               border: "1px solid #BFBFBF",
-              margin: "0 auto 20px auto",
+              margin: "0 auto 10px auto",
               display: "flex",
               alignItems: "center",
               background: "#000",
@@ -121,6 +173,7 @@ export default function PaymentFlow({ open, onClose }) {
               }}
             />
             <button
+              onClick={handleApply}
               style={{
                 width: "100px",
                 height: "100%",
@@ -135,6 +188,13 @@ export default function PaymentFlow({ open, onClose }) {
               Apply
             </button>
           </div>
+
+          {/* Coupon Error */}
+          {couponError && (
+            <p style={{ color: "red", fontSize: "14px", marginBottom: "10px" }}>
+              {couponError}
+            </p>
+          )}
 
           <button
             onClick={() => setStage("proof")}
@@ -155,7 +215,7 @@ export default function PaymentFlow({ open, onClose }) {
         </div>
       )}
 
-      {/* ================= PAYMENT PROOF POPUP ================= */}
+      {/* ===== Payment Proof ===== */}
       {stage === "proof" && (
         <div
           style={{
@@ -222,7 +282,7 @@ export default function PaymentFlow({ open, onClose }) {
         </div>
       )}
 
-      {/* ================= LOADING POPUP ================= */}
+      {/* ===== Loading ===== */}
       {stage === "loading" && (
         <div
           style={{
