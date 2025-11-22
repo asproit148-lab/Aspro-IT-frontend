@@ -1,14 +1,29 @@
 // src/components/LiveLearning.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { courses } from "../components/courses/CourseData";
+import { getAllCourses } from "../api/course";
 
 export default function LiveLearning() {
   const navigate = useNavigate();
   const [showAll, setShowAll] = useState(false);
   const slugify = (title) => title.trim().toLowerCase().replace(/\s+/g, "-");
+  const [courseList, setCourseList] = useState([]);
 
-  const displayedCourses = showAll ? courses : courses.slice(0, 6);
+  useEffect(() => {
+  async function loadCourses() {
+    try {
+      const response = await getAllCourses();
+      setCourseList(response.courses);  // backend returns { courses: [...] }
+    } catch (err) {
+      console.error("Failed to fetch courses:", err);
+    }
+  }
+  loadCourses();
+}, []);
+
+const displayedCourses = showAll
+  ? courseList
+  : courseList.slice(0, 6);
 
   return (
     <section id="live-learning"
@@ -114,7 +129,7 @@ export default function LiveLearning() {
             }}
           >
             <img
-              src={course.img}
+              src={course.imageUrl}
               alt={course.title}
               style={{
                 width: "407px",
@@ -136,7 +151,7 @@ export default function LiveLearning() {
                   textAlign: "left",
                 }}
               >
-                {course.title}
+                {course.Course_title}
               </h3>
 
               {/* Chips */}
@@ -152,8 +167,8 @@ export default function LiveLearning() {
                       fontSize: "16px",
                       color: "#FFF",
                       background:
-                      course.mode === "Live" ? "#951212" : "#375B91",
-                      fontFamily: "Poppins, sans-serif", }}>{course.mode}</div>                 
+                      course.mode === "Online" ? "#951212" : "#375B91",
+                      fontFamily: "Poppins, sans-serif", }}>{course.Course_type}</div>                 
               </div>
 
               <p
@@ -180,7 +195,7 @@ export default function LiveLearning() {
                 <div
                   style={{ fontSize: "24px", fontWeight: 600, color: "#FFFFFF" }}
                 >
-                  ₹{course.price}
+                  ₹{course.Final_cost}
                 </div>
                 <div
                   style={{
@@ -189,7 +204,7 @@ export default function LiveLearning() {
                     textDecoration: "line-through",
                   }}
                 >
-                  ₹{course.originalPrice}
+                  ₹{course.Course_cost}
                 </div>
                 <div
                   style={{
@@ -206,7 +221,7 @@ export default function LiveLearning() {
                     color: "#FFF",
                   }}
                 >
-                  {course.discount}
+                  {course.Discount}% OFF
                 </div>
               </div>
 
@@ -233,7 +248,9 @@ export default function LiveLearning() {
                     e.target.style.background = "#FFFFFF40";
                     e.target.style.color = "#FFFFFF";
                   }}
-                  onClick={() => navigate(`/courses/${slugify(course.title)}`, { state: { course } })}
+                  onClick={() =>
+  navigate(`/courses/${course._id}`)
+}
                 >
                   View Details
                 </button>
@@ -257,7 +274,12 @@ export default function LiveLearning() {
                   onMouseLeave={(e) =>
                     (e.target.style.background = "#FFFFFFBF")
                   }
-                  onClick={() => navigate("/courses/enrollment", { state: { course: course.title, courseId: course._id } })}
+                  onClick={() => navigate("/courses/enrollment", 
+                    { state: { course: course.title, 
+                      courseId: course._id, 
+                      discount: course.discount, 
+                      originalPrice: course.originalPrice, 
+                      price: course.price, } })}
                 >
                   Buy Now
                 </button>

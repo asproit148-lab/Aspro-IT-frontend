@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API = "http://localhost:3000/api/blog";
+// const API = "http://localhost:3000/api/blog";
+const API = "https://aspro-it-backend.onrender.com/api/blog";
 
 const fileConfig = {
   headers: {

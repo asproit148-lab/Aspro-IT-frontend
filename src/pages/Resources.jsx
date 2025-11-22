@@ -25,7 +25,7 @@ export default function Resources() {
   const handleDownload = async (resource) => {
     try {
       // Use backend proxy to download
-      const downloadUrl = `${'http://localhost:3000'}/api/resources/download-resource/${resource._id}`;
+      const downloadUrl = `${import.meta.env.VITE_API_URL}/api/resources/download-resource/${resource._id}`;
       
       // Fetch with proper headers
       const response = await fetch(downloadUrl, {

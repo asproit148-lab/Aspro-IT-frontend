@@ -162,30 +162,22 @@ export default function CourseModule({ skills, modules, faqs }) {
             listStyleType: "disc",
           }}
         >
-          {Array.isArray(module.module_description)
-            ? module.module_description.map((topic, tIndex) => (
-                <li
-                  key={tIndex}
-                  style={{
-                    marginBottom: "4px",
-                    fontSize: "18px",
-                    color: "rgba(255,255,255,0.85)",
-                  }}
-                >
-                  {topic}
-                </li>
-              ))
-            : (
-                <li
-                  style={{
-                    marginBottom: "4px",
-                    fontSize: "18px",
-                    color: "rgba(255,255,255,0.85)",
-                  }}
-                >
-                  {module.module_description}
-                </li>
-              )}
+          {(Array.isArray(module.module_description)
+  ? module.module_description
+  : module.module_description.split(" • ")
+).map((topic, tIndex) => (
+  <li
+    key={tIndex}
+    style={{
+      marginBottom: "4px",
+      fontSize: "18px",
+      color: "rgba(255,255,255,0.85)",
+    }}
+  >
+    {topic}
+  </li>
+))}
+
         </ul>
       )}
     </div>

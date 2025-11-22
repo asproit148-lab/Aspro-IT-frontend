@@ -13,9 +13,6 @@ import Contact from './pages/Contact.jsx';
 import Jobs from './pages/Jobs.jsx';
 import Internships from './pages/Internships.jsx';
 
-import PythonBlog from "./pages/PythonBlog";
-import GenAIBlog from "./pages/GenAIBlog";
-
 import CourseDetails from "./pages/CourseDetails.jsx";
 import Enrollment from "./pages/Enrollment";
 import ConfirmedEnroll from './pages/ConfirmedEnroll'
@@ -47,9 +44,6 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/internships" element={<Internships />} />
-
-          <Route path="/blogs/python" element={<PythonBlog />} />
-          <Route path="/blogs/gen-ai" element={<GenAIBlog />} />
 
           <Route path="/courses/:courseSlug" element={<CourseDetails />} />
           <Route path="/courses/enrollment" element={<Enrollment />} />

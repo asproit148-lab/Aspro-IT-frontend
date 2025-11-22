@@ -281,7 +281,7 @@ export default function BlogManagement() {
                 justifyContent: "space-between",
               }}
             >
-              <button
+              {/* <button
                 onClick={() => openEditPopup(blog)}
                 style={{
                   width: "80px",
@@ -299,7 +299,7 @@ export default function BlogManagement() {
               >
                 <Edit3 size={20} />
                 Edit
-              </button>
+              </button> */}
 
               <button
                 onClick={() => handleDeleteBlog(blog._id)}

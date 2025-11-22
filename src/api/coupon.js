@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API = "http://localhost:3000/api/coupon";
+// const API = "http://localhost:3000/api/coupon";
+const API = "https://aspro-it-backend.onrender.com/api/coupon";
 
 const config = {
   withCredentials: true,

@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API = "http://localhost:3000/api/resources";
+// const API = "http://localhost:3000/api/resources";
+const API = "https://aspro-it-backend.onrender.com/api/resources";
+
 const config = {
   withCredentials: true,
 };

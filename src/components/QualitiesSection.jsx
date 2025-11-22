@@ -29,7 +29,7 @@ export default function Qualities() {
 
       const res = await sendEnquiry(data);
 
-      if (res.ok) {
+      if (res.status === 200) {
         alert("Enquiry sent successfully!");
         setName("");
         setEmail("");
@@ -262,6 +262,22 @@ export default function Qualities() {
               fontWeight: 500,
               cursor: "pointer",
               alignSelf: "center",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.width = "250px";
+              e.target.style.height = "68px";
+              e.target.style.fontSize = "18px";
+              e.target.style.padding = "22px 40px";
+              e.target.style.border = "3px solid #A86AFF";
+              e.target.style.boxShadow = "0px 0px 20px 0px #494949";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.width = "238px";
+              e.target.style.height = "60px";
+              e.target.style.fontSize = "16px";
+              e.target.style.padding = "18px 36px";
+              e.target.style.border = "3px solid #FFFFFF";
+              e.target.style.boxShadow = "none";
             }}
           >
             Join Free Trial Class

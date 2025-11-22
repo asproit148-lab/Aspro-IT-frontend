@@ -6,12 +6,11 @@ import project from '../../assets/project.png';
 import liveclass from '../../assets/liveclass.png';
 
 export default function CourseInfo({ course }) {
-  console.log("Course Info:", course);
   return (
     <div
       style={{
         width: "100%",
-        height: "600px",
+        minHeight: "600px",
         backgroundColor: "#000",
         fontFamily: "Poppins",
         color: "white",
@@ -36,7 +35,7 @@ export default function CourseInfo({ course }) {
         <div
           style={{
             width: "622px",
-            height: "530px",
+            height: "570px",
             borderRadius: "36px",
             padding: "24px",
             boxSizing: "border-box",
@@ -199,7 +198,7 @@ export default function CourseInfo({ course }) {
         <div
           style={{
             width: "622px",
-            height: "530px",
+            minHeight: "570px",
             borderRadius: "36px",
             padding: "28px",
             boxSizing: "border-box",

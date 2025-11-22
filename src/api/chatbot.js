@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API = "http://localhost:3000/api/chatbot";
+// const API = "http://localhost:3000/api/chatbot";
+const API = "https://aspro-it-backend.onrender.com/api/chatbot";
 
 const config = {
   withCredentials: true,

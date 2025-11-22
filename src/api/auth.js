@@ -2,8 +2,10 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000/api/user", // your backend base
-  withCredentials: true, // **CRITICAL** to send/receive httpOnly cookies
+  // baseURL: "http://localhost:3000/api/user", 
+  baseURL: "https://aspro-it-backend.onrender.com/api/user", 
+
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API = "http://localhost:3000/api/payment";
+// const API = "http://localhost:3000/api/payment";
+const API = "https://aspro-it-backend.onrender.com/api/payment";
 
 // Axios config
 const config = {
