@@ -127,6 +127,11 @@ export default function CampaignPopup() {
 
           {/* Button */}
           <button
+          onClick={() => {
+    if (banner?.url) {
+      window.open(banner.url, "_blank", "noopener,noreferrer");
+    }
+  }}
             style={{
               marginTop: "20px",
               width: "121px",

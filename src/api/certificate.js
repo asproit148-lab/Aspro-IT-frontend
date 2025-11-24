@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API = "http://localhost:3000/api/certificate";
-// const API = "https://aspro-it-backend.onrender.com/api/certificate";
+// const API = "http://localhost:3000/api/certificate";
+const API = "https://aspro-it-backend.onrender.com/api/certificate";
 
 const config = {
   withCredentials: true,

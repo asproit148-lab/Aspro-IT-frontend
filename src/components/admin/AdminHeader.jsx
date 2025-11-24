@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import logo from '../../assets/logo.png';
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import {
   LogOut,
   BadgeIndianRupee,
@@ -16,6 +17,7 @@ import {
 } from "lucide-react";
 
 export default function AdminHeader() {
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [hovered, setHovered] = useState(null);
@@ -111,7 +113,7 @@ export default function AdminHeader() {
                   borderRadius: "8px",
                   boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",
                   overflow: "hidden",
-                  width: "120px",
+                  width: "100px",
                   zIndex: 999,
                 }}
               >
@@ -120,17 +122,20 @@ export default function AdminHeader() {
                     display: "flex",
                     alignItems: "center",
                     gap: "8px",
-                    width: "100%",
                     padding: "15px",
                     background: "none",
                     border: "none",
                     color: "white",
-                    fontSize: "20px",
+                    fontSize: "16px",
                     cursor: "pointer",
                     textAlign: "center",
                   }}
+                  onClick={() => {
+                    signOut();
+                    setShowDropdown(false);
+                  }}
                 >
-                  <LogOut size={20} />
+                  <LogOut size={16} />
                   Logout
                 </button>
               </div>

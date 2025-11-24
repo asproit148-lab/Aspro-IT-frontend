@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useAuth } from "../context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPopup({ onClose, setToken, onSignup }) {
   const { signIn, signInWithGoogle } = useAuth();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +25,13 @@ export default function LoginPopup({ onClose, setToken, onSignup }) {
         alert(res.message || "Login failed");
         return;
       }
+
+if (res.user?.role === "admin") {
+  navigate("/admin/dashboard");
+} else {
+  navigate("/");
+}
+
       alert("Login Successful!");
       onClose();
     } catch (err) {

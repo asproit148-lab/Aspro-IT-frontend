@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import qrImg from "../assets/qr.jpeg";
 import loadingImg from "../assets/loading.png";
 import { applyCoupon } from "../api/coupon";
+import { submitPayment } from "../api/payment"; // make sure this exists
+import { Upload } from "lucide-react"; // Upload icon
 
-export default function PaymentFlow({ open, onClose, price }) {
+export default function PaymentFlow({ open, onClose, price, courseId }) {
   const [stage, setStage] = useState("qr"); 
   const [coupon, setCoupon] = useState("");
   const [paymentFile, setPaymentFile] = useState(null);
@@ -25,25 +27,25 @@ export default function PaymentFlow({ open, onClose, price }) {
   };
 
   const handleApply = async () => {
-  if (!coupon) return;
+    if (!coupon) return;
 
-  try {
-    const res = await applyCoupon({
-      Code: coupon,
-      amount: price,
-    });
+    try {
+      const res = await applyCoupon({
+        Code: coupon,
+        amount: price,
+      });
 
-    if (res.success) {
-      setDiscountPercent(res.discountPercent);   // percentage
-      setFinalPrice(res.finalAmount);            // final price after discount
-      setCouponError("");
-    } else {
-      setCouponError(res.message || "Invalid coupon");
+      if (res.success) {
+        setDiscountPercent(res.discountPercent);
+        setFinalPrice(res.finalAmount);
+        setCouponError("");
+      } else {
+        setCouponError(res.message || "Invalid coupon");
+      }
+    } catch (err) {
+      setCouponError("Invalid or expired coupon");
     }
-  } catch (err) {
-    setCouponError("Invalid or expired coupon");
-  }
-};
+  };
 
   const closeBtn = (
     <button
@@ -81,7 +83,6 @@ export default function PaymentFlow({ open, onClose, price }) {
         zIndex: 9999,
       }}
     >
-
       {/* ================= QR POPUP ================= */}
       {stage === "qr" && (
         <div
@@ -101,7 +102,6 @@ export default function PaymentFlow({ open, onClose, price }) {
 
           <h2 style={{ fontSize: "24px", fontWeight: 600 }}>Scan to Proceed</h2>
 
-          {/* PRICE SECTION */}
           <p style={{ marginTop: "10px", fontSize: "18px", fontWeight: 600 }}>
             Price: ₹{price}
           </p>
@@ -189,7 +189,6 @@ export default function PaymentFlow({ open, onClose, price }) {
             </button>
           </div>
 
-          {/* Coupon Error */}
           {couponError && (
             <p style={{ color: "red", fontSize: "14px", marginBottom: "10px" }}>
               {couponError}
@@ -235,35 +234,46 @@ export default function PaymentFlow({ open, onClose, price }) {
           <h2 style={{ fontSize: "24px", fontWeight: 600 }}>Add Payment Screenshot</h2>
 
           <label
-            style={{
-              width: "480px",
-              height: "200px",
-              borderRadius: "16px",
-              border: "1px dashed #C9C9C9",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              margin: "25px auto",
-              cursor: "pointer",
-              fontFamily: "Inter",
-              opacity: 0.7,
-            }}
-          >
-            {paymentFile ? (
-              <p>Uploaded: {paymentFile.name}</p>
-            ) : (
-              "Upload screenshot"
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={(e) => setPaymentFile(e.target.files[0])}
-            />
-          </label>
+  style={{
+    width: "480px",
+    height: "200px",
+    borderRadius: "16px",
+    border: "1px dashed #C9C9C9",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: "25px auto",
+    cursor: "pointer",
+    fontFamily: "Inter",
+    opacity: 0.7,
+  }}
+>
+  {paymentFile ? <p>Uploaded: {paymentFile.name}</p> : "Upload screenshot"}
+  <input
+    type="file"
+    accept="image/*"
+    style={{ display: "none" }}
+    onChange={(e) => setPaymentFile(e.target.files[0])}
+  />
+</label>
+
 
           <button
-            onClick={() => setStage("loading")}
+            onClick={async () => {
+              if (!paymentFile) {
+                alert("Please upload a screenshot before submitting.");
+                return;
+              }
+
+              try {
+                await submitPayment(courseId, paymentFile);
+                alert("Payment submitted successfully! Pending verification.");
+                setStage("loading");
+              } catch (err) {
+                console.error(err);
+                alert("Failed to submit payment. Try again.");
+              }
+            }}
             style={{
               width: "113px",
               height: "39px",

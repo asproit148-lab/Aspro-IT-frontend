@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { Upload } from "lucide-react";
-import { addBanner } from "../../api/campaign"; // using existing API wrapper
+import { addBanner } from "../../api/campaign";
 
 export default function AddCampaign({ onClose, onSave }) {
-  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null); // for showing preview
+  const [imageFile, setImageFile] = useState(null); // actual file to send
   const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
-      reader.onloadend = () => setImage(reader.result); // base64 stored here
+      reader.onloadend = () => setImagePreview(reader.result);
       reader.readAsDataURL(file);
     }
   };
@@ -18,19 +21,22 @@ export default function AddCampaign({ onClose, onSave }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !image) {
+    if (!title || !imageFile) {
       alert("Please upload an image and enter a title.");
       return;
     }
 
     try {
-      const payload = {
-        title,
-        image,
-      };
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("url", url);
+      formData.append("image", imageFile); // Multer reads this
 
-      const banner = await addBanner(payload); // API call
-      onSave(banner); // update parent UI
+      const banner = await addBanner(formData);
+
+      alert("Campaign added successfully!");
+
+      onSave(banner);
       onClose();
     } catch (err) {
       console.error("Upload error:", err);
@@ -77,7 +83,6 @@ export default function AddCampaign({ onClose, onSave }) {
         </h2>
 
         {/* Upload Area */}
-
         <label
           htmlFor="campaign-image"
           style={{
@@ -94,9 +99,9 @@ export default function AddCampaign({ onClose, onSave }) {
             overflow: "hidden",
           }}
         >
-          {image ? (
+          {imagePreview ? (
             <img
-              src={image}
+              src={imagePreview}
               alt="Uploaded"
               style={{
                 width: "100%",
@@ -131,7 +136,6 @@ export default function AddCampaign({ onClose, onSave }) {
         </label>
 
         {/* Title Input */}
-
         <div
           style={{
             width: "97%",
@@ -150,6 +154,37 @@ export default function AddCampaign({ onClose, onSave }) {
             placeholder="Add Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            style={{
+              width: "100%",
+              background: "transparent",
+              border: "none",
+              outline: "none",
+              fontFamily: "Poppins, sans-serif",
+              fontSize: "18px",
+              color: "#FFFFFF",
+            }}
+          />
+        </div>
+
+        {/* URL Input */}
+        <div
+          style={{
+            width: "97%",
+            height: "60px",
+            border: "1px solid #C9C9C94D",
+            borderRadius: "30px",
+            display: "flex",
+            alignItems: "center",
+            paddingLeft: "24px",
+            background: "#2E2E2E",
+            marginTop: "20px",
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Add URL"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
             style={{
               width: "100%",
               background: "transparent",

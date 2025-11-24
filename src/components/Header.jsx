@@ -437,7 +437,7 @@ export default function Header() {
                     textAlign: "center",
                   }}
                   onClick={() => {
-                    signOut(); // global logout
+                    signOut();
                     setShowDropdown(false);
                   }}
                 >
