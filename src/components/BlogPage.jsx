@@ -4,7 +4,11 @@ import Header from "../components/Header";
 import IndividualBlog from "../components/IndividualBlog";
 import { getBlog } from "../api/blog";
 
-const SERVER_URL = "http://localhost:3000";
+const SERVER_URL = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://aspro-it-frontend.vercel.app"
+];
 
 export default function BlogPage() {
   const { slug } = useParams();

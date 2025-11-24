@@ -1,7 +1,7 @@
 // src/components/AddCourse.jsx
 import React, { useEffect, useState } from "react";
 import { Upload, Trash2 } from "lucide-react";
-import { addCourse } from "../../api/course"; 
+import { addCourse, updateCourse  } from "../../api/course"; 
 
 export default function AddCourse({ onClose, onSave, existingCourse }) {
 
@@ -138,44 +138,51 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
     setSkills((prev) => prev.filter((_, i) => i !== index));
   };
 
-    // Save handler
   const handleSave = async () => {
-    setError("");
+  setError("");
 
-    const formData = new FormData();
+  const formData = new FormData();
 
-    formData.append("Course_title", title);
-    formData.append("Course_description", description);
-    formData.append("Course_type", mode); // Online/Offline
-    formData.append("Course_cost", cost);
-    formData.append("Discount", discount);
+  formData.append("Course_title", title);
+  formData.append("Course_description", description);
+  formData.append("Course_type", mode);
+  formData.append("Course_cost", cost);
+  formData.append("Discount", discount);
 
-    // Arrays must be stringified
-    formData.append("Skills", JSON.stringify(skills));
-    formData.append("Modules", JSON.stringify(modules));
-    formData.append("FAQs", JSON.stringify(faqs));
+  formData.append("Skills", JSON.stringify(skills));
+  formData.append("Modules", JSON.stringify(modules));
+  formData.append("FAQs", JSON.stringify(faqs));
 
-    // Image upload
-    if (file) {
-      formData.append("imageFile", file); 
-    }
+  if (file) {
+    formData.append("imageFile", file);
+  }
 
-    try {
-          console.log("Sending course data...");
+  try {
+    console.log("Sending course data...");
 
-      const res = await addCourse(formData);
+    let res;
 
+    if (existingCourse) {
+      // 🚀 UPDATE COURSE
+      res = await updateCourse(existingCourse._id, formData);
+      alert("Course updated successfully!");
+    } else {
+      // ➕ ADD NEW COURSE
+      res = await addCourse(formData);
       alert("Course added successfully!");
-        if (onSave && res.course) {
-      onSave(res.course); // This should include the real imageUrl from Cloudinary
     }
-      onClose();
-    } catch (err) {
-      console.error("Error adding course:", err);
-      setError("Failed to add course. Please try again.");
-    }
-  };
 
+    if (onSave && res.course) {
+      onSave(res.course); // updated or added
+    }
+
+    onClose();
+
+  } catch (err) {
+    console.error("Error saving course:", err);
+    setError("Failed to save course. Please try again.");
+  }
+};
 
   const steps = ["Basic Info", "Curriculum", "Pricing", "FAQs & Skills", "Preview"];
 

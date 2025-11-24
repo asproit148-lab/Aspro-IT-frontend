@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const API = "http://localhost:3000/api/course";
-const API = "https://aspro-it-backend.onrender.com/api/course";
+const API = "http://localhost:3000/api/course";
+// const API = "https://aspro-it-backend.onrender.com/api/course";
 
 const formConfig = {
   withCredentials: true,
@@ -13,10 +13,18 @@ export const addCourse = async (data) => {
   const res = await axios.post(`${API}/add-Course`, data, formConfig);
   return res.data;
 };
+
+// Update Course
+export const updateCourse = async (courseId, data) => {
+  const res = await axios.put(`${API}/${courseId}/edit-course`, data, formConfig);
+  return res.data;
+};
+
 export const totalCourse = async () => {
   const res = await axios.get(`${API}/total-courses`, { withCredentials: true });
   return res.data;
 };
+
 export const totalEnrollments = async () => {
   const res = await axios.get(`${API}/total-enrollment`, { withCredentials: true });
   return res.data;

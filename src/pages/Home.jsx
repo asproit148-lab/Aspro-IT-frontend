@@ -1,4 +1,5 @@
 // src/pages/Home.jsx
+import CampaignPopup from "../components/CampaignPopup";
 import Companies from "../components/Companies";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -11,6 +12,7 @@ import SubtleScroll from "../components/SubtleScroll";
 export default function Home() {
   return (
     <div className="relative">
+      <CampaignPopup />
       <Header />
       <Hero />
       <LearningExperience />

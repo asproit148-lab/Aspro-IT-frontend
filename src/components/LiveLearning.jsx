@@ -167,7 +167,7 @@ const displayedCourses = showAll
                       fontSize: "16px",
                       color: "#FFF",
                       background:
-                      course.mode === "Online" ? "#951212" : "#375B91",
+                      course.Course_type === "Online" ? "#951212" : "#375B91",
                       fontFamily: "Poppins, sans-serif", }}>{course.Course_type}</div>                 
               </div>
 

@@ -22,7 +22,7 @@ export default function CourseManagement() {
   }, []);
 
   // Edit
-  const handleEditCourse = (course) => {
+  const handleEditCourse = (course) => {  
     setEditCourse(course);
     setShowPopup(true);
   };
