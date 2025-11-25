@@ -340,7 +340,7 @@ export default function CourseManagement() {
   onClose={() => {
     setShowPopup(false);
     setEditCourse(null);
-    fetchCourses();   // 🔥 refresh after saving
+    fetchCourses();
   }}
   existingCourse={editCourse}
 />

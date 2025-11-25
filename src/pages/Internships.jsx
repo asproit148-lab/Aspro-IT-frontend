@@ -126,7 +126,7 @@ export default function Internships() {
               {/* Apply Button */}
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <button
-                  onClick={() => alert(`Applied for ${job.role}`)}
+                  onClick={() => window.open(job.companyWebsite, "_blank")}
                   style={{
                     width: "97px",
                     height: "34px",

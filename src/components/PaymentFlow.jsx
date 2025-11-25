@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import qrImg from "../assets/qr.jpeg";
 import loadingImg from "../assets/loading.png";
 import { applyCoupon } from "../api/coupon";
@@ -13,6 +13,16 @@ export default function PaymentFlow({ open, onClose, price, courseId }) {
   const [finalPrice, setFinalPrice] = useState(price);
   const [discountPercent, setDiscountPercent] = useState(0);
   const [couponError, setCouponError] = useState("");
+
+  useEffect(() => {
+  if (stage === "loading") {
+    const timer = setTimeout(() => {
+      window.location.href = "/";
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }
+}, [stage]);
 
   if (!open) return null;
 
