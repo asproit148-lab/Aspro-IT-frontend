@@ -32,20 +32,41 @@ const discount = location.state?.discount || 0;
   };
 
   const handleSubmit = async () => {
-    // Frontend validation
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.address ||
-      !formData.state ||
-      !formData.zip ||
-      !formData.phone ||
-      !mode ||
-      !batch
-    ) {
-      alert("Please fill all required fields!");
-      return;
-    }
+    // Empty fields validation
+  if (
+    !formData.name ||
+    !formData.email ||
+    !formData.address ||
+    !formData.state ||
+    !formData.zip ||
+    !formData.phone ||
+    !mode ||
+    !batch
+  ) {
+    alert("Please fill all required fields!");
+    return;
+  }
+
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formData.email)) {
+    alert("Please enter a valid email address!");
+    return;
+  }
+
+  // Zip must be 6 digits
+  const zipRegex = /^[0-9]{6}$/;
+  if (!zipRegex.test(formData.zip)) {
+    alert("Zip code must be exactly 6 digits!");
+    return;
+  }
+
+  // Phone must be 10 digits
+  const phoneRegex = /^[0-9]{10}$/;
+  if (!phoneRegex.test(formData.phone)) {
+    alert("Phone number must be exactly 10 digits!");
+    return;
+  }
 
     const payload = {
       name: formData.name,

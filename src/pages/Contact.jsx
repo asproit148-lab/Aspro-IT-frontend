@@ -20,6 +20,19 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+     // Validation
+  if (!formData.name || !formData.phone_no || !formData.message) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  // Phone number must be exactly 10 digits
+  const phoneRegex = /^[0-9]{10}$/;
+  if (!phoneRegex.test(formData.phone_no)) {
+    alert("Mobile number must be exactly 10 digits");
+    return;
+  }
     setLoading(true);
 
     try {

@@ -18,6 +18,19 @@ export default function LoginPopup({ onClose, setToken, onSignup }) {
       return;
     }
 
+    // Email format validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    alert("Please enter a valid email address");
+    return;
+  }
+
+  // Password rules
+  if (password.length < 6) {
+    alert("Password must be at least 6 characters");
+    return;
+  }
+
     try {
       setLoading(true);
       const res = await signIn({ email, password });

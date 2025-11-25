@@ -1,6 +1,6 @@
 // src/components/LiveLearning.jsx
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { getAllCourses } from "../api/course";
 
 export default function LiveLearning() {
@@ -254,6 +254,16 @@ const displayedCourses = showAll
                 >
                   View Details
                 </button>
+                <Link
+                  to="/courses/enrollment"
+                  state={{
+                    course: course.title,
+                    courseId: course._id,
+                    price: course.price,                  // final cost
+                    originalPrice: course.originalPrice,  // original price
+                    discount: course.discount            // discount
+                  }}
+                >
                 <button
                   style={{
                     width: "181px",
@@ -274,15 +284,10 @@ const displayedCourses = showAll
                   onMouseLeave={(e) =>
                     (e.target.style.background = "#FFFFFFBF")
                   }
-                  onClick={() => navigate("/courses/enrollment", 
-                    { state: { course: course.title, 
-                      courseId: course._id, 
-                      discount: course.discount, 
-                      originalPrice: course.originalPrice, 
-                      price: course.price, } })}
                 >
                   Buy Now
                 </button>
+                </Link>
               </div>
             </div>
           </div>

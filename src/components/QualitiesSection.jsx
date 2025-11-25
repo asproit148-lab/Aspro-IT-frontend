@@ -13,10 +13,25 @@ export default function Qualities() {
   const [mobile, setMobile] = useState("");
 
   const handleSubmit = async () => {
-    if (!name || !email || !mobile || !selectedCourse || !mode) {
-      alert("Please fill all fields");
-      return;
-    }
+    // Empty field validation
+  if (!name || !email || !mobile || !selectedCourse || !mode) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    alert("Please enter a valid email address");
+    return;
+  }
+
+  // Mobile must be exactly 10 digits
+  const phoneRegex = /^[0-9]{10}$/;
+  if (!phoneRegex.test(mobile)) {
+    alert("Mobile number must be exactly 10 digits");
+    return;
+  }
 
     try {
       const data = {

@@ -16,6 +16,26 @@ export default function SignupPopup({ onClose }) {
       alert("Please fill all fields");
       return;
     }
+
+    // Full name validation
+  if (fullName.trim().length < 3) {
+    alert("Full name must be at least 3 characters");
+    return;
+  }
+
+  // Email format validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    alert("Please enter a valid email address");
+    return;
+  }
+
+  // Password length validation
+  if (password.length < 6) {
+    alert("Password must be at least 6 characters long");
+    return;
+  }
+
     try {
       setLoading(true);
       await registerUser({ name: fullName, email, password });
