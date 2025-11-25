@@ -306,7 +306,7 @@ const discount = location.state?.discount || 0;
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                placeholder="+91 909xxxxxxx"
+                placeholder="909xxxxxxx"
                 style={{
                   fontSize: "12px",
                   width: "360px",

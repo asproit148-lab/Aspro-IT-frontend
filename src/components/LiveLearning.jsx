@@ -13,7 +13,7 @@ export default function LiveLearning() {
   async function loadCourses() {
     try {
       const response = await getAllCourses();
-      setCourseList(response.courses);  // backend returns { courses: [...] }
+      setCourseList(response.courses);
     } catch (err) {
       console.error("Failed to fetch courses:", err);
     }
@@ -257,12 +257,12 @@ const displayedCourses = showAll
                 <Link
                   to="/courses/enrollment"
                   state={{
-                    course: course.title,
-                    courseId: course._id,
-                    price: course.price,                  // final cost
-                    originalPrice: course.originalPrice,  // original price
-                    discount: course.discount            // discount
-                  }}
+    course: course.Course_title,       // correct
+    courseId: course._id,              // correct
+    price: course.Final_cost,          // final cost
+    originalPrice: course.Course_cost, // original price
+    discount: course.Discount          // discount %
+  }}
                 >
                 <button
                   style={{
