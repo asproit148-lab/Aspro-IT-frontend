@@ -28,7 +28,7 @@ const displayedCourses = showAll
   return (
     <section id="live-learning"
       style={{
-        width: "1440px",
+        width: "100%",
         position: "relative",
         background: "#1B1B1B",
         boxShadow:

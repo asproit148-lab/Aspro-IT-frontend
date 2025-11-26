@@ -22,8 +22,8 @@ export default function Certificates() {
       {/* Hero Section */}
       <div
         style={{
-          width: "1440px",
-          height: "550px",
+          width: "100%",
+          minHeight: "550px",
           backgroundImage: `url(${bg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",

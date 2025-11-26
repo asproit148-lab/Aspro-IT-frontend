@@ -43,7 +43,7 @@ export default function IndividualBlog({ title, image, subheading, content }) {
           height: "406px",
           borderRadius: "36px",
           objectFit: "cover",
-          marginBottom: "20px",
+          marginBottom: "40px",
           marginTop: "30px",
         }}
       />

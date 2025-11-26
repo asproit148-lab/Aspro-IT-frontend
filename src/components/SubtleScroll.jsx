@@ -25,7 +25,7 @@ export default function SubtleScroll() {
         duration: 1.2,
       }}
       style={{
-        width: "1440px",
+        width: "100%",
         height: "536px",
         background: "#101010",
         position: "relative",
@@ -51,7 +51,7 @@ export default function SubtleScroll() {
             justifyContent: "flex-start",
             width: "100%",
             paddingLeft: "86px",
-            gap: "40px",
+            gap: "80px",
           }}
         >
           <div
@@ -82,7 +82,7 @@ export default function SubtleScroll() {
           {/* Right Text */}
           <div
             style={{
-              width: "619px",
+              width: "640px",
               color: "white",
               fontFamily: "Poppins, sans-serif",
             }}

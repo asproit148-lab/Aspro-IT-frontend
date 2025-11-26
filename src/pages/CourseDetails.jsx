@@ -57,7 +57,6 @@ export default function CourseDetails() {
           fontFamily: "Poppins, sans-serif",
         }}
       >
-        <h2>Loading course...</h2>
       </div>
     );
   }

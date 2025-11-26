@@ -66,7 +66,7 @@ export default function Resources() {
 
       <div
         style={{
-          width: "1440px",
+          width: "100%",
           minHeight: "700px",
           backgroundImage: `url(${bg})`,
           backgroundSize: "cover",
@@ -75,7 +75,7 @@ export default function Resources() {
           flexDirection: "column",
           justifyContent: "center",
           paddingLeft: "120px",
-          marginBottom: "40px",
+          marginBottom: "60px",
           gap: "30px",
         }}
       >

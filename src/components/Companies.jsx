@@ -12,7 +12,7 @@ export default function Companies() {
   return (
     <section
       style={{
-        width: "1440px",
+        width: "100%",
         height: "650px",
         background:
           "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",

@@ -55,7 +55,7 @@ export default function Contact() {
 
       <div
         style={{
-          width: "1440px",
+          width: "100%",
           height: "550px",
           backgroundImage: `url(${bg})`,
           backgroundSize: "cover",

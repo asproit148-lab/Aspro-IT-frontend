@@ -27,7 +27,6 @@ export default function AdminRoute({ children }) {
     checkAdmin();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
 
   if (!isAdmin) return <Navigate to="/" replace />;
 

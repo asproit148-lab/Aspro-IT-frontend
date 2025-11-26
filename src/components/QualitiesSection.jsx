@@ -61,7 +61,7 @@ export default function Qualities() {
   return (
     <section
       style={{
-        width: "1268px",
+        width: "100%",
         margin: "80px auto 0",
         display: "flex",
         flexDirection: "column",

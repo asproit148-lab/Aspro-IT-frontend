@@ -53,7 +53,7 @@ export default function Header() {
     <header
       style={{
         position: "relative",
-        width: "1440px",
+        width: "100%",
         height: "105px",
         backgroundColor: "black",
         top: 0,
@@ -64,18 +64,21 @@ export default function Header() {
     >
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          height: "100%",
-          position: "relative",
-        }}
+    maxWidth: "1400px",
+    margin: "0 auto",
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "0 40px",
+  }}
       >
         {/* Logo */}
         <div
           style={{
             position: "absolute",
             top: "21px",
-            left: "86px",
+            left: "60px",
           }}
         >
           <Link to="/">
@@ -97,7 +100,7 @@ export default function Header() {
             position: "absolute",
             top: "35px",
             display: "flex",
-            gap: "45px",
+            gap: "40px",
             left: "400px",
           }}
         >
@@ -108,7 +111,7 @@ export default function Header() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: "103px",
+              width: "auto",
               height: "36px",
               gap: "5px",
               fontFamily: "Poppins, sans-serif",
@@ -128,26 +131,27 @@ export default function Header() {
             onMouseEnter={() => setIsDownloadOpen(true)}
             onMouseLeave={() => setIsDownloadOpen(false)}
           >
-            <Link
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "120px",
-                height: "36px",
-                gap: "5px",
-                fontFamily: "Poppins, sans-serif",
-                fontWeight: 300,
-                fontSize: "24px",
-                lineHeight: "100%",
-                textDecoration: "none",
-                color: textColor,
-                cursor: "pointer",
-              }}
-            >
-              <Download size={20} /> Download{" "}
-              {isDownloadOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-            </Link>
+            <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "auto",
+    height: "36px",
+    gap: "5px",
+    fontFamily: "Poppins, sans-serif",
+    fontWeight: 300,
+    fontSize: "24px",
+    lineHeight: "100%",
+    textDecoration: "none",
+    color: textColor,
+    cursor: "pointer",
+  }}
+>
+  Download{" "}
+  {isDownloadOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+</div>
+
 
             {isDownloadOpen && (
               <div
@@ -155,7 +159,7 @@ export default function Header() {
                   position: "absolute",
                   top: "36px",
                   left: "0",
-                  width: "138px",
+                  width: "auto",
                   background: "#343434",
                   borderRadius: "8px",
                   boxShadow: "0px 1px 20px 0px rgba(61, 150, 224, 0.5)",
@@ -219,7 +223,7 @@ export default function Header() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "147px",
+                width: "auto",
                 height: "36px",
                 gap: "5px",
                 fontFamily: "Poppins, sans-serif",
@@ -241,7 +245,7 @@ export default function Header() {
                   position: "absolute",
                   top: "36px",
                   left: "0",
-                  width: "227px",
+                  width: "auto",
                   background: "#343434",
                   borderRadius: "8px",
                   boxShadow: "0px 1px 20px 0px rgba(61, 150, 224, 0.5)",
@@ -299,7 +303,7 @@ export default function Header() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "120px",
+                width: "auto",
                 height: "36px",
                 gap: "5px",
                 fontFamily: "Poppins, sans-serif",
@@ -321,7 +325,7 @@ export default function Header() {
                   position: "absolute",
                   top: "36px",
                   left: "0",
-                  width: "138px",
+                  width: "auto",
                   background: "#343434",
                   borderRadius: "8px",
                   boxShadow: "0px 1px 20px 0px rgba(61, 150, 224, 0.5)",
@@ -373,7 +377,7 @@ export default function Header() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: "128px",
+              width: "auto",
               height: "36px",
               gap: "5px",
               fontFamily: "Poppins, sans-serif",
@@ -394,7 +398,7 @@ export default function Header() {
             onClick={() => setShowDropdown(!showDropdown)}
             style={{
               position: "absolute",
-              top: "29px",
+              top: "30px",
               left: "1250px",
               width: "48px",
               height: "48px",
@@ -413,8 +417,8 @@ export default function Header() {
               <div
                 style={{
                   position: "absolute",
-                  top: "50px",
-                  right: 0,
+                  top: "56px",
+                  left: "0",
                   background: "#1E1E1E",
                   borderRadius: "8px",
                   boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",

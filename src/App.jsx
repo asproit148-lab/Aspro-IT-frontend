@@ -32,8 +32,6 @@ import ChatbotWidget from "./components/ChatbotWidget";
 export default function App() {
   const { user, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>;
-
   return (
     <Router>
       <div className="App">
@@ -72,7 +70,6 @@ export default function App() {
               <Route path="/courses/payment-failed" element={<PaymentFail />} />
 
               <Route path="/admin/*" element={<Navigate to="/" />} />
-              <Route path="*" element={<Navigate to="/" />} />
             </>
           )}
 

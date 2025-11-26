@@ -5,7 +5,7 @@ export default function CourseHeader() {
   return (
     <header
       style={{
-        width: "1440px",
+        width: "100%",
         height: "90px",
         backgroundColor: "black",
         borderBottom: "1px solid",

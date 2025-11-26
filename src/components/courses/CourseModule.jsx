@@ -8,7 +8,7 @@ export default function CourseModule({ skills, modules, faqs }) {
   return (
     <div
       style={{
-        width: "1440px",
+        width: "100%",
         backgroundColor: "#000",
         color: "#fff",
         minHeight: "100vh",
@@ -26,7 +26,7 @@ export default function CourseModule({ skills, modules, faqs }) {
           alignItems: "center",
           paddingLeft: "80px",
           gap: "72px",
-          height: "100px",
+          height: "0px",
           backgroundColor: "#101010",
           borderBottom: "2px solid",
           borderImage: "linear-gradient(90deg, #CD41DA 0%, #9B9EE3 100%) 1",
@@ -36,9 +36,7 @@ export default function CourseModule({ skills, modules, faqs }) {
           color: "#FFFFFF",
         }}
       >
-        <span>About</span>
-        <span>Courses</span>
-        <span>Testimonials</span>
+      
       </div>
 
       {/* Skills Section */}

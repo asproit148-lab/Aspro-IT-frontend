@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <footer
       style={{
-        width: "1440px",
+        alignItems: "center",
         height: "480px",
         background: "#101010",
         boxShadow: "inset 0px -8px 12px #2A292940, inset 0px 8px 12px #2A292940",
