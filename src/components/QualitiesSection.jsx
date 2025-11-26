@@ -62,7 +62,7 @@ export default function Qualities() {
     <section
       style={{
         width: "100%",
-        margin: "80px auto 0",
+        margin: "40px auto 0",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -77,8 +77,8 @@ export default function Qualities() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-start",
-          width: "1268px",
-          gap: "60px",
+          width: "1200px",
+          gap: "40px",
         }}
       >
         {/* Left Content */}

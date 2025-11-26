@@ -77,7 +77,7 @@ export default function AdminHeader() {
             top: "30px",
             display: "flex",
             gap: "36px",
-            left: "1200px",
+            right: 0,
           }}
         >
           <div
@@ -108,7 +108,7 @@ export default function AdminHeader() {
                 style={{
                   position: "absolute",
                   top: "50px",
-                  right: 0,
+                  right: 20,
                   background: "#1E1E1E",
                   borderRadius: "8px",
                   boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",

@@ -83,7 +83,7 @@ export default function PaymentVerification() {
       {/* Top Bar */}
       <div
         style={{
-          width: "1160px",
+          width: "90%",
           height: "72px",
           marginTop: "40px",
           marginLeft: "20px",
@@ -107,7 +107,7 @@ export default function PaymentVerification() {
       {/* Pending Cards */}
       <div
         style={{
-          width: "100px",
+          width: "90%",
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "30px",
@@ -120,7 +120,7 @@ export default function PaymentVerification() {
           <div
             key={item._id}
             style={{
-              width: "340px",
+              width: "90%",
               height: "350px",
               background: "#343434",
               borderRadius: "20px",

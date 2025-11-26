@@ -15,19 +15,18 @@ export default function CourseInfo({ course }) {
         fontFamily: "Poppins",
         color: "white",
         position: "relative",
-        padding: "40px 60px 80px",
+        padding: "40px 40px 80px 20px",
         boxSizing: "border-box",
       }}
     >
       {/* Centered Container */}
       <div
         style={{
-          maxWidth: "1280px",
-width: "100%",
-padding: "0 20px",
+          width: "100%",
+          padding: "0 20px",
           margin: "0 auto",
           display: "flex",
-          gap: "36px",
+          gap: "30px",
           alignItems: "flex-start",
           position: "relative",
           zIndex: 2,
@@ -36,8 +35,8 @@ padding: "0 20px",
         {/* LEFT CARD */}
         <div
           style={{
-            width: "622px",
-            height: "570px",
+           width: "50%",
+            minHeight: "570px",
             borderRadius: "36px",
             padding: "24px",
             boxSizing: "border-box",
@@ -170,7 +169,7 @@ padding: "0 20px",
 >
             <button
               style={{
-                width: "545px",
+                minWidth: "520px",
                 height: "66px",
                 borderRadius: "8px",
                 border: "1px solid #FFFFFF",
@@ -199,7 +198,7 @@ padding: "0 20px",
         {/* RIGHT CARD */}
         <div
           style={{
-            width: "622px",
+            width: "50%",
             minHeight: "570px",
             borderRadius: "36px",
             padding: "28px",
@@ -337,6 +336,7 @@ padding: "0 20px",
           {/* Bottom info pills */}
           <div
             style={{
+              width: "100%",
               display: "flex",
               flexWrap: "wrap",
               gap: "16px",
@@ -344,15 +344,15 @@ padding: "0 20px",
             }}
           >
             {[
-              { k: "Language: ", v: "Bilingual" },
-              { k: "Certificate: ", v: "Yes" },
+              { k: "Language: ", v: "Bilingual" },           
               { k: "Schedule: ", v: "Mon - Sat (7:30)" },
               { k: "Learning Hours: ", v: "200+ Hours" },
+              { k: "Certificate: ", v: "Yes" },
             ].map((item) => (
               <div
                 key={item.k}
                 style={{
-                  width: "270px",
+                  width: "45%", 
                   height: "48px",
                   borderRadius: "8px",
                   padding: "12px 16px",

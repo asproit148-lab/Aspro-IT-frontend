@@ -52,7 +52,7 @@ export default function SubtleScroll() {
   justifyContent: isAwake ? "flex-start" : "center",
   width: "100%",
   paddingLeft: isAwake ? "86px" : "0px",
-  gap: "80px",
+  gap: "40px",
   position: "relative",
   zIndex: 2,
   transition: "all 0.4s ease",

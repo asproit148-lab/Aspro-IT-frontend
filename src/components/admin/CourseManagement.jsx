@@ -85,7 +85,7 @@ export default function CourseManagement() {
       {/* Top Bar */}
       <div
         style={{
-          width: "1160px",
+          width: "90%",
           height: "72px",
           marginTop: "40px",
           marginLeft: "20px",
@@ -141,7 +141,7 @@ export default function CourseManagement() {
       {/* Course Cards */}
       <div
         style={{
-          width: "100px",
+          width: "90%",
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "30px",
@@ -154,7 +154,7 @@ export default function CourseManagement() {
           <div
             key={course._id}
             style={{
-              width: "340px",
+              width: "90%",
               minHeight: "350px",
               background: "#343434",
               borderRadius: "20px",
@@ -169,7 +169,7 @@ export default function CourseManagement() {
               src={course.imageUrl}
               alt={course.Course_title}
               style={{
-                width: "345px",
+                width: "100%",
                 height: "179px",
                 borderRadius: "16px",
                 objectFit: "cover",

@@ -80,7 +80,7 @@ export default function ResourceManagement() {
       {/* Top Bar */}
       <div
         style={{
-          width: "1160px",
+          width: "90%",
           height: "72px",
           marginTop: "40px",
           marginLeft: "20px",
@@ -121,7 +121,7 @@ export default function ResourceManagement() {
       {/* Resource Cards */}
       <div
         style={{
-          width: "100px",
+          width: "90%",
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "30px",
@@ -134,7 +134,7 @@ export default function ResourceManagement() {
           <div
             key={res._id}
             style={{
-              width: "340px",
+              width: "90%",
               minHeight: "150px",
               background: "#343434",
               borderRadius: "20px",

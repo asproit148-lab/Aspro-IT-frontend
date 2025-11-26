@@ -58,10 +58,11 @@ export default function AddJob({ onClose, onSave }) {
     >
       <div
         style={{
+          height: "95%",
           width: "600px",
           background: "#1B1B1B",
           borderRadius: "20px",
-          padding: "30px 40px",
+          padding: "10px 40px",
           boxShadow: "0px 8px 24px rgba(0,0,0,0.5)",
           display: "flex",
           flexDirection: "column",
@@ -88,7 +89,7 @@ export default function AddJob({ onClose, onSave }) {
           onChange={(e) => setType(e.target.value)}
           style={{
             width: "100%",
-            height: "55px",
+            height: "40px",
             borderRadius: "15px",
             border: "1px solid #C9C9C94D",
             background: "#2E2E2E",
@@ -110,7 +111,7 @@ export default function AddJob({ onClose, onSave }) {
           { label: "CTC / Stipend", state: ctc, set: setCtc },
           { label: "Company Website", state: website, set: setWebsite },
         ].map((item, index) => (
-          <div key={index} style={{ marginBottom: "20px" }}>
+          <div key={index} style={{ marginBottom: "15px" }}>
             <label style={{ color: "#C9C9C9", fontFamily: "Poppins" }}>
               {item.label}
             </label>
@@ -120,8 +121,8 @@ export default function AddJob({ onClose, onSave }) {
               onChange={(e) => item.set(e.target.value)}
               placeholder={item.label}
               style={{
-                width: "95%",
-                height: "55px",
+                width: "93%",
+                height: "40px",
                 borderRadius: "15px",
                 border: "1px solid #C9C9C94D",
                 background: "#2E2E2E",
@@ -148,7 +149,7 @@ export default function AddJob({ onClose, onSave }) {
             onClick={onClose}
             style={{
               width: "100px",
-              height: "50px",
+              height: "40px",
               borderRadius: "15px",
               background: "#414141",
               color: "#FFFFFF",
@@ -166,7 +167,7 @@ export default function AddJob({ onClose, onSave }) {
             disabled={loading}
             style={{
               width: "100px",
-              height: "50px",
+              height: "40px",
               borderRadius: "15px",
               background: "#2B6EF0",
               color: "#FFFFFF",

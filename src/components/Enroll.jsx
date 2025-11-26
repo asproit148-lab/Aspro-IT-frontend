@@ -100,7 +100,8 @@ const discount = location.state?.discount || 0;
         backgroundColor: "black",
         color: "white",
         fontFamily: "Poppins, sans-serif",
-        padding: "40px 60px 60px 60px",
+        marginRight: "20px",
+        padding: "40px 0 60px 30px",
         transition: "0.3s ease",
       }}
     >
@@ -120,7 +121,7 @@ const discount = location.state?.discount || 0;
         {/* FORM CONTAINER */}
         <div
           style={{
-            width: "800px",
+            width: "64%",
             minHeight: "552px",
             borderRadius: "16px",
             background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
@@ -143,7 +144,7 @@ const discount = location.state?.discount || 0;
                 placeholder="Full Name"
                 style={{
                   fontSize: "12px",
-                  width: "360px",
+                  minWidth: "350px",
                   paddingLeft: "20px",
                   height: "40px",
                   borderRadius: "8px",
@@ -163,7 +164,7 @@ const discount = location.state?.discount || 0;
                 placeholder="example@gmail.com"
                 style={{
                   fontSize: "12px",
-                  width: "360px",
+                  minWidth: "350px",
                   height: "40px",
                   paddingLeft: "20px",
                   borderRadius: "8px",
@@ -186,7 +187,7 @@ const discount = location.state?.discount || 0;
               placeholder="Residential address"
               style={{
                 fontSize: "12px",
-                width: "775px",
+                minWidth: "745px",
                 height: "40px",
                 borderRadius: "8px",
                 border: "0.5px solid #FFFFFF",
@@ -209,7 +210,7 @@ const discount = location.state?.discount || 0;
                 placeholder="eg: Delhi"
                 style={{
                   fontSize: "12px",
-                  width: "360px",
+                  minWidth: "350px",
                   height: "40px",
                   borderRadius: "8px",
                   border: "0.5px solid #FFFFFF",
@@ -229,7 +230,7 @@ const discount = location.state?.discount || 0;
                 placeholder="eg: 112223"
                 style={{
                   fontSize: "12px",
-                  width: "360px",
+                  minWidth: "350px",
                   height: "40px",
                   borderRadius: "8px",
                   border: "0.5px solid #FFFFFF",
@@ -250,7 +251,7 @@ const discount = location.state?.discount || 0;
                 value={courseName}
                 readOnly
                 style={{
-                  width: "360px",
+                  minWidth: "350px",
                   height: "40px",
                   borderRadius: "8px",
                   padding: "0 20px",
@@ -309,7 +310,7 @@ const discount = location.state?.discount || 0;
                 placeholder="909xxxxxxx"
                 style={{
                   fontSize: "12px",
-                  width: "360px",
+                  minWidth: "350px",
                   height: "40px",
                   borderRadius: "8px",
                   border: "0.5px solid #FFFFFF",
@@ -323,19 +324,19 @@ const discount = location.state?.discount || 0;
         </div>
 
         {/* PRICE DETAILS CONTAINER */}
-        <div style={{ width: "400px", minHeight: "557px", borderRadius: "16px", background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)", boxShadow: "0px 4px 16px 0px #FFFFFF40", padding: "20px", display: "flex", flexDirection: "column" }}>
+        <div style={{ width: "36%", minHeight: "557px", borderRadius: "16px", background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)", boxShadow: "0px 4px 16px 0px #FFFFFF40", padding: "20px", display: "flex", flexDirection: "column" }}>
           {/* Prices */}
-          <div style={{ display: "flex", alignItems: "baseline", gap: "20px", marginBottom: "5px", marginTop: "40px" }}>
-            <div style={{ fontSize: "48px", fontWeight: 700, color: "#FFFFFF" }}>₹{price}</div>
-            <div style={{ fontSize: "24px", fontWeight: 700, color: "rgba(255,255,255,0.5)", textDecoration: "line-through" }}>₹{originalPrice}</div>
-            <div style={{ marginLeft: "auto", width: "81px", height: "32px", borderRadius: "25px", color: "#0DA745", background: "#0DA74540", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", fontWeight: 700 }}>{discount}% OFF</div>
+          <div style={{ display: "flex", width: "auto", alignItems: "baseline", gap: "20px", marginBottom: "5px", marginTop: "40px" }}>
+            <div style={{ fontSize: "42px", width: "auto", fontWeight: 700, color: "#FFFFFF" }}>₹{price}</div>
+            <div style={{ fontSize: "24px", width: "auto", fontWeight: 700, color: "rgba(255,255,255,0.5)", textDecoration: "line-through" }}>₹{originalPrice}</div>
+            <div style={{ marginLeft: "auto", minWidth: "70px", height: "32px", borderRadius: "25px", color: "#0DA745", background: "#0DA74540", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", fontWeight: 700 }}>{discount}% OFF</div>
           </div>
 
           <p style={{ fontSize: "16px", fontWeight: 500, color: "#FF6969", marginBottom: "30px" }}>Sale ends in 24 hours!</p>
 
           {/* Button */}
           <button
-            style={{ width: "375px", height: "54px", borderRadius: "8px", border: "1px solid #FFFFFF", background: "transparent", color: "#FFFFFF", fontSize: "28px", fontWeight: 600, cursor: "pointer", transition: "all 0.3s ease" }}
+            style={{ width: "95%", height: "54px", borderRadius: "8px", border: "1px solid #FFFFFF", background: "transparent", color: "#FFFFFF", fontSize: "28px", fontWeight: 600, cursor: "pointer", transition: "all 0.3s ease" }}
             onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0px 4px 16px 0px #FFFFFF40"; e.currentTarget.style.background = "rgba(255,255,255,0.25)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.background = "transparent"; }}
             onClick={handleSubmit}
@@ -345,7 +346,7 @@ const discount = location.state?.discount || 0;
           </button>
 
           {/* Divider & Course Includes */}
-          <div style={{ width: "377px", borderTop: "1px solid white", opacity: "0.4", marginTop: "40px", marginBottom: "30px" }}></div>
+          <div style={{ width: "95%", borderTop: "1px solid white", opacity: "0.4", marginTop: "40px", marginBottom: "30px" }}></div>
           <p style={{ fontSize: "14px", fontWeight: 700, marginBottom: "16px" }}>This course includes:</p>
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             {[{ icon: <Award size={25} color="#0DA745" />, text: "Certification of completion" }, { icon: <Clock size={25} color="#0DA745" />, text: "Full time access" }, { icon: <Video size={25} color="#0DA745" />, text: "On-demand videos" }, { icon: <Download size={25} color="#0DA745" />, text: "Downloadable resources" }].map((item, index) => (

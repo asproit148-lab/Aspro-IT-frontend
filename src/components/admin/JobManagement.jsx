@@ -93,7 +93,7 @@ export default function JobManagement() {
       {/* Top Bar */}
       <div
         style={{
-          width: "1160px",
+          width: "90%",
           height: "72px",
           marginTop: "40px",
           marginLeft: "20px",
@@ -198,7 +198,7 @@ export default function JobManagement() {
       {/* Cards */}
       <div
         style={{
-          width: "100px",
+          width: "90%",
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "30px",
@@ -211,7 +211,7 @@ export default function JobManagement() {
           <div
             key={job._id}
             style={{
-              width: "330px",
+              width: "90%",
               height: "280px",
               borderRadius: "12px",
               border: "1px solid #FFFFFF33",

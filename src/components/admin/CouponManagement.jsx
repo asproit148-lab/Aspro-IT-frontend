@@ -82,7 +82,7 @@ export default function CouponManagement() {
       {/* Top Bar */}
       <div
         style={{
-          width: "1160px",
+          width: "90%",
           height: "72px",
           marginTop: "40px",
           marginLeft: "20px",
@@ -140,7 +140,7 @@ export default function CouponManagement() {
         style={{
           marginTop: "50px",
           marginLeft: "50px",
-          width: "1050px",
+          width: "80%",
           background: "#282727",
           borderRadius: "10px",
           padding: "10px 50px",

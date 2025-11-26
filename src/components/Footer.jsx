@@ -16,11 +16,11 @@ export default function Footer() {
   display: "flex",
   flexDirection: "row",
   alignItems: "flex-start",
-  padding: "50px 80px",
+  padding: "50px 40px",
   position: "relative",
   color: "#FFFFFF",
   fontFamily: "Poppins, sans-serif",
-  gap: "60px",
+  gap: "50px",
   flexWrap: "wrap",
       }}
     >
@@ -76,7 +76,7 @@ export default function Footer() {
         style={{
           display: "flex",
   flexDirection: "row",
-  gap: "60px",
+  gap: "50px",
   flexWrap: "wrap",
   alignItems: "flex-start",
         }}

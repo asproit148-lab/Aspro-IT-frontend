@@ -82,7 +82,7 @@ export default function Campaign() {
       {/* Top Bar */}
       <div
         style={{
-          width: "1160px",
+          width: "90%",
           height: "72px",
           marginTop: "40px",
           marginLeft: "20px",
@@ -136,7 +136,7 @@ export default function Campaign() {
       {/* Campaign Cards */}
       <div
         style={{
-          width: "100px",
+          width: "90%",
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "30px",
@@ -149,7 +149,7 @@ export default function Campaign() {
           <div
             key={campaign.id}
             style={{
-              width: "340px",
+              width: "90%",
               height: "320px",
               background: "#343434",
               borderRadius: "20px",
@@ -164,7 +164,7 @@ export default function Campaign() {
               src={campaign.img}
               alt={campaign.title}
               style={{
-                width: "345px",
+                width: "100%",
                 height: "179px",
                 borderRadius: "16px",
                 objectFit: "cover",

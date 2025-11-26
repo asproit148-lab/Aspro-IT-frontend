@@ -80,7 +80,7 @@ export default function CourseModule({ skills, modules, faqs }) {
 
       {/* Modules Section */}
 <div style={{ padding: "30px 6vw",
-  maxWidth: "1200px",
+  minWidth: "1000px",
   margin: "0 auto", }}>
   <h2
     style={{
@@ -367,7 +367,7 @@ export default function CourseModule({ skills, modules, faqs }) {
             borderRadius: "36px",
             paddingLeft: "20px",
             paddingRight: "20px",
-            maxWidth: "840px",
+            maxWidth: "1000px",
           }}
         >
           {faqs.map((faq, index) => (
