@@ -67,16 +67,17 @@ export default function Resources() {
       <div
         style={{
           width: "100%",
-          minHeight: "700px",
-          backgroundImage: `url(${bg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          paddingLeft: "120px",
-          marginBottom: "60px",
-          gap: "30px",
+  minHeight: "600px",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  padding: "20px 120px 60px 120px",
+  gap: "30px",
+  backgroundImage: `url(${bg})`,  
+  color: "#FFFFFF",
+  fontFamily: "Poppins, sans-serif",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
         }}
       >
         {/* Heading */}
@@ -86,7 +87,7 @@ export default function Resources() {
             fontSize: "48px",
             fontWeight: 600,
             color: "#FFFFFF",
-            marginTop: "20px",
+            marginTop: "0",
             marginBottom: 0,
           }}
         >
@@ -96,7 +97,7 @@ export default function Resources() {
         {/* Resources List */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px", width: "80%" }}>
           {loading ? (
-            <p style={{ fontSize: "18px" }}>Loading resources...</p>
+            <p></p>
           ) : resources.length === 0 ? (
             <p style={{ fontSize: "18px" }}>No resources available</p>
           ) : (
@@ -105,13 +106,14 @@ export default function Resources() {
                 key={resource._id}
                 style={{
                   display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  background: "rgba(255, 255, 255, 0.1)",
-                  borderRadius: "12px",
-                  padding: "16px 24px",
-                  backdropFilter: "blur(6px)",
-                  boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+  justifyContent: "space-between",
+  alignItems: "center",
+  background: "rgba(255, 255, 255, 0.1)",
+  borderRadius: "12px",
+  padding: "16px 24px",
+  backdropFilter: "blur(6px)",
+  boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+  transition: "all 0.3s ease",
                 }}
               >
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -125,15 +127,15 @@ export default function Resources() {
                   onClick={() => handleDownload(resource)}
                   style={{
                     width: "180px",
-                    height: "45px",
-                    borderRadius: "25px",
-                    border: "none",
-                    background: "#00A8FF",
-                    color: "#FFFFFF",
-                    fontSize: "16px",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    transition: "0.3s",
+  height: "45px",
+  borderRadius: "25px",
+  border: "none",
+  background: "#00A8FF",
+  color: "#FFFFFF",
+  fontSize: "16px",
+  fontWeight: 600,
+  cursor: "pointer",
+  transition: "all 0.3s ease",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.background = "#0090DD")}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "#00A8FF")}

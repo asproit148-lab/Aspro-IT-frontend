@@ -32,22 +32,29 @@ export default function BlogCard() {
         Blogs
       </h2>
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 150, flexWrap: "wrap" }}>
+      <div style={{ display: "flex",
+    justifyContent: "center",
+    gap: "40px",
+    flexWrap: "wrap",
+    maxWidth: "1300px",
+    margin: "0 auto", }}>
         {blogs.map((blog) => (
   <div
     key={blog._id}
     onClick={() => navigate(`/blogs/${blog._id}`)}
-    style={{ cursor: "pointer", width: "519px", textAlign: "left" }}
+    style={{ cursor: "pointer",
+    width: "100%",
+    maxWidth: "520px",
+    textAlign: "left", }}
   >
     <img
       src={blog.image || "/fallback.jpg"}
       alt={blog.title}
       style={{
-        width: "514px",
-        height: "336px",
-        borderRadius: "36px",
-        border: "1px solid #000",
-        objectFit: "cover",
+        width: "100%",
+    height: "336px",
+    borderRadius: "36px",
+    objectFit: "cover",
       }}
     />
     <div style={{ marginTop: "24px" }}>

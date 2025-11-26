@@ -7,28 +7,27 @@ export default function Hero() {
     <section
       style={{
         backgroundImage: `url(${bg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        width: "100%",
-        height: "550px",
-        marginTop: "0",
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        padding: "0 40px",
-        opacity: 1,
-        boxShadow: "0px -4px 8px 2px #00508A inset",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  width: "100%",
+  height: "550px",
+  position: "relative",
+  display: "flex",
+  alignItems: "center",
+  padding: "0 20px",
+  boxShadow: "0px -4px 8px 2px #00508A inset",
+  overflow: "hidden",
       }}
     >
       {/* Overlay */}
       <div
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: "rgba(0,0,0,0.10)",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: "rgba(0, 0, 0, 0.2)",
         }}
       />
 
@@ -36,13 +35,13 @@ export default function Hero() {
       <div
         style={{
           position: "relative",
-          zIndex: 10,
-          maxWidth: "754px",
-          height: "267px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          gap: "36px",
+  zIndex: 10,
+  maxWidth: "750px",
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  gap: "24px",
         }}
       >
         {/* Heading */}
@@ -51,16 +50,14 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1.5 }}
             style={{
-              width: "754px",
-              height: "112px",
               fontFamily: "Poppins, sans-serif",
-              fontWeight: 600,
-              fontSize: "48px",
-              lineHeight: "56px",
-              color: "#FFFFFF",
-              margin: 0,
-              verticalAlign: "middle",
-              background: "transparent",
+  fontWeight: 600,
+  fontSize: "42px",
+  lineHeight: "1.2",
+  color: "#FFFFFF",
+  margin: 0,
+  marginLeft: "20px",
+  background: "transparent",
           }}
         >
           "Future-Ready Skills, On Your <br /> Schedule."
@@ -70,15 +67,14 @@ export default function Hero() {
         <p
           style={{
             width: "754px",
-              height: "54px",
               fontFamily: "Poppins, sans-serif",
-              fontWeight: 400,
-              fontSize: "18px",
-              lineHeight: "100%",
-              color: "#FFFFFF",
-              margin: 0,
-              verticalAlign: "middle",
-              background: "transparent",
+  fontWeight: 400,
+  fontSize: "16px",
+  lineHeight: "1.5",
+  color: "#FFFFFF",
+  margin: 0,
+  marginLeft: "20px",
+  background: "transparent",
           }}
         >
           Join thousands of students and trusted companies worldwide who choose Aspro IT 
@@ -93,24 +89,25 @@ export default function Hero() {
             });
           }}
           style={{
-            width: "238px",
-            height: "60px",
-            borderRadius: "36px",
-            border: "3px solid #FFFFFF",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "18px 8px 18px 8px",
-            gap: "10px",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 600,
-            fontSize: "16px",
-            lineHeight: "100%",
-            color: "#FFFFFF",
-            textDecoration: "none",
-            opacity: 1,
-            cursor: "pointer",
-            transition: "all 0.3s ease",
+            width: "fit-content",
+  minWidth: "200px",
+  padding: "14px 24px",
+  marginLeft: "20px",
+  height: "25px",
+  borderRadius: "36px",
+  border: "3px solid #FFFFFF",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "10px",
+  fontFamily: "Poppins, sans-serif",
+  fontWeight: 600,
+  fontSize: "16px",
+  lineHeight: "1",
+  color: "#FFFFFF",
+  textDecoration: "none",
+  cursor: "pointer",
+  transition: "all 0.3s ease",
           }}
           onMouseEnter={(e) => {
             e.target.style.border = "3px solid #00A8FF";

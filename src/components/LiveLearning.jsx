@@ -29,45 +29,43 @@ const displayedCourses = showAll
     <section id="live-learning"
       style={{
         width: "100%",
-        position: "relative",
-        background: "#1B1B1B",
-        boxShadow:
-          "0px 8px 12px 0px #52525280 inset, 0px -8px 12px 0px #52525240 inset",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        overflow: "hidden",
-        paddingBottom: "30px",
-        transition: "all 0.4s ease",
+  position: "relative",
+  background: "#1B1B1B",
+  boxShadow: "0px 8px 12px 0px #52525280 inset, 0px -8px 12px 0px #52525240 inset",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  overflow: "hidden",
+  padding: "60px 20px 40px",
+  transition: "all 0.4s ease",
+  gap: "30px",
       }}
     >
       <div
         style={{
           position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
-          zIndex: 1,
-          background:
-            "radial-gradient(circle at 5% 5%, rgba(230,113,240,0.9) 0px, rgba(230,113,240,0.55) 80px, rgba(230,113,240,0.25) 250px, transparent 320px), " +
-            "radial-gradient(circle at 95% 95%, rgba(61,140,224,0.9) 0px, rgba(61,140,224,0.55) 80px, rgba(61,140,224,0.25) 250px, transparent 320px)",
-          filter: "blur(50px)",
+  inset: 0,
+  pointerEvents: "none",
+  zIndex: 1,
+  background:
+    "radial-gradient(circle at 5% 5%, rgba(230,113,240,0.9) 0px, rgba(230,113,240,0.55) 80px, rgba(230,113,240,0.25) 250px, transparent 320px), " +
+    "radial-gradient(circle at 95% 95%, rgba(61,140,224,0.9) 0px, rgba(61,140,224,0.55) 80px, rgba(61,140,224,0.25) 250px, transparent 320px)",
+  filter: "blur(50px)",
         }}
       />
 
       {/* Heading */}
       <h2
         style={{
-          width: "1043px",
-          height: "25px",
-          marginTop: "60px",
-          textAlign: "center",
-          fontFamily: "Poppins, sans-serif",
-          fontWeight: 600,
-          fontSize: "48px",
-          lineHeight: "1",
-          color: "#FFFFFF",
-          position: "relative",
-          zIndex: 2,
+          margin: 0,
+  textAlign: "center",
+  fontFamily: "Poppins, sans-serif",
+  fontWeight: 600,
+  fontSize: "42px",
+  lineHeight: "1.2",
+  color: "#FFFFFF",
+  position: "relative",
+  zIndex: 2,
         }}
       >
         Accelerate Your Career with
@@ -78,17 +76,15 @@ const displayedCourses = showAll
       {/* Subheading */}
       <p
         style={{
-          width: "1043px",
-          height: "10px",
-          marginTop: "2px",
-          textAlign: "center",
-          fontFamily: "Inter, sans-serif",
-          fontWeight: 400,
-          fontSize: "16px",
-          lineHeight: "1",
-          color: "#FFFFFF80",
-          position: "relative",
-          zIndex: 2,
+          margin: 0,
+  textAlign: "center",
+  fontFamily: "Inter, sans-serif",
+  fontWeight: 400,
+  fontSize: "16px",
+  lineHeight: "1.5",
+  color: "#FFFFFF80",
+  position: "relative",
+  zIndex: 2,
         }}
       >
         Gain instant access to our live expert-led classes and join a vibrant
@@ -99,56 +95,57 @@ const displayedCourses = showAll
       {/* Course grid */}
       <div
         style={{
-          width: "1268px",
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "48px 24px",
-          marginTop: "80px",
-          justifyItems: "center",
-          position: "relative",
-          zIndex: 2,
-          transition: "all 0.4s ease",
+  gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+  gap: "40px",
+  width: "100%",
+  maxWidth: "1280px",
+  justifyItems: "center",
+  position: "relative",
+  zIndex: 2,
+  transition: "all 0.4s ease",
         }}
       >
         {displayedCourses.map((course, index) => (
           <div
             key={index}
             style={{
-              width: "407px",
-              height: "580px",
-              borderRadius: "24px",
-              background:
-                "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
-              boxShadow:
-                "-4px -4px 16px 0px #FFFFFF0D inset, 4px 4px 16px 0px #FFFFFF0D inset",
-              overflow: "hidden",
-              transition: "all 0.4s ease-out",
-              display: "flex",
-              flexDirection: "column",
-              cursor: "pointer",
+              width: "100%",
+  maxWidth: "407px",
+  borderRadius: "24px",
+  background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
+  boxShadow: "-4px -4px 16px 0px #FFFFFF0D inset, 4px 4px 16px 0px #FFFFFF0D inset",
+  overflow: "hidden",
+  display: "flex",
+  flexDirection: "column",
+  cursor: "pointer",
+  transition: "all 0.4s ease-out",
             }}
           >
             <img
               src={course.imageUrl}
               alt={course.title}
               style={{
-                width: "407px",
-                height: "285px",
-                objectFit: "cover",
-                borderTopLeftRadius: "24px",
-                borderTopRightRadius: "24px",
+                width: "100%",
+  height: "285px",
+  objectFit: "cover",
+  borderTopLeftRadius: "24px",
+  borderTopRightRadius: "24px",
               }}
             />
 
-            <div style={{ padding: "20px 24px", flex: "1" }}>
+            <div style={{ padding: "20px 24px",
+  flex: "1",
+  display: "flex",
+  flexDirection: "column", }}>
               <h3
                 style={{
                   fontFamily: "Poppins, sans-serif",
-                  fontWeight: 600,
-                  fontSize: "28px",
-                  color: "#FFFFFF",
-                  margin: "10px 0 8px",
-                  textAlign: "left",
+  fontWeight: 600,
+  fontSize: "24px",
+  color: "#FFFFFF",
+  margin: "10px 0 8px",
+  textAlign: "left",
                 }}
               >
                 {course.Course_title}
@@ -161,7 +158,8 @@ const displayedCourses = showAll
                       fontSize: "16px",
                       color: "#FFF",
                       background:"#FFFFFF40",
-                      fontFamily: "Poppins, sans-serif", }}>Bilingual</div>
+                      fontFamily: "Poppins, sans-serif",
+                      textAlign: "center", }}>Bilingual</div>
                 <div style={{ borderRadius: "8px",
                       padding: "4px 8px",
                       fontSize: "16px",
@@ -175,10 +173,10 @@ const displayedCourses = showAll
                 style={{
                   fontFamily: "Poppins, sans-serif",
                   fontWeight: 600,
-                  fontSize: "16px",
+                  fontSize: "20px",
                   color: "#FFFFFF",
-                  marginBottom: "2px",
-                  marginTop: "40px",
+                  marginBottom: "8px",
+                  marginTop: "15px",
                 }}
               >
                 Grab your discount
@@ -187,9 +185,10 @@ const displayedCourses = showAll
               <div
                 style={{
                   display: "flex",
-                  alignItems: "baseline",
-                  gap: "30px",
-                  marginBottom: "12px",
+  alignItems: "baseline",
+  gap: "20px",
+  marginBottom: "12px",
+  flexWrap: "wrap",
                 }}
               >
                 <div
@@ -209,36 +208,37 @@ const displayedCourses = showAll
                 <div
                   style={{
                     marginLeft: "auto",
-                    width: "81px",
-                    height: "32px",
-                    borderRadius: "8px",
-                    background: "rgba(255,255,255,0.25)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "16px",
-                    fontWeight: 400,
-                    color: "#FFF",
+  minWidth: "80px",
+  height: "32px",
+  borderRadius: "8px",
+  background: "rgba(255,255,255,0.25)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: "14px",
+  fontWeight: 400,
+  color: "#FFF",
+  textAlign: "center",
                   }}
                 >
                   {course.Discount}% OFF
                 </div>
               </div>
 
-              <div style={{ display: "flex", gap: "16px" }}>
+              <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", }}>
                 <button
                   style={{
-                    width: "177px",
-                    height: "44px",
-                    borderRadius: "8px",
-                    background: "#FFFFFF40",
-                    color: "#FFFFFF",
-                    fontFamily: "Poppins, sans-serif",
-                    fontWeight: 400,
-                    fontSize: "16px",
-                    border: "none",
-                    cursor: "pointer",
-                    transition: "all 0.3s ease",
+                    minWidth: "160px",
+  height: "44px",
+  borderRadius: "8px",
+  background: "rgba(255,255,255,0.25)",
+  color: "#FFFFFF",
+  fontFamily: "Poppins, sans-serif",
+  fontWeight: 400,
+  fontSize: "14px",
+  border: "none",
+  cursor: "pointer",
+  transition: "all 0.3s ease",
                   }}
                   onMouseEnter={(e) => {
                     e.target.style.background = "#FFFFFF";
@@ -266,17 +266,17 @@ const displayedCourses = showAll
                 >
                 <button
                   style={{
-                    width: "181px",
-                    height: "44px",
-                    borderRadius: "8px",
-                    background: "#FFFFFFBF",
-                    color: "#000000",
-                    fontFamily: "Poppins, sans-serif",
-                    fontWeight: 700,
-                    fontSize: "16px",
-                    border: "none",
-                    cursor: "pointer",
-                    transition: "all 0.3s ease",
+                    minWidth: "160px",
+  height: "44px",
+  borderRadius: "8px",
+  background: "#FFFFFFBF",
+  color: "#000000",
+  fontFamily: "Poppins, sans-serif",
+  fontWeight: 700,
+  fontSize: "14px",
+  border: "none",
+  cursor: "pointer",
+  transition: "all 0.3s ease",
                   }}
                   onMouseEnter={(e) =>
                     (e.target.style.background = "#FFFFFF")
@@ -299,19 +299,19 @@ const displayedCourses = showAll
         onClick={() => setShowAll(!showAll)}
         style={{
           marginTop: "30px",
-          width: "260px",
-          height: "60px",
-          borderRadius: "20px",
-          border: "none",
-          background: "rgba(255,255,255,0.25)",
-          fontFamily: "Poppins, sans-serif",
-          fontSize: "18px",
-          fontWeight: 600,
-          color: "#FFFFFF",
-          cursor: "pointer",
-          transition: "all 0.3s ease",
-          position: "relative",
-          zIndex: 2,
+  width: "260px",
+  height: "60px",
+  borderRadius: "20px",
+  border: "none",
+  background: "rgba(255,255,255,0.25)",
+  fontFamily: "Poppins, sans-serif",
+  fontSize: "16px",
+  fontWeight: 600,
+  color: "#FFFFFF",
+  cursor: "pointer",
+  transition: "all 0.3s ease",
+  position: "relative",
+  zIndex: 2,
         }}
       >
         {showAll ? "Show Less" : "Explore All Courses"}

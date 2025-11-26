@@ -121,9 +121,10 @@ export default function ResourceManagement() {
       {/* Resource Cards */}
       <div
         style={{
+          width: "100px",
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "10px",
+          gap: "30px",
           marginLeft: "50px",
           marginTop: "50px",
           marginBottom: "100px",

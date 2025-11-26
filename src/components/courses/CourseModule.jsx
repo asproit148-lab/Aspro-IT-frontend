@@ -40,7 +40,7 @@ export default function CourseModule({ skills, modules, faqs }) {
       </div>
 
       {/* Skills Section */}
-      <div style={{ padding: "60px 86px" }}>
+      <div style={{ padding: "60px 6vw" }}>
         <h2
           style={{
             fontSize: "36px",
@@ -69,7 +69,7 @@ export default function CourseModule({ skills, modules, faqs }) {
                 background:
                   "linear-gradient(#000, #000) padding-box, linear-gradient(180deg, #CB46DB 0%, #8A38F5 100%) border-box",
                 borderRadius: "36px",
-                padding: "6px 24px",
+                padding: "6px 20px",
               }}
             >
               <span style={{ fontSize: "14px", fontWeight: 400 }}>{skill}</span>
@@ -79,7 +79,9 @@ export default function CourseModule({ skills, modules, faqs }) {
       </div>
 
       {/* Modules Section */}
-<div style={{ padding: "0px 86px", width: "1250px" }}>
+<div style={{ padding: "30px 6vw",
+  maxWidth: "1200px",
+  margin: "0 auto", }}>
   <h2
     style={{
       fontSize: "36px",
@@ -185,10 +187,8 @@ export default function CourseModule({ skills, modules, faqs }) {
       {/* Reviews */}
       <div
         style={{
-          marginTop: "50px",
-          marginLeft: "80px",
-          color: "white",
-          fontFamily: "Poppins, sans-serif",
+          marginTop: "60px",
+  padding: "0 6vw",
         }}
       >
         {/* Heading */}
@@ -216,7 +216,7 @@ export default function CourseModule({ skills, modules, faqs }) {
           <div
             style={{
               width: "300px",
-              height: "240px",
+              minHeight: "240px",
               background: "#101010",
               borderRadius: "24px",
               border: "3px solid transparent",
@@ -282,7 +282,7 @@ export default function CourseModule({ skills, modules, faqs }) {
     <div
       style={{
         width: "300px",
-        height: "240px",
+        minHeight: "240px",
         background: "#101010",
         borderRadius: "24px",
         border: "3px solid transparent",
@@ -347,7 +347,7 @@ export default function CourseModule({ skills, modules, faqs }) {
       </div>
 
       {/* FAQs Section */}
-      <div style={{ padding: "40px 80px" }}>
+      <div style={{ padding: "50px 6vw", }}>
         <h2
           style={{
             fontSize: "36px",
@@ -367,7 +367,7 @@ export default function CourseModule({ skills, modules, faqs }) {
             borderRadius: "36px",
             paddingLeft: "20px",
             paddingRight: "20px",
-            maxWidth: "730px",
+            maxWidth: "840px",
           }}
         >
           {faqs.map((faq, index) => (

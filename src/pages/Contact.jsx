@@ -55,28 +55,31 @@ export default function Contact() {
 
       <div
         style={{
-          width: "100%",
-          height: "550px",
           backgroundImage: `url(${bg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          margin: "0 auto",
-          padding: "0 10px",
+          width: "100%",
+    minHeight: "550px",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    margin: "0 auto",
+    padding: "0 40px",
+    gap: "25px",
         }}
       >
         {/* Left Side */}
-        <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+        <div style={{ flex: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",}}>
           <img
             src={contactImg}
             alt="Contact Illustration"
             style={{
-              width: "80%",
-              height: "auto",
-              borderRadius: "20px",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+              width: "90%",
+    height: "auto",
+    boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
             }}
           />
         </div>
@@ -84,11 +87,11 @@ export default function Contact() {
         {/* Right Side */}
         <div
           style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            gap: "20px",
+             flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: "20px",
           }}
         >
           <h1
@@ -96,6 +99,7 @@ export default function Contact() {
               fontSize: "56px",
               fontWeight: 600,
               marginBottom: "10px",
+              marginTop: 0,
               color: "#FFFFFF",
             }}
           >
@@ -177,15 +181,15 @@ export default function Contact() {
               disabled={loading}
               style={{
                 width: "50%",
-                height: "50px",
-                borderRadius: "25px",
-                border: "none",
-                background: loading ? "#555" : "#00A8FF",
-                color: "#FFFFFF",
-                fontSize: "18px",
-                fontWeight: 600,
-                cursor: loading ? "not-allowed" : "pointer",
-                transition: "0.3s",
+    height: "50px",
+    borderRadius: "25px",
+    border: "none",
+    background: "#00A8FF",
+    color: "#FFFFFF",
+    fontSize: "18px",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "0.3s",
               }}
               onMouseEnter={(e) => !loading && (e.currentTarget.style.background = "#0090DD")}
               onMouseLeave={(e) => !loading && (e.currentTarget.style.background = "#00A8FF")}

@@ -107,6 +107,7 @@ export default function PaymentVerification() {
       {/* Pending Cards */}
       <div
         style={{
+          width: "100px",
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "30px",

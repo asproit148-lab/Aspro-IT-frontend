@@ -121,7 +121,7 @@ const discount = location.state?.discount || 0;
         <div
           style={{
             width: "800px",
-            height: "552px",
+            minHeight: "552px",
             borderRadius: "16px",
             background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
             boxShadow: "0px 4px 16px 0px #FFFFFF40",
@@ -323,7 +323,7 @@ const discount = location.state?.discount || 0;
         </div>
 
         {/* PRICE DETAILS CONTAINER */}
-        <div style={{ width: "400px", height: "557px", borderRadius: "16px", background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)", boxShadow: "0px 4px 16px 0px #FFFFFF40", padding: "20px", display: "flex", flexDirection: "column" }}>
+        <div style={{ width: "400px", minHeight: "557px", borderRadius: "16px", background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)", boxShadow: "0px 4px 16px 0px #FFFFFF40", padding: "20px", display: "flex", flexDirection: "column" }}>
           {/* Prices */}
           <div style={{ display: "flex", alignItems: "baseline", gap: "20px", marginBottom: "5px", marginTop: "40px" }}>
             <div style={{ fontSize: "48px", fontWeight: 700, color: "#FFFFFF" }}>₹{price}</div>

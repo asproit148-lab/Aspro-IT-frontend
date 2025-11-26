@@ -22,7 +22,9 @@ export default function CourseInfo({ course }) {
       {/* Centered Container */}
       <div
         style={{
-          width: "1280px",
+          maxWidth: "1280px",
+width: "100%",
+padding: "0 20px",
           margin: "0 auto",
           display: "flex",
           gap: "36px",
@@ -350,7 +352,7 @@ export default function CourseInfo({ course }) {
               <div
                 key={item.k}
                 style={{
-                  width: "275px",
+                  width: "270px",
                   height: "48px",
                   borderRadius: "8px",
                   padding: "12px 16px",

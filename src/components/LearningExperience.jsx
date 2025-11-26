@@ -50,36 +50,37 @@ export default function LearningExperience() {
     <section
       style={{
         position: "relative",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        marginTop: "50px",
-        marginBottom: "50px",
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  margin: "50px 20px", // responsive horizontal padding
+  gap: "30px",
       }}
     >
       {/* Container */}
       <div
         style={{
-          width: "829px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "1px",
-          opacity: 1,
-          position: "relative",
+          maxWidth: "850px",
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "16px",
+  textAlign: "center",
+  position: "relative",
+  opacity: 1,
         }}
       >
         {/* Title */}
         <h2
           style={{
             margin: 0,
-            textAlign: "center",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 600,
-            fontSize: "48px",
-            lineHeight: "100%",
+  fontFamily: "Poppins, sans-serif",
+  fontWeight: 600,
+  fontSize: "42px",
+  lineHeight: "1.2",
           }}
         >
           The Ultimate{" "}
@@ -90,12 +91,12 @@ export default function LearningExperience() {
         {/* Subtitle */}
         <p
           style={{
-            textAlign: "center",
-            fontFamily: "Inter, sans-serif",
-            fontWeight: 500,
-            fontSize: "16px",
-            lineHeight: "100%",
-            color: "grey",
+            margin: 0,
+  fontFamily: "Inter, sans-serif",
+  fontWeight: 500,
+  fontSize: "16px",
+  lineHeight: "1.5",
+  color: "grey",
           }}
         >
           Beyond Learning: Your All-in-One Pathway to a New Career.
@@ -106,11 +107,12 @@ export default function LearningExperience() {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "50px",
-          marginTop: "20px",
-          flexWrap: "wrap",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "50px",
+  flexWrap: "wrap",
+  width: "100%",
+  maxWidth: "1000px",
         }}
       >
         {featureItems.map((item, index) => (
@@ -118,28 +120,30 @@ export default function LearningExperience() {
             key={index}
             onClick={item.onClick}
             style={{
-              width: item.width,
-              height: "108px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
-              borderRadius: "35px",
-              cursor: "pointer",
+              minWidth: "90px",
+  maxWidth: "135px",
+  height: "120px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "8px",
+  borderRadius: "35px",
+  cursor: "pointer",
+  transition: "transform 0.3s ease",
             }}
           >
             <div
               style={{
                 width: "70px",
-                height: "70px",
-                borderRadius: "50px",
-                background: item.bg,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: `0px 4px 20px 2px ${item.bg}`,
-                padding: "17px",
+  height: "70px",
+  borderRadius: "50%",
+  background: item.bg,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  boxShadow: `0px 4px 20px 2px ${item.bg}`,
+  padding: "12px",
               }}
             >
               {item.icon}
@@ -147,10 +151,11 @@ export default function LearningExperience() {
             <span
               style={{
                 color: "white",
-                fontFamily: "Inter, sans-serif",
-                fontWeight: 400,
-                fontSize: "20px",
-                marginTop: "8px",
+  fontFamily: "Inter, sans-serif",
+  fontWeight: 500,
+  fontSize: "16px",
+  textAlign: "center",
+  marginTop: "4px",
               }}
             >
               {item.label}

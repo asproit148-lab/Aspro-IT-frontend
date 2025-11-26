@@ -47,10 +47,30 @@ export default function BlogPage() {
     <div className="bg-black min-h-screen text-white font-[Poppins]">
       <Header />
       <IndividualBlog
-        title={blog.title}
-        image={blog.image}
-        content={<div dangerouslySetInnerHTML={{ __html: blog.description }} />}
-      />
+  title={blog.title}
+  image={blog.image}
+  content={
+    <div
+      style={{
+        maxWidth: "1200px",
+        margin: "0 auto",
+        padding: "20px 40px",
+        lineHeight: "1.8",
+        fontSize: "20px",
+        color: "#ccc",
+        textAlign: "justify",
+      }}
+    >
+      {blog.description
+        .split(/\n\n|\. /)
+        .map((p, i) => (
+          <p key={i} style={{ marginBottom: "18px" }}>
+            {p.trim()}
+          </p>
+        ))}
+    </div>
+  }
+/>
     </div>
   );
 }

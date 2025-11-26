@@ -111,13 +111,14 @@ export default function BlogManagement() {
   return (
     <div
       style={{
-        left: "100px",
-        background: "black",
-        color: "white",
-        fontFamily: "Poppins, sans-serif",
-        paddingTop: "140px",
-        paddingLeft: "120px",
-        minHeight: "100vh",
+        position: "relative",
+    background: "black",
+    color: "white",
+    fontFamily: "Poppins, sans-serif",
+    paddingTop: "130px",
+    paddingLeft: "140px",
+    paddingRight: "40px",
+    minHeight: "100vh",
       }}
     >
       <div>
@@ -149,17 +150,16 @@ export default function BlogManagement() {
 
       <div
         style={{
-          width: "1160px",
-          height: "72px",
-          marginTop: "40px",
-          marginLeft: "20px",
-          borderRadius: "10px",
-          background: "linear-gradient(90.19deg, #323232 0%, #0F0F0F 59.13%)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingBottom: "4px",
-          paddingLeft: "30px",
+          width: "100%",
+    maxWidth: "1150px",
+    height: "72px",
+    marginTop: "40px",
+    borderRadius: "12px",
+    background: "linear-gradient(90.19deg, #323232 0%, #0F0F0F 59.13%)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "0 24px",
         }}
       >
         <div>
@@ -201,6 +201,7 @@ export default function BlogManagement() {
       {/* CARDS */}
       <div
         style={{
+          width: "100px",
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "30px",

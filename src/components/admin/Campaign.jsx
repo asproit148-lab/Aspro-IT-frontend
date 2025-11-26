@@ -136,13 +136,13 @@ export default function Campaign() {
       {/* Campaign Cards */}
       <div
         style={{
+          width: "100px",
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "30px",
           marginLeft: "50px",
           marginTop: "50px",
-          marginBottom: "80px",
-          width: "fit-content",
+          marginBottom: "100px",
         }}
       >
         {campaigns.map((campaign) => (

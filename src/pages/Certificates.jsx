@@ -16,23 +16,27 @@ export default function Certificates() {
   };
 
   return (
-    <div style={{ backgroundColor: "black", color: "white", fontFamily: "Poppins, sans-serif" }}>
+    <div style={{ width: "100%",
+    minHeight: "100vh",
+    backgroundColor: "black",
+    color: "#FFFFFF",
+    fontFamily: "Poppins, sans-serif", }}>
       <Header />
 
       {/* Hero Section */}
       <div
         style={{
           width: "100%",
-          minHeight: "550px",
-          backgroundImage: `url(${bg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          gap: "28px",
+    minHeight: "550px",
+    backgroundImage: `url(${bg})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    gap: "28px",
         }}
       >
         <h1
@@ -107,7 +111,7 @@ export default function Certificates() {
             fontWeight: 600,
             cursor: "pointer",
             marginTop: "20px",
-            transition: "0.3s",
+            transition: "all 0.3s ease",
           }}
           onMouseEnter={(e) => (e.currentTarget.style.background = "#0090DD")}
           onMouseLeave={(e) => (e.currentTarget.style.background = "#00A8FF")}

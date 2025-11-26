@@ -26,13 +26,14 @@ export default function SubtleScroll() {
       }}
       style={{
         width: "100%",
-        height: "536px",
-        background: "#101010",
-        position: "relative",
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: isAwake ? "flex-start" : "center",
+  height: "536px",
+  background: "#101010",
+  position: "relative",
+  overflow: "hidden",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  transition: "all 0.4s ease",
       }}
     >
       {isAwake && (
@@ -47,23 +48,26 @@ export default function SubtleScroll() {
           }}
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            width: "100%",
-            paddingLeft: "86px",
-            gap: "80px",
+  alignItems: "center",
+  justifyContent: isAwake ? "flex-start" : "center",
+  width: "100%",
+  paddingLeft: isAwake ? "86px" : "0px",
+  gap: "80px",
+  position: "relative",
+  zIndex: 2,
+  transition: "all 0.4s ease",
           }}
         >
           <div
         style={{
           position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
-          zIndex: 1,
-          background:
-            "radial-gradient(circle at 95% 5%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 20px), " +
-            "radial-gradient(circle at 5% 95%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 320px)",
-          filter: "blur(100px)",
+  inset: 0,
+  pointerEvents: "none",
+  zIndex: 1,
+  background:
+    "radial-gradient(circle at 95% 5%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 20px), " +
+    "radial-gradient(circle at 5% 95%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 320px)",
+  filter: "blur(100px)",
         }}
       />
           {/* Left Image */}
@@ -72,10 +76,10 @@ export default function SubtleScroll() {
             alt="gemini"
             style={{
               width: "514px",
-              height: "488px",
-              borderRadius: "36px",
-              objectFit: "cover",
-              flexShrink: 0,
+  height: "488px",
+  borderRadius: "36px",
+  objectFit: "cover",
+  flexShrink: 0,
             }}
           />
 
@@ -83,8 +87,10 @@ export default function SubtleScroll() {
           <div
             style={{
               width: "640px",
-              color: "white",
-              fontFamily: "Poppins, sans-serif",
+  color: "#FFFFFF",
+  fontFamily: "Poppins, sans-serif",
+  display: "flex",
+  flexDirection: "column",
             }}
           >
             <h2

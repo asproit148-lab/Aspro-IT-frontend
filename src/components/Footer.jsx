@@ -9,34 +9,38 @@ export default function Footer() {
   return (
     <footer
       style={{
-        alignItems: "center",
-        height: "480px",
-        background: "#101010",
-        boxShadow: "inset 0px -8px 12px #2A292940, inset 0px 8px 12px #2A292940",
-        display: "flex",
-        alignItems: "flex-start",
-        padding: "50px 80px",
-        position: "relative",
-        color: "white",
-        fontFamily: "Poppins, sans-serif",
-        margin: "0px",
+        width: "100%",
+  minHeight: "450px",
+  background: "#101010",
+  boxShadow: "inset 0px -8px 12px #2A292940, inset 0px 8px 12px #2A292940",
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "flex-start",
+  padding: "50px 80px",
+  position: "relative",
+  color: "#FFFFFF",
+  fontFamily: "Poppins, sans-serif",
+  gap: "60px",
+  flexWrap: "wrap",
       }}
     >
       {/* LEFT SIDE (Company, Subscribe) */}
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          gap: "48px",
-          width: "407px",
+  flexDirection: "column",
+  gap: "48px",
+  minWidth: "280px",
+  maxWidth: "407px",
         }}
       >
         {/* Company Description */}
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
+            fontWeight: 400,
+  fontSize: "16px",
+  lineHeight: "160%",
+  color: "#FFFFFF",
           }}
         >
           <img
@@ -71,20 +75,19 @@ export default function Footer() {
       <div
         style={{
           display: "flex",
-          flexDirection: "row",
-          gap: "60px",
-          alignItems: "flex-start",
-          marginTop: "0px",
+  flexDirection: "row",
+  gap: "60px",
+  flexWrap: "wrap",
+  alignItems: "flex-start",
         }}
       >
         {/* Address */}
         <div
           style={{
-            width: "235px",
             display: "flex",
-            flexDirection: "column",
-            marginLeft: "120px",
-            gap: "18px",
+  flexDirection: "column",
+  gap: "15px",
+  minWidth: "150px",
           }}
         >
           <h3
@@ -116,10 +119,10 @@ export default function Footer() {
         {/* Company */}
         <div
           style={{
-            width: "167px",
             display: "flex",
-            flexDirection: "column",
-            gap: "15px",
+  flexDirection: "column",
+  gap: "15px",
+  minWidth: "150px",
           }}
         >
           <h3
@@ -152,10 +155,10 @@ export default function Footer() {
         {/* Contacts */}
         <div
           style={{
-            width: "229px",
             display: "flex",
-            flexDirection: "column",
-            gap: "15px",
+  flexDirection: "column",
+  gap: "15px",
+  minWidth: "150px",
           }}
         >
           <h3
@@ -190,15 +193,13 @@ export default function Footer() {
       <div
         style={{
           position: "absolute",
-          left: "1008px",
-          top: "443px",
-          width: "346px",
-          height: "50px",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "24px",
+  right: "200px",
+  bottom: "80px",
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: "24px",
         }}
       >
         {[facebook, instagram, x, whatsapp, linkedin].map((icon, i) => (
@@ -208,10 +209,10 @@ export default function Footer() {
             alt="social-icon"
             style={{
               width: "50px",
-              height: "50px",
-              objectFit: "contain",
-              cursor: "pointer",
-              transition: "transform 0.3s ease",
+  height: "50px",
+  objectFit: "contain",
+  cursor: "pointer",
+  transition: "transform 0.3s ease",
             }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.transform = "scale(1.1)")
