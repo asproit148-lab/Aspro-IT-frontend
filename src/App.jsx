@@ -34,7 +34,7 @@ export default function App() {
 
   return (
     <Router>
-      <div className="App w-full">
+      <div className="App">
         <Routes>
 
           {/* Admin Routes */}

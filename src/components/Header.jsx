@@ -52,35 +52,32 @@ export default function Header() {
   return (
     <header
       style={{
-        position: "relative",
-        width: "100%",
-        height: "105px",
-        backgroundColor: "black",
-        top: 0,
-        left: 0,
-        zIndex: 50,
-        boxShadow: "0px 4px 25px 0px #00508A",
-      }}
+  width: "100%",
+  backgroundColor: "black",
+  position: "sticky",
+  top: 0,
+  zIndex: 100,
+  boxShadow: "0px 4px 25px 0px #00508A",
+}}
     >
       <div
         style={{
-    maxWidth: "1400px",
-    margin: "0 auto",
-    height: "100%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "0 40px",
-  }}
+  maxWidth: "1400px",
+  margin: "0 auto",
+  height: "105px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  padding: "0 40px",
+  flexWrap: "nowrap",
+}}
       >
         {/* Logo */}
-        <div
-          style={{
-            position: "absolute",
-            top: "21px",
-            left: "60px",
-          }}
-        >
+        <div style={{
+  width: "180px",
+  height: "auto",
+  objectFit: "contain",
+}}>
           <Link to="/">
             <img
               src={logo}
@@ -96,31 +93,29 @@ export default function Header() {
 
         {/* Nav */}
         <div
-          style={{
-            position: "absolute",
-            top: "35px",
-            display: "flex",
-            gap: "40px",
-            left: "400px",
-          }}
-        >
+  style={{
+  display: "flex",
+  alignItems: "center",
+  gap: "30px",
+  flexWrap: "nowrap",
+}}
+>
           {/* Home */}
           <Link
             to="/"
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "auto",
-              height: "36px",
-              gap: "5px",
-              fontFamily: "Poppins, sans-serif",
-              fontWeight: 300,
-              fontSize: "24px",
-              lineHeight: "100%",
-              textDecoration: "none",
-              color: textColor,
-            }}
+  display: "flex",
+  alignItems: "center",
+  gap: "6px",
+  textDecoration: "none",
+  fontFamily: "Poppins, sans-serif",
+  fontSize: "20px",
+  fontWeight: 400,
+  color: textColor,
+  cursor: "pointer",
+  padding: "6px 0",
+  transition: "0.3s",
+}}
           >
             <Home size={20} /> Home
           </Link>
@@ -133,20 +128,18 @@ export default function Header() {
           >
             <div
   style={{
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "auto",
-    height: "36px",
-    gap: "5px",
-    fontFamily: "Poppins, sans-serif",
-    fontWeight: 300,
-    fontSize: "24px",
-    lineHeight: "100%",
-    textDecoration: "none",
-    color: textColor,
-    cursor: "pointer",
-  }}
+  display: "flex",
+  alignItems: "center",
+  gap: "6px",
+  textDecoration: "none",
+  fontFamily: "Poppins, sans-serif",
+  fontSize: "20px",
+  fontWeight: 400,
+  color: textColor,
+  cursor: "pointer",
+  padding: "6px 0",
+  transition: "0.3s",
+}}
 >
   Download{" "}
   {isDownloadOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -156,17 +149,18 @@ export default function Header() {
             {isDownloadOpen && (
               <div
                 style={{
-                  position: "absolute",
-                  top: "36px",
-                  left: "0",
-                  width: "auto",
-                  background: "#343434",
-                  borderRadius: "8px",
-                  boxShadow: "0px 1px 20px 0px rgba(61, 150, 224, 0.5)",
-                  display: "flex",
-                  flexDirection: "column",
-                  zIndex: 100,
-                }}
+  position: "absolute",
+  top: "40px",
+  left: 0,
+  background: "#212121",
+  borderRadius: "8px",
+  boxShadow: "0px 1px 20px rgba(61,150,224,0.5)",
+  display: "flex",
+  flexDirection: "column",
+  minWidth: "160px",
+  zIndex: 999,
+}}
+
               >
                 {[{ name: "Resources", link: "/resources" }, { name: "Certificates", link: "/certificates" }].map(
                   (item, index) => (
@@ -220,20 +214,18 @@ export default function Header() {
                 setIsAboutOpen(false);
               }}
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "auto",
-                height: "36px",
-                gap: "5px",
-                fontFamily: "Poppins, sans-serif",
-                fontWeight: 300,
-                fontSize: "24px",
-                lineHeight: "100%",
-                textDecoration: "none",
-                color: textColor,
-                cursor: "pointer",
-              }}
+  display: "flex",
+  alignItems: "center",
+  gap: "6px",
+  textDecoration: "none",
+  fontFamily: "Poppins, sans-serif",
+  fontSize: "20px",
+  fontWeight: 400,
+  color: textColor,
+  cursor: "pointer",
+  padding: "6px 0",
+  transition: "0.3s",
+}}
             >
               <BookOpen size={20} /> Courses{" "}
               {isCoursesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -242,17 +234,18 @@ export default function Header() {
             {isCoursesOpen && (
               <div
                 style={{
-                  position: "absolute",
-                  top: "36px",
-                  left: "0",
-                  width: "auto",
-                  background: "#343434",
-                  borderRadius: "8px",
-                  boxShadow: "0px 1px 20px 0px rgba(61, 150, 224, 0.5)",
-                  display: "flex",
-                  flexDirection: "column",
-                  zIndex: 100,
-                }}
+  position: "absolute",
+  top: "40px",
+  left: 0,
+  background: "#212121",
+  borderRadius: "8px",
+  boxShadow: "0px 1px 20px rgba(61,150,224,0.5)",
+  display: "flex",
+  flexDirection: "column",
+  minWidth: "160px",
+  zIndex: 999,
+}}
+
               >
                 {courses
   .filter(course => course.Course_title) // optional: skip courses without title
@@ -300,20 +293,18 @@ export default function Header() {
             <Link
               to="/about-us"
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "auto",
-                height: "36px",
-                gap: "5px",
-                fontFamily: "Poppins, sans-serif",
-                fontWeight: 300,
-                fontSize: "24px",
-                lineHeight: "100%",
-                textDecoration: "none",
-                color: textColor,
-                cursor: "pointer",
-              }}
+  display: "flex",
+  alignItems: "center",
+  gap: "6px",
+  textDecoration: "none",
+  fontFamily: "Poppins, sans-serif",
+  fontSize: "20px",
+  fontWeight: 400,
+  color: textColor,
+  cursor: "pointer",
+  padding: "6px 0",
+  transition: "0.3s",
+}}
             >
               <Info size={20} />About{" "}
               {isAboutOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -322,17 +313,18 @@ export default function Header() {
             {isAboutOpen && (
               <div
                 style={{
-                  position: "absolute",
-                  top: "36px",
-                  left: "0",
-                  width: "auto",
-                  background: "#343434",
-                  borderRadius: "8px",
-                  boxShadow: "0px 1px 20px 0px rgba(61, 150, 224, 0.5)",
-                  display: "flex",
-                  flexDirection: "column",
-                  zIndex: 100,
-                }}
+  position: "absolute",
+  top: "40px",
+  left: 0,
+  background: "#212121",
+  borderRadius: "8px",
+  boxShadow: "0px 1px 20px rgba(61,150,224,0.5)",
+  display: "flex",
+  flexDirection: "column",
+  minWidth: "160px",
+  zIndex: 999,
+}}
+
               >
                 {[{ name: "Blogs", link: "/blogs" }, { name: "Services", link: "/our-services" }].map(
                   (item, index) => (
@@ -374,19 +366,18 @@ export default function Header() {
           <Link
             to="/contact"
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "auto",
-              height: "36px",
-              gap: "5px",
-              fontFamily: "Poppins, sans-serif",
-              fontWeight: 300,
-              fontSize: "24px",
-              lineHeight: "100%",
-              textDecoration: "none",
-              color: textColor,
-            }}
+  display: "flex",
+  alignItems: "center",
+  gap: "6px",
+  textDecoration: "none",
+  fontFamily: "Poppins, sans-serif",
+  fontSize: "20px",
+  fontWeight: 400,
+  color: textColor,
+  cursor: "pointer",
+  padding: "6px 0",
+  transition: "0.3s",
+}}
           >
             <Phone size={20} /> Contact
           </Link>
@@ -397,49 +388,53 @@ export default function Header() {
           <div
             onClick={() => setShowDropdown(!showDropdown)}
             style={{
-              position: "absolute",
-              top: "30px",
-              left: "1250px",
-              width: "48px",
-              height: "48px",
-              borderRadius: "50%",
-              border: "3px solid #FFFFFF",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              transition: "0.3s",
-            }}
+  width: "48px",
+  height: "48px",
+  borderRadius: "50%",
+  border: "3px solid #FFFFFF",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  backgroundColor: "transparent",
+  position: "relative",
+  transition: "0.3s",
+}}
+
             title="Profile"
           >
             <User size={24} color="white" />
             {showDropdown && (
               <div
                 style={{
-                  position: "absolute",
-                  top: "56px",
-                  left: "0",
-                  background: "#1E1E1E",
-                  borderRadius: "8px",
-                  boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",
-                  overflow: "hidden",
-                  width: "100px",
-                  zIndex: 999,
-                }}
+  position: "absolute",
+  top: "60px",
+  right: 0,
+  background: "#1E1E1E",
+  borderRadius: "8px",
+  boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",
+  minWidth: "120px",
+  overflow: "hidden",
+  zIndex: 999,
+}}
+
               >
                 <button
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    padding: "15px",
-                    background: "none",
-                    border: "none",
-                    color: "white",
-                    fontSize: "16px",
-                    cursor: "pointer",
-                    textAlign: "center",
-                  }}
+  width: "100%",
+  padding: "12px 16px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "8px",
+  border: "none",
+  background: "transparent",
+  color: "white",
+  fontSize: "16px",
+  fontFamily: "Poppins, sans-serif",
+  cursor: "pointer",
+  transition: "0.3s",
+}}
                   onClick={() => {
                     signOut();
                     setShowDropdown(false);
@@ -454,25 +449,18 @@ export default function Header() {
         ) : (
           <button
             style={{
-              position: "absolute",
-              top: "29px",
-              left: "1250px",
-              width: "108px",
-              height: "48px",
-              borderRadius: "36px",
-              border: "3px solid #FFFFFF",
-              padding: "12px 18px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-              background: "transparent",
-              color: "white",
-              fontSize: "18px",
-              fontWeight: 700,
-              cursor: "pointer",
-              transition: "0.3s",
-            }}
+  padding: "10px 24px",
+  borderRadius: "36px",
+  border: "3px solid #FFFFFF",
+  background: "transparent",
+  color: "white",
+  fontFamily: "Poppins, sans-serif",
+  fontSize: "18px",
+  fontWeight: 600,
+  cursor: "pointer",
+  transition: "0.3s",
+  whiteSpace: "nowrap",
+}}
             onClick={() => setShowLoginPopup(true)}
             onMouseEnter={(e) => (e.target.style.border = "3px solid #00A8FF")}
             onMouseLeave={(e) => (e.target.style.border = "3px solid #FFFFFF")}
