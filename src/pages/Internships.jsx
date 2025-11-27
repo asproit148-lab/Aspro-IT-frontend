@@ -60,6 +60,7 @@ export default function Internships() {
         {/* internship Cards */}
         <div
           style={{
+            width: "90%",
             display: "flex",
             flexWrap: "wrap",
             gap: "40px",
@@ -69,7 +70,7 @@ export default function Internships() {
             <div
               key={index}
               style={{
-                width: "350px",
+                width: "90%",
                 height: "210px",
                 borderRadius: "12px",
                 border: "1px solid #FFFFFF33",
