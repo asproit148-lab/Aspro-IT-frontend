@@ -1,9 +1,103 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import gemini from '../assets/gemini.png';
 import { motion } from "framer-motion";
 
+const desktopBreakpoint = 768;
+
 export default function SubtleScroll() {
   const [isAwake, setIsAwake] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < desktopBreakpoint);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Base motion container style
+  const motionContainerStyle = {
+    width: "100%",
+    // ➡️ FIX 1: Set height dynamically on mobile
+    height: isMobile ? "auto" : "536px", 
+    padding: isMobile ? "40px 20px" : "0", // Add vertical padding on mobile
+    background: "#101010",
+    position: "relative",
+    overflow: "hidden",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "all 0.4s ease",
+  };
+
+  // Content wrapper style (the inner motion.div)
+  const contentWrapperStyle = {
+    display: "flex",
+    // ➡️ FIX 2: Stack content vertically on mobile
+    flexDirection: isMobile ? "column" : "row", 
+    alignItems: "center",
+    // On mobile, center the items; on web, adjust based on isAwake
+    justifyContent: isMobile ? "center" : (isAwake ? "flex-start" : "center"),
+    width: "100%",
+    // ➡️ FIX 3: Remove large left padding on mobile
+    paddingLeft: isMobile ? "0px" : (isAwake ? "86px" : "0px"),
+    gap: isMobile ? "20px" : "40px", // Reduce gap on mobile
+    position: "relative",
+    zIndex: 2,
+    transition: "all 0.4s ease",
+  };
+
+  // Left Image style
+  const imageStyle = {
+    // ➡️ FIX 4: Reduce image size significantly on mobile and ensure it fits
+    width: isMobile ? "90%" : "514px",
+    maxWidth: isMobile ? "400px" : "514px", 
+    height: isMobile ? "auto" : "488px",
+    borderRadius: "36px",
+    objectFit: "cover",
+    flexShrink: 0,
+    // Add margin for separation if stacked
+    marginBottom: isMobile ? "20px" : "0", 
+  };
+
+  // Right Text container style
+  const textContainerStyle = {
+    // ➡️ FIX 5: Use 100% width on mobile, and apply max-width for consistency
+    width: isMobile ? "100%" : "640px",
+    maxWidth: isMobile ? "100%" : "640px",
+    color: "#FFFFFF",
+    fontFamily: "Poppins, sans-serif",
+    display: "flex",
+    flexDirection: "column",
+    textAlign: isMobile ? "center" : "left", // Center text on mobile
+    padding: isMobile ? "0 10px" : "0", // Add slight inner padding on mobile
+  };
+
+  // Heading style
+  const headingStyle = {
+    fontWeight: 600,
+    // ➡️ FIX 6: Shrink heading font size on mobile
+    fontSize: isMobile ? "28px" : "36px", 
+    lineHeight: "130%",
+    marginBottom: "16px",
+    // Remove <br /> tags on mobile using a smaller element or conditional text
+  };
+
+  // Paragraph style
+  const paragraphStyle = {
+    fontWeight: 400,
+    // ➡️ FIX 7: Shrink paragraph font size on mobile
+    fontSize: isMobile ? "16px" : "20px", 
+    lineHeight: "150%",
+    color: "#E0E0E0",
+  };
+  
+  // Conditionally render text to remove line breaks for mobile
+  const headingText = "Summer Training and Internship Opportunity for College Students";
+  const paragraphText = `✨ Kickstart Your Career This Summer! Are you a college student eager to turn your summer break into a career-defining opportunity? Join our Summer Training & Internship Program, carefully crafted for ambitious learners who want more than just classroom knowledge. Over the course of the program, you’ll gain real-world skills, practical hands-on experience, and valuable industry exposure, while collaborating with professionals and peers on projects that truly make an impact. By the end, you won’t just complete a program — you’ll walk away with the confidence, portfolio, and expertise to stand out in your future career journey.`;
+  
 
   return (
     <motion.div
@@ -24,17 +118,7 @@ export default function SubtleScroll() {
         damping: 20,
         duration: 1.2,
       }}
-      style={{
-        width: "100%",
-  height: "536px",
-  background: "#101010",
-  position: "relative",
-  overflow: "hidden",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  transition: "all 0.4s ease",
-      }}
+      style={motionContainerStyle}
     >
       {isAwake && (
         <motion.div
@@ -46,83 +130,37 @@ export default function SubtleScroll() {
             stiffness: 150,
             damping: 30,
           }}
-          style={{
-            display: "flex",
-  alignItems: "center",
-  justifyContent: isAwake ? "flex-start" : "center",
-  width: "100%",
-  paddingLeft: isAwake ? "86px" : "0px",
-  gap: "40px",
-  position: "relative",
-  zIndex: 2,
-  transition: "all 0.4s ease",
-          }}
+          style={contentWrapperStyle}
         >
+          {/* Subtle Glow Layer (Keep as is) */}
           <div
-        style={{
-          position: "absolute",
-  inset: 0,
-  pointerEvents: "none",
-  zIndex: 1,
-  background:
-    "radial-gradient(circle at 95% 5%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 20px), " +
-    "radial-gradient(circle at 5% 95%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 320px)",
-  filter: "blur(100px)",
-        }}
-      />
+            style={{
+              position: "absolute",
+              inset: 0,
+              pointerEvents: "none",
+              zIndex: 1,
+              background:
+                "radial-gradient(circle at 95% 5%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 20px), " +
+                "radial-gradient(circle at 5% 95%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 320px)",
+              filter: "blur(100px)",
+            }}
+          />
+          
           {/* Left Image */}
           <img
             src={gemini}
             alt="gemini"
-            style={{
-              width: "514px",
-  height: "488px",
-  borderRadius: "36px",
-  objectFit: "cover",
-  flexShrink: 0,
-            }}
+            style={imageStyle}
           />
 
           {/* Right Text */}
-          <div
-            style={{
-              width: "640px",
-  color: "#FFFFFF",
-  fontFamily: "Poppins, sans-serif",
-  display: "flex",
-  flexDirection: "column",
-            }}
-          >
-            <h2
-              style={{
-                fontWeight: 600,
-                fontSize: "36px",
-                lineHeight: "130%",
-                marginBottom: "16px",
-              }}
-            >
-              Summer Training and Internship <br /> Opportunity for College
-              Students
+          <div style={textContainerStyle}>
+            <h2 style={headingStyle}>
+              {headingText}
             </h2>
-            <p
-              style={{
-                fontWeight: 400,
-                fontSize: "20px",
-                lineHeight: "150%",
-                color: "#E0E0E0",
-              }}
-            >
-              ✨ Kickstart Your Career This Summer! 
-              <br />Are you a college student eager to turn your summer break 
-              <br />into a career-defining opportunity? Join our Summer Training
-              <br />& Internship Program, carefully crafted for ambitious learners
-              <br />who want more than just classroom knowledge. Over the 
-              <br />course of the program, you’ll gain real-world skills, practical 
-              <br />hands-on experience, and valuable industry exposure, while 
-              <br />collaborating with professionals and peers on projects that 
-              <br />truly make an impact. By the end, you won’t just complete a 
-              <br />program — you’ll walk away with the confidence, portfolio, 
-              <br /> andexpertise to stand out in your future career journey.
+            <p style={paragraphStyle}>
+              {/* Note: I removed the manual <br /> tags from the original code and let the browser wrap the text naturally */}
+              {paragraphText}
             </p>
           </div>
         </motion.div>

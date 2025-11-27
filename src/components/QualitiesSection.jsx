@@ -1,37 +1,55 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { courses } from "../components/courses/CourseData";
+// ⚠️ Note: I am keeping the original imports as requested to make no change in logic, 
+// even though 'courses' should be dynamically fetched for better practice.
+import { courses } from "../components/courses/CourseData"; 
 import { sendEnquiry } from "../api/email";
 
+const desktopBreakpoint = 992; 
+
 export default function Qualities() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Existing state variables
   const [selectedCourse, setSelectedCourse] = useState("");
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
   const [mode, setMode] = useState("");
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
 
+  // --- Effect Hook for Responsiveness ---
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < desktopBreakpoint);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
+  // --- Submit Handler (Logic Unchanged) ---
   const handleSubmit = async () => {
     // Empty field validation
-  if (!name || !email || !mobile || !selectedCourse || !mode) {
-    alert("Please fill all fields");
-    return;
-  }
+    if (!name || !email || !mobile || !selectedCourse || !mode) {
+      alert("Please fill all fields");
+      return;
+    }
 
-  // Email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    alert("Please enter a valid email address");
-    return;
-  }
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
 
-  // Mobile must be exactly 10 digits
-  const phoneRegex = /^[0-9]{10}$/;
-  if (!phoneRegex.test(mobile)) {
-    alert("Mobile number must be exactly 10 digits");
-    return;
-  }
+    // Mobile must be exactly 10 digits
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(mobile)) {
+      alert("Mobile number must be exactly 10 digits");
+      return;
+    }
 
     try {
       const data = {
@@ -57,93 +75,146 @@ export default function Qualities() {
       alert("Something went wrong!");
     }
   };
+  
+  // --- Responsive Style Definitions ---
+
+  const sectionStyle = {
+    width: "100%",
+    margin: isMobile ? "20px auto 0" : "40px auto 0", 
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: isMobile ? "30px" : "60px", 
+    color: "white",
+    fontFamily: "Poppins, sans-serif",
+    padding: isMobile ? "0 20px" : "0", 
+  };
+
+  const contentWrapperStyle = {
+    display: "flex",
+    // Stack horizontally on desktop, vertically on mobile
+    flexDirection: isMobile ? "column" : "row",
+    justifyContent: isMobile ? "center" : "space-between",
+    alignItems: isMobile ? "center" : "flex-start",
+    width: isMobile ? "100%" : "1200px",
+    maxWidth: "100%",
+    gap: isMobile ? "30px" : "40px",
+  };
+
+  // Left Content (Heading)
+  const leftContentStyle = {
+    width: isMobile ? "100%" : "622px",
+    height: isMobile ? "auto" : "440px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    // Smaller font size on mobile
+    fontSize: isMobile ? "36px" : "64px",
+    fontWeight: 600,
+    lineHeight: "125%",
+    marginBottom: isMobile ? "20px" : "0", 
+  };
+
+  // Right Form Container
+  const rightFormStyle = {
+    width: isMobile ? "100%" : "622px",
+    // Constrain max width for centering on typical mobile screens
+    maxWidth: isMobile ? "450px" : "622px", 
+    height: isMobile ? "auto" : "440px",
+    borderRadius: "36px",
+    background: "#6325B8",
+    boxShadow: `
+      0px 4px 8px 0px #00000040 inset,
+      0px -4px 8px 0px #00000040 inset,
+      -4px 0px 8px 0px #00000040 inset,
+      4px 0px 8px 0px #00000040 inset
+    `,
+    // Adjusted padding for mobile
+    padding: isMobile ? "30px" : "5px 30px 0",
+    marginBottom: isMobile ? "0" : "50px",
+    marginTop: isMobile ? "0" : "30px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+  };
+  
+  // Form Heading
+  const formHeadingStyle = {
+    // Smaller font size on mobile
+    fontSize: isMobile ? "24px" : "32px",
+    fontWeight: 600,
+    marginBottom: "10px",
+    // Center alignment on mobile
+    marginLeft: isMobile ? "0" : "28px", 
+    textAlign: isMobile ? "center" : "left", 
+  };
+
+  // Input Row Container
+  const inputRowStyle = {
+    display: "flex",
+    // Stack inputs vertically on mobile
+    flexDirection: isMobile ? "column" : "row", 
+    gap: isMobile ? "20px" : "18px",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
+  // Individual Input/Dropdown Style Base
+  const inputBaseStyle = {
+    height: "45px",
+    borderRadius: "18px",
+    padding: "0 15px",
+    border: "none",
+    outline: "none",
+    // Use 100% width on mobile inputs
+    width: isMobile ? "100%" : "auto", 
+    flexGrow: isMobile ? 1 : 0,
+  };
+  
+  // Specific Input Widths (will be overridden to 100% on mobile by inputBaseStyle)
+  const nameInputStyle = { ...inputBaseStyle, width: isMobile ? "100%" : "257px" };
+  const emailInputStyle = { ...inputBaseStyle, width: isMobile ? "100%" : "263px" };
+  const mobileInputStyle = { ...inputBaseStyle, width: isMobile ? "100%" : "257px" };
+  const courseDropdownStyle = { position: "relative", width: isMobile ? "100%" : "263px" };
+  
+  const courseDropdownToggleStyle = {
+    width: "100%", // Ensures full width within its container
+    height: "45px",
+    borderRadius: "18px",
+    padding: "0 15px",
+    border: "2px solid",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    cursor: "pointer",
+    fontSize: "14px",
+  };
+
 
   return (
-    <section
-      style={{
-        width: "100%",
-        margin: "40px auto 0",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "60px",
-        color: "white",
-        fontFamily: "Poppins, sans-serif",
-      }}
-    >
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          width: "1200px",
-          gap: "40px",
-        }}
-      >
-        {/* Left Content */}
-        <div
-          style={{
-            width: "622px",
-            height: "440px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "64px",
-            fontWeight: 600,
-            lineHeight: "125%",
-          }}
-        >
+    <section style={sectionStyle}>
+      <div style={contentWrapperStyle}>
+        
+        {/* Left Content (Heading) */}
+        <div style={leftContentStyle}>
           Ready to Transform Your Career with AsproIT?
         </div>
 
         {/* Right Form */}
-        <div
-          style={{
-            width: "622px",
-            height: "440px",
-            borderRadius: "36px",
-            background: "#6325B8",
-            boxShadow: `
-              0px 4px 8px 0px #00000040 inset,
-              0px -4px 8px 0px #00000040 inset,
-              -4px 0px 8px 0px #00000040 inset,
-              4px 0px 8px 0px #00000040 inset
-            `,
-            padding: "5px 30px 0",
-            marginBottom: "50px",
-            marginTop: "30px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-          }}
-        >
-          <h3
-            style={{
-              fontSize: "32px",
-              fontWeight: 600,
-              marginBottom: "10px",
-              marginLeft: "28px",
-            }}
-          >
+        <div style={rightFormStyle}>
+          <h3 style={formHeadingStyle}>
             Enroll Now & Kickstart Your Career
           </h3>
 
-          {/* Inputs */}
-          <div style={{ display: "flex", gap: "18px" }}>
+          {/* Inputs - Row 1 */}
+          <div style={inputRowStyle}>
             <input
               type="text"
               placeholder="Name:"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              style={{
-                width: "257px",
-                height: "45px",
-                borderRadius: "18px",
-                padding: "0 15px",
-                border: "none",
-                outline: "none",
-              }}
+              style={nameInputStyle}
             />
 
             <input
@@ -151,49 +222,25 @@ export default function Qualities() {
               placeholder="Email:"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{
-                width: "263px",
-                height: "45px",
-                borderRadius: "18px",
-                padding: "0 15px",
-                border: "none",
-                outline: "none",
-              }}
+              style={emailInputStyle}
             />
           </div>
 
-          <div style={{ display: "flex", gap: "16px" }}>
+          {/* Inputs - Row 2 */}
+          <div style={inputRowStyle}>
             <input
               type="tel"
               placeholder="Mobile No:"
               value={mobile}
               onChange={(e) => setMobile(e.target.value)}
-              style={{
-                width: "257px",
-                height: "45px",
-                borderRadius: "18px",
-                padding: "0 15px",
-                border: "none",
-                outline: "none",
-              }}
+              style={mobileInputStyle}
             />
 
             {/* Course Dropdown */}
-            <div style={{ position: "relative", width: "263px" }}>
+            <div style={courseDropdownStyle}>
               <div
                 onClick={() => setIsCoursesOpen(!isCoursesOpen)}
-                style={{
-                  width: "263px",
-                  height: "45px",
-                  borderRadius: "18px",
-                  padding: "0 15px",
-                  border: "2px solid",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  cursor: "pointer",
-                  fontSize: "14px",
-                }}
+                style={courseDropdownToggleStyle}
               >
                 {selectedCourse || "Select a course"}
                 {isCoursesOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -212,6 +259,7 @@ export default function Qualities() {
                     flexDirection: "column",
                   }}
                 >
+                  {/* Using the imported 'courses' array (logic not changed) */}
                   {courses.map((course, index) => (
                     <div
                       key={index}
@@ -237,9 +285,26 @@ export default function Qualities() {
           </div>
 
           {/* Mode Selection */}
-          <label style={{ fontWeight: 500, fontSize: "16px" }}>Mode of Training</label>
+          <label 
+            style={{ 
+              fontWeight: 500, 
+              fontSize: "16px",
+              // Center the label text on mobile
+              textAlign: isMobile ? "center" : "left", 
+              marginTop: isMobile ? "10px" : "0", 
+            }}
+          >
+            Mode of Training
+          </label>
 
-          <div style={{ display: "flex", gap: "20px" }}>
+          <div 
+            style={{ 
+              display: "flex", 
+              gap: "20px",
+              // Center radio buttons horizontally on mobile
+              justifyContent: "center", 
+            }}
+          >
             <label style={{ display: "flex", gap: "5px", fontSize: "18px" }}>
               <input
                 type="radio"
@@ -277,6 +342,7 @@ export default function Qualities() {
               fontWeight: 500,
               cursor: "pointer",
               alignSelf: "center",
+              transition: "all 0.3s ease", 
             }}
             onMouseEnter={(e) => {
               e.target.style.width = "250px";

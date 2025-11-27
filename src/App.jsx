@@ -34,7 +34,12 @@ export default function App() {
 
   return (
     <Router>
-      <div className="App">
+      <div className="App"
+      style={{ 
+          overflowX: 'hidden', 
+          maxWidth: '100%', 
+          boxSizing: 'border-box' 
+        }}>
         <Routes>
 
           {/* Admin Routes */}

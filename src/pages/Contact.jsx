@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import bg from "../assets/homeBg.jpg";
 import contactImg from "../assets/contact.png";
 import Footer from "../components/Footer";
 import { sendContact } from "../api/email";
+
+const desktopBreakpoint = 768; 
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -13,6 +15,16 @@ export default function Contact() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false); // State to track mobile view
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < desktopBreakpoint);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,18 +33,18 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-     // Validation
-  if (!formData.name || !formData.phone_no || !formData.message) {
-    alert("Please fill all fields");
-    return;
-  }
+    // Validation
+    if (!formData.name || !formData.phone_no || !formData.message) {
+      alert("Please fill all fields");
+      return;
+    }
 
-  // Phone number must be exactly 10 digits
-  const phoneRegex = /^[0-9]{10}$/;
-  if (!phoneRegex.test(formData.phone_no)) {
-    alert("Mobile number must be exactly 10 digits");
-    return;
-  }
+    // Phone number must be exactly 10 digits
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(formData.phone_no)) {
+      alert("Mobile number must be exactly 10 digits");
+      return;
+    }
     setLoading(true);
 
     try {
@@ -40,7 +52,7 @@ export default function Contact() {
 
       alert(res.message || "Message sent successfully!");
 
-      setFormData({ name: "", mobile: "", message: "" });
+      setFormData({ name: "", phone_no: "", message: "" }); 
     } catch (error) {
       console.error(error);
       alert("Failed to send message. Please try again.");
@@ -49,60 +61,131 @@ export default function Contact() {
     }
   };
 
-  return (
-    <div style={{ backgroundColor: "black", color: "white", fontFamily: "Poppins, sans-serif" }}>
-      <Header />
+  // --- RESPONSIVE STYLE DEFINITIONS ---
 
-      <div
-        style={{
-          backgroundImage: `url(${bg})`,
-          width: "100%",
-    minHeight: "550px",
+  const mainSectionStyle = {
+    backgroundImage: `url(${bg})`,
+    width: "100%",
+    // Changed minHeight to only apply on desktop
+    minHeight: isMobile ? "auto" : "550px", 
+    paddingTop: isMobile ? "40px" : "0", 
+    paddingBottom: isMobile ? "40px" : "0", 
     backgroundSize: "cover",
     backgroundPosition: "center",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     margin: "0 auto",
-    padding: "0 40px",
-    gap: "25px",
-        }}
-      >
-        {/* Left Side */}
-        <div style={{ flex: 1,
+    // Conditional layout: row (desktop) vs column (mobile)
+    flexDirection: isMobile ? "column" : "row",
+    // Conditional padding: tight on mobile, wide on desktop
+    paddingLeft: isMobile ? "20px" : "40px",
+    paddingRight: isMobile ? "20px" : "40px",
+    // Gap can be zero on mobile if the image is removed, but keeping 40px ensures space below the form.
+    gap: isMobile ? "40px" : "25px", 
+    boxSizing: 'border-box', 
+  };
+  
+  // leftSideStyle is only relevant if the image is present, but we keep it for desktop rendering.
+  const leftSideStyle = {
+    flex: isMobile ? 'none' : 1, 
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",}}>
-          <img
-            src={contactImg}
-            alt="Contact Illustration"
-            style={{
-              width: "90%",
+    alignItems: "center",
+    width: isMobile ? '100%' : 'auto',
+  };
+  
+  const contactImageStyle = {
+    maxWidth: "90%", // Only used on desktop now
     height: "auto",
     boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
-            }}
-          />
-        </div>
+  };
 
-        {/* Right Side */}
-        <div
-          style={{
-             flex: 1,
+  const rightSideStyle = {
+    flex: 1,
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
+    alignItems: isMobile ? "center" : "flex-start", 
     gap: "20px",
-          }}
-        >
-          <h1
-            style={{
-              fontSize: "56px",
-              fontWeight: 600,
-              marginBottom: "10px",
-              marginTop: 0,
-              color: "#FFFFFF",
-            }}
-          >
+    width: '100%', // Use full width of the padded container
+    padding: isMobile ? '0' : '20px 0',
+  };
+  
+  const headingStyle = {
+    fontSize: isMobile ? "40px" : "56px", 
+    fontWeight: 600,
+    marginBottom: "10px",
+    marginTop: 0,
+    color: "#FFFFFF",
+    textAlign: isMobile ? "center" : "left", 
+    width: "100%",
+  };
+  
+  const formElementWidth = isMobile ? "100%" : "80%";
+  const buttonWidth = isMobile ? "100%" : "50%";
+
+  const formElementStyle = {
+    width: formElementWidth,
+    height: "50px",
+    borderRadius: "10px",
+    border: "none",
+    background: "#FFFFFF",
+    color: "#000",
+    fontSize: "18px",
+    paddingLeft: "20px",
+    outline: "none",
+    boxSizing: 'border-box',
+  };
+
+  const textareaStyle = {
+    ...formElementStyle,
+    width: isMobile ? "100%" : "80%", 
+    height: "100px",
+    padding: "15px 20px",
+    resize: "none",
+  };
+  
+  const buttonStyle = {
+    width: buttonWidth,
+    height: "50px",
+    borderRadius: "25px",
+    border: "none",
+    background: "#00A8FF",
+    color: "#FFFFFF",
+    fontSize: "18px",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "0.3s",
+    alignSelf: isMobile ? "center" : "flex-start", 
+    boxSizing: 'border-box',
+  };
+
+
+  return (
+    <div style={{ 
+      backgroundColor: "black", 
+      color: "white", 
+      fontFamily: "Poppins, sans-serif",
+      overflowX: "hidden", // Prevents horizontal scroll/zoom out
+    }}>
+      <Header />
+
+      <div style={mainSectionStyle}>
+        
+        {/* Left Side (Image) - Renders ONLY on Desktop */}
+        {!isMobile && (
+          <div style={leftSideStyle}>
+            <img
+              src={contactImg}
+              alt="Contact Illustration"
+              style={contactImageStyle}
+            />
+          </div>
+        )}
+
+        {/* Right Side (Form) */}
+        <div style={rightSideStyle}>
+          <h1 style={headingStyle}>
             Get in Touch
           </h1>
 
@@ -114,6 +197,8 @@ export default function Contact() {
               display: "flex",
               flexDirection: "column",
               gap: "20px",
+              // Center form fields on mobile if rightSide is centered
+              alignItems: isMobile ? "center" : "flex-start",
             }}
           >
             <input
@@ -123,17 +208,7 @@ export default function Contact() {
               value={formData.name}
               onChange={handleChange}
               required
-              style={{
-                width: "80%",
-                height: "50px",
-                borderRadius: "10px",
-                border: "none",
-                background: "#FFFFFF",
-                color: "#000",
-                fontSize: "18px",
-                paddingLeft: "20px",
-                outline: "none",
-              }}
+              style={formElementStyle}
             />
 
             <input
@@ -143,17 +218,7 @@ export default function Contact() {
               value={formData.phone_no}
               onChange={handleChange}
               required
-              style={{
-                width: "80%",
-                height: "50px",
-                borderRadius: "10px",
-                border: "none",
-                background: "#FFFFFF",
-                color: "#000",
-                fontSize: "18px",
-                paddingLeft: "20px",
-                outline: "none",
-              }}
+              style={formElementStyle}
             />
 
             <textarea
@@ -162,35 +227,13 @@ export default function Contact() {
               value={formData.message}
               onChange={handleChange}
               required
-              style={{
-                width: "78%",
-                height: "100px",
-                borderRadius: "10px",
-                border: "none",
-                background: "#FFFFFF",
-                color: "#000",
-                fontSize: "18px",
-                padding: "15px 20px",
-                resize: "none",
-                outline: "none",
-              }}
+              style={textareaStyle}
             />
 
             <button
               type="submit"
               disabled={loading}
-              style={{
-                width: "50%",
-    height: "50px",
-    borderRadius: "25px",
-    border: "none",
-    background: "#00A8FF",
-    color: "#FFFFFF",
-    fontSize: "18px",
-    fontWeight: 600,
-    cursor: "pointer",
-    transition: "0.3s",
-              }}
+              style={buttonStyle}
               onMouseEnter={(e) => !loading && (e.currentTarget.style.background = "#0090DD")}
               onMouseLeave={(e) => !loading && (e.currentTarget.style.background = "#00A8FF")}
             >
