@@ -201,7 +201,7 @@ export default function BlogManagement() {
       {/* CARDS */}
       <div
         style={{
-          width: "100px",
+          width: "90%",
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "30px",
@@ -214,7 +214,7 @@ export default function BlogManagement() {
           <div
             key={blog._id}
             style={{
-              width: "340px",
+              width: "90%",
               height: "350px",
               background: "#343434",
               borderRadius: "20px",
