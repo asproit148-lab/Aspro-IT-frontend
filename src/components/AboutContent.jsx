@@ -26,11 +26,10 @@ export default function AboutContent() {
         background:
       "radial-gradient(75.43% 86.11% at 6.76% 93.52%, rgba(61,150,224,0.1) 0%, rgba(61,61,61,0.3) 100%)",
     borderRadius: "20px",
-    padding: "40px 90px",
+    padding: "40px 50px",
     boxShadow: "0px 4px 25px 0px rgba(61,150,224,0.4)",
-    maxWidth: "1200px",
-    margin: "0 auto",
-    width: "100%",
+    margin: "0",
+    width: "95%",
       }}
     >
       {/* About Us */}
