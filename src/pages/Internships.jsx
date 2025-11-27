@@ -26,7 +26,7 @@ export default function Internships() {
       <div
         style={{
           width: "100%",
-          padding: "20px 80px",
+          padding: "20px 40px",
           color: "white",
           fontFamily: "Poppins, sans-serif",
         }}
@@ -61,9 +61,12 @@ export default function Internships() {
         <div
           style={{
             width: "90%",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "40px",
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "30px",
+          marginLeft: "50px",
+          marginTop: "50px",
+          marginBottom: "100px",
           }}
         >
           {internships.map((job, index) => (
