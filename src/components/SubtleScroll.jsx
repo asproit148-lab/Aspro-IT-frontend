@@ -19,8 +19,7 @@ export default function SubtleScroll() {
 
   // Base motion container style
   const motionContainerStyle = {
-    width: "100%",
-    // ➡️ FIX 1: Set height dynamically on mobile
+    width: isMobile ? "90%" : "100%", 
     height: isMobile ? "auto" : "536px", 
     padding: isMobile ? "40px 20px" : "0", // Add vertical padding on mobile
     background: "#101010",

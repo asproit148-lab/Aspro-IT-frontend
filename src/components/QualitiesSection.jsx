@@ -79,7 +79,7 @@ export default function Qualities() {
   // --- Responsive Style Definitions ---
 
   const sectionStyle = {
-    width: "100%",
+    width: isMobile ? "80%" : "100%", 
     margin: isMobile ? "20px auto 0" : "40px auto 0", 
     display: "flex",
     flexDirection: "column",
@@ -120,7 +120,7 @@ export default function Qualities() {
   const rightFormStyle = {
     width: isMobile ? "100%" : "622px",
     // Constrain max width for centering on typical mobile screens
-    maxWidth: isMobile ? "450px" : "622px", 
+    maxWidth: isMobile ? "350px" : "622px", 
     height: isMobile ? "auto" : "440px",
     borderRadius: "36px",
     background: "#6325B8",

@@ -42,7 +42,7 @@ export default function Companies() {
 
   const headingStyle = {
     // ➡️ FIX 2: Shrink width, margins, and font size on mobile
-    width: isMobile ? "100%" : "1250px",
+    width: isMobile ? "95%" : "100%", 
     height: isMobile ? "auto" : "72px",
     marginTop: isMobile ? "0" : "30px",
     fontFamily: "Poppins, sans-serif",

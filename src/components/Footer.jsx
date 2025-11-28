@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import styled from "@emotion/styled";
 import logo from "../assets/logo.png";
 import facebook from "../assets/facebook.png";
 import whatsapp from "../assets/whatsapp.png";
@@ -6,223 +7,303 @@ import instagram from "../assets/instagram.png";
 import x from "../assets/x.png";
 import linkedin from "../assets/linkedin.png";
 
-const desktopBreakpoint = 768; 
+// --- Constants ---
+const desktopBreakpoint = 768;
 
-export default function Footer() {
-  const [isMobile, setIsMobile] = useState(false);
+// --- Custom Hook to check screen size ---
+const useIsMobile = (breakpoint) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < breakpoint);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < desktopBreakpoint);
+      setIsMobile(window.innerWidth < breakpoint);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [breakpoint]);
 
-  // --- Style Definitions ---
+  return isMobile;
+};
 
-  const footerStyle = {
-    width: "100%",
-    minHeight: isMobile ? "auto" : "450px", 
-    background: "#101010",
-    boxShadow: "inset 0px -8px 12px #2A292940, inset 0px 8px 12px #2A292940",
-    display: "flex",
-    flexDirection: isMobile ? "column" : "row", 
-    alignItems: isMobile ? "center" : "flex-start",
-    padding: isMobile ? "40px 20px" : "50px 40px", 
-    position: "relative",
-    color: "#FFFFFF",
-    fontFamily: "Poppins, sans-serif",
-    gap: isMobile ? "40px" : "50px",
-    flexWrap: isMobile ? "nowrap" : "wrap", 
-    overflowX: "hidden", // Final check to prevent horizontal scroll
-  };
+// --- Styled Components (Desktop-First Approach) ---
 
-  // LEFT SIDE (Company, Subscribe)
-  const leftSideStyle = {
-    display: "flex",
-    flexDirection: "column",
-    gap: isMobile ? "20px" : "48px",
-    minWidth: isMobile ? "100%" : "280px", 
-    maxWidth: isMobile ? "100%" : "407px", // Allow full width on mobile
-    textAlign: isMobile ? "center" : "left",
-    alignItems: isMobile ? "center" : "flex-start",
-  };
+const StyledFooter = styled.footer`
+  /* DESKTOP DEFAULTS (No change from original request) */
+  width: 100%;
+  min-height: 450px;
+  background: #101010;
+  box-shadow: inset 0px -8px 12px #2A292940, inset 0px 8px 12px #2A292940;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 50px 40px;
+  position: relative;
+  color: #FFFFFF;
+  font-family: 'Poppins', sans-serif;
+  gap: 50px;
+  flex-wrap: wrap;
+  overflow-x: hidden;
 
-  // Right Side Container (Address, Company, Contacts)
-  const rightSideStyle = {
-    display: "flex",
-    // Use row layout on both, but rely on flexWrap and conditional sizing
-    flexDirection: "row", 
-    gap: isMobile ? "40px" : "50px",
-    flexWrap: "wrap", // ALLOWS COLUMNS TO STACK/WRAP IF THEY DON'T FIT
-    justifyContent: isMobile ? "center" : "flex-start",
-    // Crucial: Use flex-grow on desktop, full width on mobile
-    width: isMobile ? "100%" : "auto", 
-    flexGrow: isMobile ? 0 : 1,
-  };
+  /* MOBILE OVERRIDES */
+  @media (max-width: ${desktopBreakpoint}px) {
+    width: 90%;
+    min-height: auto;
+    flex-direction: column;
+    align-items: center; /* Center content block */
+    padding: 40px 20px;
+    gap: 40px;
+    flex-wrap: nowrap;
+  }
+`;
 
-  // Individual Column Heading (Address, Company, Contacts)
-  const columnHeadingStyle = {
-    fontFamily: "Inter, sans-serif",
-    fontWeight: 600,
-    fontSize: isMobile ? "28px" : "36px", 
-    margin: 0,
-    width: "100%",
-    textAlign: isMobile ? "center" : "left",
-  };
+const LeftSide = styled.div`
+  /* DESKTOP DEFAULTS */
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  min-width: 280px;
+  max-width: 407px;
+  text-align: left;
+  align-items: flex-start;
 
-  // Individual Column Content (Address, Company, Contacts)
-  const columnContentStyle = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
-    // FIX: Min-width should be auto on mobile to prevent overflow
-    minWidth: isMobile ? "auto" : "150px", 
-    // Important: Allow columns to take roughly 1/3rd of the available space on desktop.
-    flex: isMobile ? 'none' : '1 1 auto', 
-    textAlign: isMobile ? "center" : "left",
-  };
+  /* MOBILE OVERRIDES */
+  @media (max-width: ${desktopBreakpoint}px) {
+    gap: 20px;
+    min-width: 100%;
+    max-width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+`;
+
+const LogoImage = styled.img`
+  /* DESKTOP DEFAULTS */
+  width: 221px;
+  height: 63px;
+  mix-blend-mode: lighten;
+  display: block;
+  margin: 0;
+
+  /* MOBILE OVERRIDES */
+  @media (max-width: ${desktopBreakpoint}px) {
+    width: 180px;
+    height: 50px;
+    margin: 0 auto 10px auto; /* Center logo on mobile */
+  }
+`;
+
+const CompanyDescriptionWrapper = styled.div`
+  /* DESKTOP DEFAULTS */
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 160%;
+  color: #FFFFFF;
   
-  // Link/Paragraph Text
-  const linkTextStyle = {
-    textDecoration: "none",
-    color: "#FFFFFF99",
-    fontSize: isMobile ? "16px" : "24px", // Reduced size slightly more for mobile
-    fontWeight: 500,
-    lineHeight: isMobile ? "24px" : "32px",
-    transition: "all 0.3s ease",
-    // FIX: Allow wrapping on mobile, but keep original nowrap on desktop for aesthetics
-    whiteSpace: isMobile ? "normal" : "nowrap", 
-    // Center text on mobile if the parent columnContentStyle is centered
-    textAlign: isMobile ? "center" : "left",
-  };
+  /* Inherit text alignment from LeftSide */
+  text-align: inherit; 
+`;
 
-  // Social Media Icons Section
-  const socialIconsStyle = {
-    // FIX: Remove absolute positioning on mobile; integrate into flow
-    position: isMobile ? "relative" : "absolute", 
-    right: isMobile ? "auto" : "200px",
-    bottom: isMobile ? "auto" : "80px",
-    marginTop: isMobile ? "20px" : "0", 
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: isMobile ? "center" : "space-between",
-    gap: isMobile ? "15px" : "24px",
-    width: isMobile ? "100%" : "auto",
-    maxWidth: isMobile ? "100%" : "400px", // Use 100% of the container on mobile
-    order: isMobile ? 4 : 0, 
-  };
-  
-  // Social Icon Image size
-  const iconImageStyle = {
-    width: isMobile ? "32px" : "50px", // Slightly smaller icons on mobile
-    height: isMobile ? "32px" : "50px",
-    objectFit: "contain",
-    cursor: "pointer",
-    transition: "transform 0.3s ease",
-  };
+const RightSide = styled.div`
+  /* DESKTOP DEFAULTS */
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-grow: 1; /* Allows it to take up available space */
+  justify-content: flex-start;
+
+  /* MOBILE OVERRIDES */
+  @media (max-width: ${desktopBreakpoint}px) {
+    width: 100%;
+    gap: 40px 20px; /* Vertical and horizontal gap */
+    justify-content: space-around; /* Distribute columns */
+    flex-grow: 0;
+  }
+`;
+
+const ColumnContent = styled.div`
+  /* DESKTOP DEFAULTS */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 150px;
+  flex: 1 1 0; /* Ensures even distribution, similar to original flex: '1 1 auto' */
+  text-align: left;
+
+  /* MOBILE OVERRIDES */
+  @media (max-width: ${desktopBreakpoint}px) {
+    min-width: 45%; /* Allows two columns per row on mobile/tablet */
+    max-width: 50%;
+    text-align: center;
+    flex: none;
+  }
+`;
+
+const ColumnHeading = styled.h3`
+  /* DESKTOP DEFAULTS */
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 36px;
+  margin: 0;
+  color: #FFFFFF;
+  text-align: left;
+  width: 100%;
+
+  /* MOBILE OVERRIDES */
+  @media (max-width: ${desktopBreakpoint}px) {
+    font-size: 28px;
+    text-align: center;
+  }
+`;
+
+const FooterText = styled.p`
+  /* DESKTOP DEFAULTS (Used for Address text and contact links) */
+  text-decoration: none;
+  color: #FFFFFF99;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 32px;
+  transition: all 0.3s ease;
+  white-space: nowrap; /* Default nowrap for desktop links/contacts */
+  text-align: inherit; /* Inherit alignment from ColumnContent */
+
+  /* MOBILE OVERRIDES */
+  @media (max-width: ${desktopBreakpoint}px) {
+    font-size: 16px;
+    line-height: 24px;
+    white-space: normal; /* Allow wrapping on mobile for fit */
+    text-align: center;
+  }
+`;
+
+const SocialIconsContainer = styled.div`
+  /* DESKTOP DEFAULTS */
+  position: absolute;
+  right: 200px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: auto;
+
+  /* MOBILE OVERRIDES */
+  @media (max-width: ${desktopBreakpoint}px) {
+    position: relative; /* Integrate into flow */
+    right: auto;
+    bottom: auto;
+    margin-top: 20px;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    order: 4; /* Ensures it appears last in the vertical mobile flow */
+  }
+`;
+
+const SocialIcon = styled.img`
+  /* DESKTOP DEFAULTS */
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  /* MOBILE OVERRIDES */
+  @media (max-width: ${desktopBreakpoint}px) {
+    width: 32px;
+    height: 32px;
+  }
+`;
+
+// --- Component Start ---
+
+export default function Footer() {
+  const isMobile = useIsMobile(desktopBreakpoint);
+
+  // Helper for applying link styling to anchor tags
+  const LinkItem = ({ item, href = "#", enableWrap = false }) => (
+    <FooterText 
+      as="a" 
+      href={href} 
+      style={enableWrap ? { whiteSpace: 'normal' } : {}}
+    >
+      {item}
+    </FooterText>
+  );
 
   return (
-    <footer style={footerStyle}>
+    <StyledFooter>
       
-      {/* LEFT SIDE (Company, Subscribe) */}
-      <div style={leftSideStyle}>
-        {/* Company Description */}
-        <div style={{ width: "100%", textAlign: isMobile ? "center" : "left" }}>
-          <img
-            src={logo}
-            alt="AsproIT Logo"
-            style={{
-              width: isMobile ? "180px" : "221px", 
-              height: isMobile ? "50px" : "63px",
-              mixBlendMode: "lighten",
-              marginBottom: isMobile ? "10px" : "0",
-              // Center image horizontally in its container on mobile
-              display: 'block',
-              margin: isMobile ? '0 auto 10px auto' : '0 0 0 0',
-            }}
-          />
-          <p
-            style={{
-              fontWeight: 400,
-              fontSize: isMobile ? "14px" : "16px",
-              lineHeight: "160%",
-              color: "#FFFFFF",
-              margin: 0,
-            }}
-          >
+      {/* LEFT SIDE (Company, Description) */}
+      <LeftSide>
+        <CompanyDescriptionWrapper>
+          <LogoImage src={logo} alt="AsproIT Logo" />
+          <FooterText as="p" style={{ 
+            fontWeight: 400, 
+            fontSize: isMobile ? "14px" : "16px",
+            lineHeight: "160%", 
+            color: "#FFFFFF",
+            whiteSpace: 'normal',
+            margin: '0',
+            textAlign: 'inherit'
+          }}>
             “AsproIT is an IT training and internship company dedicated to
             empowering students and professionals with practical skills in
             Python, Generative AI, and Data Analytics. With hands-on projects,
             expert mentors, and strong career support, we help learners
             confidently step into the future of technology.”
-          </p>
-        </div>
-        {/* NOTE: If there was a Subscribe input field, it would go here */}
-      </div>
+          </FooterText>
+        </CompanyDescriptionWrapper>
+      </LeftSide>
 
       {/* RIGHT SIDE (Address, Company, Contacts) */}
-      <div style={rightSideStyle}>
+      <RightSide>
         {/* Address */}
-        <div style={columnContentStyle}>
-          <h3 style={columnHeadingStyle}>
-            Address
-          </h3>
-          <p style={{ ...linkTextStyle, whiteSpace: "normal" }}>
+        <ColumnContent>
+          <ColumnHeading>Address</ColumnHeading>
+          <FooterText as="p" style={{ whiteSpace: "normal" }}>
             1st Floor, Pratiksha,
             <br />
             Bhawan khajpura,
             <br />
             Patna, India-800014
-          </p>
-        </div>
+          </FooterText>
+        </ColumnContent>
 
         {/* Company Links */}
-        <div style={columnContentStyle}>
-          <h3 style={columnHeadingStyle}>
-            Company
-          </h3>
+        <ColumnContent>
+          <ColumnHeading>Company</ColumnHeading>
           {["Home", "Courses", "About", "Contact"].map((item, i) => (
-            <a key={i} href="#" style={linkTextStyle}>
-              {item}
-            </a>
+            <LinkItem key={i} item={item} />
           ))}
-        </div>
+        </ColumnContent>
 
         {/* Contacts */}
-        <div style={columnContentStyle}>
-          <h3 style={columnHeadingStyle}>
-            Contacts
-          </h3>
-          {/* FIX: Ensure contacts wrap correctly on mobile */}
+        <ColumnContent>
+          <ColumnHeading>Contacts</ColumnHeading>
           {["+91-9128444000", "admin@asproit.com"].map((item, i) => (
-            <a key={i} href="#" style={{ ...linkTextStyle, whiteSpace: 'normal' }}>
-              {item}
-            </a>
+            <LinkItem key={i} item={item} enableWrap={true} />
           ))}
-        </div>
-      </div>
+        </ColumnContent>
+      </RightSide>
       
-      {/* Social Media Icons Section - Now responsive */}
-      <div style={socialIconsStyle}>
+      {/* Social Media Icons Section */}
+      <SocialIconsContainer>
         {[facebook, instagram, x, whatsapp, linkedin].map((icon, i) => (
-          <img
+          <SocialIcon
             key={i}
             src={icon}
             alt="social-icon"
-            style={iconImageStyle}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.transform = "scale(1.1)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.transform = "scale(1)")
-            }
+            // Hover logic is now inside SocialIcon:hover
           />
         ))}
-      </div>
-    </footer>
+      </SocialIconsContainer>
+    </StyledFooter>
   );
 }

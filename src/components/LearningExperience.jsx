@@ -59,7 +59,7 @@ export default function LearningExperience() {
 
   const sectionStyle = {
     position: "relative",
-    width: "100%",
+    width: isMobile ? "95%" : "100%", 
     display: "flex",
     flexDirection: "column",
     alignItems: "center",

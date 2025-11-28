@@ -1,10 +1,140 @@
 import React, { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
+import styled from "@emotion/styled";
 import { useAuth } from "../context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPopup({ onClose, setToken, onSignup }) {
+const PopupOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  padding: 20px;
+`;
+
+const PopupContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 28px 24px;
+  background: #0B1C39;
+  border: 1px solid #ffffff40;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+
+  /* FIX: Smooth scrolling only if needed */
+  max-height: 90vh;
+  overflow-y: auto;
+`;
+
+const CloseButton = styled.span`
+  position: absolute;
+  top: 10px;
+  right: 18px;
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+`;
+
+const Title = styled.h1`
+  font-family: Poppins, sans-serif;
+  font-size: 34px;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 8px;
+
+  @media (max-width: 480px) {
+    font-size: 28px;
+    margin-top: 20px;
+  }
+`;
+
+const SubTitle = styled.p`
+  font-family: Poppins, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #6D829F;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 18px;
+`;
+
+const Label = styled.label`
+  width: 100%;
+  font-family: Poppins, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #C9C9C9;
+  margin-bottom: 6px;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  height: 46px;
+  border-radius: 4px;
+  border: 1px solid #2A2A2A;
+  background: #142339;
+  color: #C9C9C9;
+  padding: 10px 12px;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-bottom: 14px;
+  outline: none;
+
+  &:focus {
+    border-color: #3f7ec8;
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  height: 48px;
+  background: #052E5A;
+  color: white;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  border: 1px solid #2A2A2A;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: 0.2s ease;
+
+  &:hover {
+    border: 1px solid #fff;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;
+
+const SignupText = styled.p`
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6D829F;
+  margin-top: 12px;
+
+  span {
+    color: #3f7ec8;
+    cursor: pointer;
+    font-weight: 600;
+  }
+`;
+
+export default function LoginPopup({ onClose, onSignup }) {
   const { signIn, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
 
@@ -13,37 +143,24 @@ export default function LoginPopup({ onClose, setToken, onSignup }) {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      alert("Please fill all fields");
-      return;
-    }
+    if (!email || !password) return alert("Please fill all fields");
 
-    // Email format validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    alert("Please enter a valid email address");
-    return;
-  }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return alert("Invalid email format");
 
-  // Password rules
-  if (password.length < 6) {
-    alert("Password must be at least 6 characters");
-    return;
-  }
+    if (password.length < 6) return alert("Password must be at least 6 characters");
 
     try {
       setLoading(true);
       const res = await signIn({ email, password });
+
       if (!res.success) {
         alert(res.message || "Login failed");
         return;
       }
 
-if (res.user?.role === "admin") {
-  navigate("/admin/dashboard");
-} else {
-  navigate("/");
-}
+      if (res.user?.role === "admin") navigate("/admin/dashboard");
+      else navigate("/");
 
       alert("Login Successful!");
       onClose();
@@ -54,209 +171,62 @@ if (res.user?.role === "admin") {
     }
   };
 
+  const handleGoogleSuccess = async (res) => {
+    setLoading(true);
+    try {
+      const response = await signInWithGoogle(res.credential);
+      if (!response.success) alert(response.message || "Google login failed");
+      else {
+        alert("Login Successful!");
+        onClose();
+      }
+    } catch (e) {
+      alert("Google login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        background: "rgba(0, 0, 0, 0.5)",
-        backdropFilter: "blur(4px)",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}
-    >
-      <div
-        style={{
-          position: "relative",
-          width: "461px",
-          height: "560.757px",
-          border: "2px solid #FFFFFF",
-          borderRadius: "12px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "24px",
-          gap: "16px",
-          background: "#0B1C39",
-          boxSizing: "border-box",
-        }}
-      >
-        {/* Close button */}
-        <span
-          style={{
-            position: "absolute",
-            top: "8px",
-            right: "18px",
-            fontSize: "32px",
-            fontWeight: "bold",
-            color: "#FFFFFF",
-            cursor: "pointer",
-          }}
-          onClick={onClose}
-        >
-          ×
-        </span>
+    <PopupOverlay>
+      <PopupContainer>
 
-        <h1
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 600,
-            fontSize: "40px",
-            color: "#FFFFFF",
-            width: "304px",
-            height: "48px",
-            textAlign: "center",
-            marginTop: "10px",
-            marginBottom: "0",
-          }}
-        >
-          Welcome Back
-        </h1>
+        <CloseButton onClick={onClose}>×</CloseButton>
 
-        <p
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 600,
-            fontSize: "16px",
-            color: "#6D829F",
-            width: "286px",
-            height: "18px",
-            textAlign: "center",
-            marginTop: 0,
-          }}
-        >
-          Login to your account to continue
-        </p>
+        <Title>Welcome Back</Title>
+        <SubTitle>Login to your account to continue</SubTitle>
 
-        {/* Email */}
-        <span
-          style={{
-            width: "100%",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "16px",
-            fontWeight: 600,
-            color: "#C9C9C9",
-            marginTop: "4px",
-            marginLeft: "24px",
-          }}
-        >
-          Email Address
-        </span>
-        <input
+        <Label>Email Address</Label>
+        <Input
           type="email"
           placeholder="You@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{
-            width: "360px",
-            height: "44px",
-            color: "#434D5B",
-            borderRadius: "3.3px",
-            border: "0.82px solid #2A2A2A",
-            background: "#142339",
-            padding: "12px",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "14px",
-            fontWeight: 500,
-            outline: "none",
-          }}
         />
 
-        {/* Password */}
-        <span
-          style={{
-            width: "100%",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "16px",
-            fontWeight: 600,
-            color: "#C9C9C9",
-            marginTop: "2px",
-            marginLeft: "24px",
-          }}
-        >
-          Password
-        </span>
-        <input
+        <Label>Password</Label>
+        <Input
           type="password"
           placeholder="Enter your password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={{
-            width: "360px",
-            height: "44px",
-            borderRadius: "3.3px",
-            border: "0.82px solid #2A2A2A",
-            background: "#142339",
-            padding: "12px",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "14px",
-            fontWeight: 500,
-            outline: "none",
-          }}
         />
 
-        <button
-          style={{
-            width: "360px",
-            height: "48px",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 600,
-            fontSize: "16px",
-            border: "none",
-            cursor: "pointer",
-            paddingTop: "8px",
-            paddingBottom: "12px",
-            background: "#052E5A",
-            border: "1px solid #2A2A2A",
-            color: "#FFFFFF",
-            marginTop: "16px",
-            marginBottom: "8px",
-          }}
-          onMouseEnter={(e) => (e.target.style.border = "2px solid #FFFFFF")}
-          onMouseLeave={(e) => (e.target.style.border = "1px solid #2A2A2A")}
-          onClick={handleLogin}
-          disabled={loading}
-        >
+        <Button disabled={loading} onClick={handleLogin}>
           {loading ? "Logging in..." : "Login"}
-        </button>
+        </Button>
 
-        {/* Google login */}
-        <GoogleLogin
-          onSuccess={async (res) => {
-            setLoading(true);
-            const token = res.credential;
-            const response = await signInWithGoogle(token);
-            if (!response.success) {
-              alert(response.message || "Google login failed");
-            } else {
-              alert("Login Successful!");
-              onClose();
-            }
-            setLoading(false);
-          }}
-          onError={() => alert("Google login failed")}
-        />
+        <div style={{ marginTop: "12px" }}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => alert("Google login failed")}
+          />
+        </div>
 
-        <p
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "13px",
-            fontWeight: "600",
-            color: "#6D829F",
-            marginTop: "6px",
-          }}
-        >
-          New user?{" "}
-          <span style={{ color: "#12549C", cursor: "pointer" }} onClick={onSignup}>
-            Signup
-          </span>
-        </p>
-      </div>
-    </div>
+        <SignupText>
+          New user? <span onClick={onSignup}>Signup</span>
+        </SignupText>
+      </PopupContainer>
+    </PopupOverlay>
   );
 }

@@ -2,222 +2,336 @@ import React, { useState, useEffect } from "react";
 import { Plus, Eye, Trash2 } from "lucide-react";
 import AddResource from "../../components/admin/AddResource";
 import {
-  addResource as addResourceAPI,
-  getAllResources,
-  deleteResource as deleteResourceAPI,
+  addResource as addResourceAPI,
+  getAllResources,
+  deleteResource as deleteResourceAPI,
 } from "../../api/resource";
 
+// Define breakpoints
+const largeBreakpoint = 1200; // For 3 columns to 2 columns
+const tabletBreakpoint = 768; // For 2 columns to 1 column
+
 export default function ResourceManagement() {
-  const [resources, setResources] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
+  const [resources, setResources] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-  // Fetch all resources from backend
-  const fetchResources = async () => {
-    try {
-      const allResources = await getAllResources(); // returns array directly
-      setResources(allResources);
-    } catch (err) {
-      console.error("Error fetching resources:", err);
-    }
-  };
+  const isMobile = screenWidth < tabletBreakpoint;
+  const isTablet = screenWidth < largeBreakpoint;
 
-  useEffect(() => {
-    fetchResources();
-  }, []);
+  // Effect to track screen size for responsiveness
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  const handleAddResource = async (newResource) => {
-    try {
-      const formData = new FormData();
-      formData.append("title", newResource.title);
-      formData.append("description", newResource.description);
-      formData.append("filePath", newResource.fileRaw);
+  // Fetch all resources from backend
+  const fetchResources = async () => {
+    try {
+      const allResources = await getAllResources(); // returns array directly
+      setResources(allResources);
+    } catch (err) {
+      console.error("Error fetching resources:", err);
+    }
+  };
 
-      const savedResourceData = await addResourceAPI(formData);
-      const savedResource = savedResourceData.resource; // backend returns { message, resource }
-      setResources((prev) => [...prev, savedResource]);
-    } catch (err) {
-      console.error("Error adding resource:", err);
-    }
-  };
+  useEffect(() => {
+    fetchResources();
+  }, []);
 
-  const handleDeleteResource = async (id) => {
-    if (window.confirm("Are you sure you want to delete this resource?")) {
-      try {
-        await deleteResourceAPI(id);
-        setResources((prev) => prev.filter((res) => res._id !== id));
-      } catch (err) {
-        console.error("Error deleting resource:", err);
-      }
-    }
-  };
+  const handleAddResource = async (newResource) => {
+    try {
+      const formData = new FormData();
+      formData.append("title", newResource.title);
+      formData.append("description", newResource.description);
+      formData.append("filePath", newResource.fileRaw);
 
-  const handleViewResource = (link) => {
-    window.open(link, "_blank");
-  };
+      const savedResourceData = await addResourceAPI(formData);
+      const savedResource = savedResourceData.resource; // backend returns { message, resource }
+      setResources((prev) => [...prev, savedResource]);
+      setShowPopup(false);
+    } catch (err) {
+      console.error("Error adding resource:", err);
+    }
+  };
 
-  return (
-    <div
-      style={{
-        left: "100px",
-        background: "black",
-        color: "white",
-        fontFamily: "Poppins, sans-serif",
-        paddingTop: "140px",
-        paddingLeft: "120px",
-        minHeight: "100vh",
-      }}
-    >
-      {/* Heading */}
-      <div>
-        <h1 style={{ fontWeight: 600, fontSize: "36px", color: "#FFFFFF", marginLeft: "24px", marginBottom: 0 }}>
-          Resources
-        </h1>
-        <p style={{ fontWeight: 400, fontSize: "16px", color: "#FFFFFF", opacity: 0.9, marginTop: "4px", marginLeft: "24px" }}>
-          Manage and access all course-related study materials and notes
-        </p>
-      </div>
+  const handleDeleteResource = async (id) => {
+    if (window.confirm("Are you sure you want to delete this resource?")) {
+      try {
+        await deleteResourceAPI(id);
+        setResources((prev) => prev.filter((res) => res._id !== id));
+      } catch (err) {
+        console.error("Error deleting resource:", err);
+      }
+    }
+  };
 
-      {/* Top Bar */}
-      <div
-        style={{
-          width: "90%",
-          height: "72px",
-          marginTop: "40px",
-          marginLeft: "20px",
-          borderRadius: "10px",
-          background: "linear-gradient(90.19deg, #323232 0%, #0F0F0F 59.13%)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingLeft: "30px",
-          paddingRight: "30px",
-        }}
-      >
-        <div>
-          <p style={{ fontSize: "20px", fontWeight: 400, marginBottom: "2px" }}>Total Resources</p>
-          <p style={{ fontSize: "24px", fontWeight: 500, marginTop: "0", marginBottom: "10px" }}>{resources.length}</p>
-        </div>
+  const handleViewResource = (link) => {
+    window.open(link, "_blank");
+  };
 
-        <button
-          onClick={() => setShowPopup(true)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            background: "#525252",
-            color: "#FFFFFF",
-            fontSize: "16px",
-            borderRadius: "10px",
-            border: "none",
-            padding: "10px 12px",
-            cursor: "pointer",
-          }}
-        >
-          <Plus size={18} />
-          Add Resource
-        </button>
-      </div>
+  // Determine number of columns based on screen size
+  let columns = 3;
+  if (screenWidth < largeBreakpoint && screenWidth >= tabletBreakpoint) {
+    columns = 2;
+  } else if (screenWidth < tabletBreakpoint) {
+    columns = 1;
+  }
 
-      {/* Resource Cards */}
-      <div
-        style={{
-          width: "90%",
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "30px",
-          marginLeft: "50px",
-          marginTop: "50px",
-          marginBottom: "100px",
-        }}
-      >
-        {resources.map((res) => (
-          <div
-            key={res._id}
-            style={{
-              width: "90%",
-              minHeight: "150px",
-              background: "#343434",
-              borderRadius: "20px",
-              padding: "12px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              alignItems: "center",
-              textAlign: "center",
-              boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",
-            }}
-          >
-            <div>
-              <h3 style={{ fontSize: "18px", fontWeight: 500, marginBottom: "8px" }}>{res.title}</h3>
-              <p
-                style={{
-                  fontSize: "15px",
-                  color: "#C9C9C9",
-                  lineHeight: "18px",
-                  whiteSpace: "normal",
-                  wordWrap: "break-word",
-                  overflowWrap: "break-word",
-                }}
-              >
-                {res.description}
-              </p>
-            </div>
+  return (
+    <div
+      style={{
+        background: "black",
+        color: "white",
+        fontFamily: "Poppins, sans-serif",
+        minHeight: "100vh",
+        boxSizing: 'border-box',
+        // ⬅️ CRUCIAL: Responsive container adjustments
+        marginLeft: isMobile ? "0" : "30px",
+        paddingTop: isMobile ? "80px" : "140px",
+        paddingLeft: isMobile ? "20px" : "120px",
+        paddingRight: isMobile ? "20px" : "20px",
+        paddingBottom: "100px",
+        width: isMobile ? '100%' : 'calc(100% - 100px)',
+      }}
+    >
+      {/* Heading */}
+      <div style={{ padding: isMobile ? '0' : '0 0 0 24px' }}>
+        <h1
+          style={{
+            fontWeight: 600,
+            // ⬅️ ADJUSTED: Smaller font size on mobile
+            fontSize: isMobile ? "28px" : "36px",
+            color: "#FFFFFF",
+            // ⬅️ CRUCIAL: Remove fixed left margin on mobile
+            marginLeft: isMobile ? "0" : "0",
+            marginBottom: isMobile ? "4px" : "8px",
+            marginTop: 0,
+          }}
+        >
+          Resources
+        </h1>
+        <p
+          style={{
+            fontWeight: 400,
+            // ⬅️ ADJUSTED: Smaller font size on mobile
+            fontSize: isMobile ? "14px" : "16px",
+            color: "#FFFFFF",
+            opacity: 0.9,
+            marginTop: isMobile ? "0" : "4px",
+            // ⬅️ CRUCIAL: Remove fixed left margin on mobile
+            marginLeft: isMobile ? "0" : "0",
+            marginBottom: isMobile ? "20px" : "0",
+          }}
+        >
+          Manage and access all course-related study materials and notes
+        </p>
+      </div>
 
-            <div style={{ display: "flex", justifyContent: "center", gap: "80px", marginTop: "16px" }}>
-              <button
-                onClick={() => handleViewResource(res.url)}
-                style={{
-                  width: "130px",
-                  height: "36px",
-                  borderRadius: "10px",
-                  background: "#4254A5",
-                  color: "#E3E3E3",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "7px",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                <Eye size={20} />
-                View Resource
-              </button>
+      {/* Top Bar (Total Resources) */}
+      <div
+        style={{
+          // ⬅️ CRUCIAL: Responsive width/margin adjustments
+          width: isMobile ? "100%" : "100%",
+          height: isMobile ? "60px" : "72px",
+          marginTop: isMobile ? "30px" : "40px",
+          marginLeft: isMobile ? "0" : "20px",
+          borderRadius: "10px",
+          background: "linear-gradient(90.19deg, #323232 0%, #0F0F0F 59.13%)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          // ⬅️ ADJUSTED: Padding for mobile
+          padding: isMobile ? "0 15px" : "0 30px",
+          boxSizing: 'border-box',
+        }}
+      >
+        <div>
+          <p
+            style={{
+              // ⬅️ ADJUSTED: Smaller font size on mobile
+              fontSize: isMobile ? "16px" : "20px",
+              fontWeight: 400,
+              marginBottom: "2px",
+              lineHeight: isMobile ? '1' : 'auto'
+            }}
+          >
+            Total Resources
+          </p>
+          <p
+            style={{
+              // ⬅️ ADJUSTED: Smaller font size on mobile
+              fontSize: isMobile ? "20px" : "24px",
+              fontWeight: 500,
+              marginTop: isMobile ? "2px" : "0",
+              marginBottom: isMobile ? "0" : "10px",
+            }}
+          >
+            {resources.length}
+          </p>
+        </div>
 
-              <button
-                onClick={() => handleDeleteResource(res._id)}
-                style={{
-                  width: "100px",
-                  height: "36px",
-                  borderRadius: "10px",
-                  background: "#373D48",
-                  color: "#E3E3E3",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "7px",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                <Trash2 size={20} />
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+        <button
+          onClick={() => setShowPopup(true)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            background: "#525252",
+            color: "#FFFFFF",
+            // ⬅️ ADJUSTED: Smaller font size/padding on mobile
+            fontSize: isMobile ? "14px" : "16px",
+            borderRadius: "10px",
+            border: "none",
+            padding: isMobile ? "8px 10px" : "10px 12px",
+            cursor: "pointer",
+          }}
+        >
+          <Plus size={isMobile ? 16 : 18} />
+          {isMobile ? "Add" : "Add Resource"}
+        </button>
+      </div>
 
-      {/* Add Resource Popup */}
-      {showPopup && (
-        <AddResource
-          onClose={() => setShowPopup(false)}
-          onSave={(resourceData) => {
-            handleAddResource(resourceData);
-            setShowPopup(false);
-          }}
-        />
-      )}
-    </div>
-  );
+      {/* Resource Cards */}
+      <div
+        style={{
+          // ⬅️ CRUCIAL: Responsive width/margin adjustments
+          width: isMobile ? "100%" : "90%",
+          display: "grid",
+          // ⬅️ CRUCIAL: Dynamic columns
+          gridTemplateColumns: `repeat(${columns}, 1fr)`,
+          gap: isMobile ? "20px" : "30px",
+          marginLeft: isMobile ? "0" : "50px",
+          marginTop: isMobile ? "30px" : "50px",
+          marginBottom: "100px",
+          boxSizing: 'border-box',
+          // CRUCIAL FIX: Ensures all cards stretch to the same height
+          alignItems: 'stretch',
+        }}
+      >
+        {resources.map((res) => (
+          <div
+            key={res._id}
+            style={{
+              // ⬅️ CRUCIAL: Card width must be 100% of the grid cell
+              width: "100%",
+              // ⬅️ ADJUSTED: Reduced min-height on mobile
+              minHeight: isMobile ? "180px" : "200px",
+              background: "#343434",
+              borderRadius: "20px",
+              // ⬅️ ADJUSTED: Reduced padding on mobile
+              padding: isMobile ? "15px" : "20px",
+              paddingLeft: "20px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+              textAlign: "center",
+              boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",
+              boxSizing: 'border-box',
+            }}
+          >
+            {/* Content Area */}
+            <div>
+              <h3
+                style={{
+                  // ⬅️ ADJUSTED: Smaller font size on mobile
+                  fontSize: isMobile ? "16px" : "18px",
+                  fontWeight: 500,
+                  marginBottom: "8px",
+                }}
+              >
+                {res.title}
+              </h3>
+              <p
+                style={{
+                  // ⬅️ ADJUSTED: Smaller font size on mobile
+                  fontSize: isMobile ? "13px" : "15px",
+                  color: "#C9C9C9",
+                  lineHeight: "18px",
+                  whiteSpace: "normal",
+                  wordWrap: "break-word",
+                  overflowWrap: "break-word",
+                }}
+              >
+                {res.description}
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                // ⬅️ ADJUSTED: Tighter gap on mobile
+                gap: isMobile ? "15px" : "20px",
+                marginTop: "16px",
+                width: '100%', // Ensure buttons take full width for better spacing
+              }}
+            >
+              <button
+                onClick={() => handleViewResource(res.url)}
+                style={{
+                  // ⬅️ ADJUSTED: Sizing adjustment for mobile
+                  width: isMobile ? "50%" : "130px",
+                  height: isMobile ? "36px" : "36px",
+                  borderRadius: "10px",
+                  background: "#4254A5",
+                  color: "#E3E3E3",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "7px",
+                  border: "none",
+                  cursor: "pointer",
+                  // ⬅️ ADJUSTED: Smaller font size on mobile
+                  fontSize: isMobile ? "12px" : "14px",
+                }}
+              >
+                <Eye size={isMobile ? 16 : 20} />
+                {isMobile ? "View" : "View"}
+              </button>
+
+              <button
+                onClick={() => handleDeleteResource(res._id)}
+                style={{
+                  // ⬅️ ADJUSTED: Sizing adjustment for mobile
+                  width: isMobile ? "50%" : "100px",
+                  height: isMobile ? "36px" : "36px",
+                  borderRadius: "10px",
+                  background: "#373D48",
+                  color: "#E3E3E3",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "7px",
+                  border: "none",
+                  cursor: "pointer",
+                  // ⬅️ ADJUSTED: Smaller font size on mobile
+                  fontSize: isMobile ? "12px" : "14px",
+                }}
+              >
+                <Trash2 size={isMobile ? 16 : 20} />
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Add Resource Popup */}
+      {showPopup && (
+        <AddResource
+          onClose={() => setShowPopup(false)}
+          onSave={(resourceData) => {
+            handleAddResource(resourceData);
+          }}
+        />
+      )}
+    </div>
+  );
 }

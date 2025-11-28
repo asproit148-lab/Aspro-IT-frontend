@@ -3,275 +3,391 @@ import { Plus, Trash2, ChevronDown } from "lucide-react";
 import AddJob from "./AddJob";
 
 import {
-  getAllOpportunities,
-  deleteOpportunity,
+  getAllOpportunities,
+  deleteOpportunity,
 } from "../../api/job";
 
+// Define breakpoints
+const largeBreakpoint = 1200; // For 3 columns to 2 columns
+const tabletBreakpoint = 768; // For 2 columns to 1 column
+
 export default function JobManagement() {
-  const [filterType, setFilterType] = useState("All");
-  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
-  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [filterType, setFilterType] = useState("All");
+  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
+  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [jobs, setJobs] = useState([]);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-  const [jobs, setJobs] = useState([]);
+  const isMobile = screenWidth < tabletBreakpoint;
+  const isTablet = screenWidth < largeBreakpoint;
 
-  // FETCH FROM BACKEND
-  const loadJobs = async () => {
-    try {
-      const res = await getAllOpportunities();
-      if (res?.success) {
-        setJobs(res.data);
-      }
-    } catch (err) {
-      console.log("Error loading jobs:", err);
-    }
-  };
+  // Effect to track screen size for responsiveness
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  useEffect(() => {
-    loadJobs();
-  }, []);
+  // FETCH FROM BACKEND
+  const loadJobs = async () => {
+    try {
+      const res = await getAllOpportunities();
+      if (res?.success) {
+        setJobs(res.data);
+      }
+    } catch (err) {
+      console.log("Error loading jobs:", err);
+    }
+  };
 
-  // DELETE FROM BACKEND
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete this opportunity?")) return;
+  useEffect(() => {
+    loadJobs();
+  }, []);
 
-    try {
-      await deleteOpportunity(id);
-      setJobs((prev) => prev.filter((job) => job._id !== id));
-    } catch (err) {
-      console.log("Delete failed:", err);
-    }
-  };
+  // DELETE FROM BACKEND
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this opportunity?")) return;
 
-  // ADD NEW JOB — reload or push to array
-  const handleSaveJob = (newJob) => {
-    setJobs((prev) => [...prev, newJob]);
-  };
+    try {
+      await deleteOpportunity(id);
+      setJobs((prev) => prev.filter((job) => job._id !== id));
+    } catch (err) {
+      console.log("Delete failed:", err);
+    }
+  };
 
-  const filteredJobs =
-    filterType === "All"
-      ? jobs
-      : jobs.filter((item) => item.type === filterType);
+  // ADD NEW JOB — reload or push to array
+  const handleSaveJob = (newJob) => {
+    setJobs((prev) => [...prev, newJob]);
+  };
 
-  return (
-    <div
-      style={{
-        left: "100px",
-        background: "black",
-        color: "white",
-        fontFamily: "Poppins, sans-serif",
-        paddingTop: "140px",
-        paddingLeft: "120px",
-        minHeight: "100vh",
-      }}
-    >
-      {/* Heading */}
-      <div>
-        <h1
-          style={{
-            fontWeight: 600,
-            fontSize: "36px",
-            color: "#FFFFFF",
-            marginLeft: "24px",
-          }}
-        >
-          Jobs and Internships
-        </h1>
+  const filteredJobs =
+    filterType === "All"
+      ? jobs
+      : jobs.filter((item) => item.type === filterType);
 
-        <p
-          style={{
-            fontWeight: 400,
-            fontSize: "16px",
-            opacity: 0.9,
-            marginTop: "4px",
-            marginLeft: "24px",
-          }}
-        >
-          Access and Manage your Jobs and Internships
-        </p>
-      </div>
+  // Determine number of columns based on screen size
+  let columns = 3;
+  if (screenWidth < largeBreakpoint && screenWidth >= tabletBreakpoint) {
+    columns = 2;
+  } else if (screenWidth < tabletBreakpoint) {
+    columns = 1;
+  }
 
-      {/* Top Bar */}
-      <div
-        style={{
-          width: "90%",
-          height: "72px",
-          marginTop: "40px",
-          marginLeft: "20px",
-          borderRadius: "10px",
-          background: "linear-gradient(90.19deg, #323232 0%, #0F0F0F 59.13%)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingBottom: "4px",
-          paddingLeft: "30px",
-        }}
-      >
-        <div>
-          <p style={{ fontSize: "20px", fontWeight: 400, marginBottom: "2px" }}>
-            Total Openings
-          </p>
-          <p
-            style={{
-              fontSize: "24px",
-              fontWeight: 500,
-              marginTop: 0,
-              marginBottom: "10px",
-            }}
-          >
-            {filteredJobs.length}
-          </p>
-        </div>
+  return (
+    <div
+      style={{
+        background: "black",
+        color: "white",
+        fontFamily: "Poppins, sans-serif",
+        minHeight: "100vh",
+        boxSizing: 'border-box',
+        // ⬅️ CRUCIAL: Responsive container adjustments
+        marginLeft: isMobile ? "0" : "30px",
+        paddingTop: isMobile ? "80px" : "140px",
+        paddingLeft: isMobile ? "20px" : "120px",
+        paddingRight: isMobile ? "20px" : "20px",
+        paddingBottom: "100px",
+        width: isMobile ? '100%' : 'calc(100% - 100px)',
+      }}
+    >
+      {/* Heading */}
+      <div style={{ padding: isMobile ? '0' : '0 0 0 24px' }}>
+        <h1
+          style={{
+            fontWeight: 600,
+            // ⬅️ ADJUSTED: Smaller font size on mobile
+            fontSize: isMobile ? "28px" : "36px",
+            color: "#FFFFFF",
+            // ⬅️ CRUCIAL: Remove fixed left margin on mobile
+            marginLeft: isMobile ? "0" : "0",
+            marginBottom: isMobile ? "4px" : "8px",
+            marginTop: 0,
+          }}
+        >
+          Jobs and Internships
+        </h1>
 
-        {/* Filter */}
-        <div style={{ position: "relative" }}>
-          <div
-            onClick={() => setShowTypeDropdown(!showTypeDropdown)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              marginLeft: "500px",
-              padding: "10px 20px",
-              background: "#3D3D3D",
-              borderRadius: "10px",
-              cursor: "pointer",
-            }}
-          >
-            <span>Type: {filterType}</span>
-            <ChevronDown size={18} />
-          </div>
+        <p
+          style={{
+            fontWeight: 400,
+            // ⬅️ ADJUSTED: Smaller font size on mobile
+            fontSize: isMobile ? "14px" : "16px",
+            opacity: 0.9,
+            marginTop: isMobile ? "0" : "4px",
+            // ⬅️ CRUCIAL: Remove fixed left margin on mobile
+            marginLeft: isMobile ? "0" : "0",
+            marginBottom: isMobile ? "20px" : "0",
+          }}
+        >
+          Access and Manage your Jobs and Internships
+        </p>
+      </div>
 
-          {showTypeDropdown && (
-            <div
-              style={{
-                position: "absolute",
-                top: "48px",
-                width: "150px",
-                marginLeft: "500px",
-                background: "#2B2B2B",
-                borderRadius: "10px",
-                overflow: "hidden",
-                zIndex: 20,
-              }}
-            >
-              {["All", "Job", "Internship"].map((item) => (
-                <div
-                  key={item}
-                  onClick={() => {
-                    setFilterType(item);
-                    setShowTypeDropdown(false);
-                  }}
-                  style={{
-                    padding: "12px 16px",
-                    cursor: "pointer",
-                    fontSize: "14px",
-                  }}
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+      {/* Top Bar */}
+      <div
+        style={{
+          // ⬅️ CRUCIAL: Responsive width/margin adjustments
+          width: isMobile ? "100%" : "100%",
+          height: isMobile ? "auto" : "72px",
+          marginTop: isMobile ? "30px" : "40px",
+          marginLeft: isMobile ? "0" : "20px",
+          borderRadius: "10px",
+          background: "linear-gradient(90.19deg, #323232 0%, #0F0F0F 59.13%)",
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          alignItems: isMobile ? "flex-start" : "center",
+          justifyContent: "space-between",
+          // ⬅️ ADJUSTED: Padding for mobile
+          padding: isMobile ? "15px" : "0 30px 4px 30px",
+          boxSizing: 'border-box',
+          gap: isMobile ? "10px" : "0",
+        }}
+      >
+        <div>
+          <p
+            style={{
+              // ⬅️ ADJUSTED: Smaller font size on mobile
+              fontSize: isMobile ? "16px" : "20px",
+              fontWeight: 400,
+              marginBottom: "2px",
+              lineHeight: isMobile ? '1' : 'auto'
+            }}
+          >
+            Total Openings
+          </p>
+          <p
+            style={{
+              // ⬅️ ADJUSTED: Smaller font size on mobile
+              fontSize: isMobile ? "20px" : "24px",
+              fontWeight: 500,
+              marginTop: isMobile ? "2px" : "0",
+              marginBottom: isMobile ? "0" : "10px",
+            }}
+          >
+            {filteredJobs.length}
+          </p>
+        </div>
 
-        {/* Add Job Button */}
-        <button
-          onClick={() => setShowAddPopup(true)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            background: "#525252",
-            color: "#FFFFFF",
-            fontSize: "16px",
-            borderRadius: "10px",
-            border: "none",
-            padding: "10px 20px",
-            cursor: "pointer",
-          }}
-        >
-          <Plus size={18} />
-          Add Job / Internship
-        </button>
-      </div>
+        {/* Right side container for Filter and Add Button */}
+        <div style={{ display: "flex", gap: isMobile ? "10px" : "20px", width: isMobile ? '100%' : 'auto', justifyContent: isMobile ? 'space-between' : 'flex-end' }}>
+          {/* Filter */}
+          <div style={{ position: "relative" }}>
+            <div
+              onClick={() => setShowTypeDropdown(!showTypeDropdown)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                // ⬅️ CRUCIAL FIX: Removed fixed margin for responsiveness
+                padding: isMobile ? "8px 15px" : "10px 20px",
+                background: "#3D3D3D",
+                borderRadius: "10px",
+                cursor: "pointer",
+                // ⬅️ ADJUSTED: Smaller font size on mobile
+                fontSize: isMobile ? "14px" : "16px",
+              }}
+            >
+              <span>Type: {filterType}</span>
+              <ChevronDown size={isMobile ? 16 : 18} />
+            </div>
 
-      {/* Cards */}
-      <div
-        style={{
-          width: "90%",
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "30px",
-          marginLeft: "50px",
-          marginTop: "50px",
-          marginBottom: "100px",
-        }}
-      >
-        {filteredJobs.map((job) => (
-          <div
-            key={job._id}
-            style={{
-              width: "90%",
-              height: "280px",
-              borderRadius: "12px",
-              border: "1px solid #FFFFFF33",
-              paddingLeft: "20px",
-              paddingRight: "20px",
-              paddingBottom: "20px",
-              background:
-                "radial-gradient(196% 302% at 6% 25%, #101010 0%, #595959 100%)",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <p style={{ fontSize: "24px", fontWeight: 600, marginBottom: 0 }}>
-              {job.companyName}
-            </p>
-            <p style={{ fontSize: "16px", marginTop: 0 }}>{job.type}</p>
-            <p style={{ fontSize: "18px", fontWeight: 500, marginTop: "5px" }}>
-              {job.roleTitle}
-            </p>
-            <p style={{ fontSize: "16px", marginTop: "5px" }}>{job.ctcOrStipend}</p>
+            {showTypeDropdown && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: isMobile ? "40px" : "48px",
+                  width: "150px",
+                  // ⬅️ CRUCIAL FIX: Position dropdown relative to its parent container
+                  right: 0,
+                  left: isMobile ? 'auto' : 'auto', // Auto keeps it aligned right on desktop
+                  background: "#2B2B2B",
+                  borderRadius: "10px",
+                  overflow: "hidden",
+                  zIndex: 20,
+                }}
+              >
+                {["All", "Job", "Internship"].map((item) => (
+                  <div
+                    key={item}
+                    onClick={() => {
+                      setFilterType(item);
+                      setShowTypeDropdown(false);
+                    }}
+                    style={{
+                      padding: "12px 16px",
+                      cursor: "pointer",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-            <p style={{ fontSize: "14px", marginTop: "5px", cursor: "pointer" }}>
-              Website –{" "}
-              <a
-                href={job.companyWebsite}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "#5FA8FF" }}
-              >
-                {job.companyName}
-              </a>
-            </p>
+          {/* Add Job Button */}
+          <button
+            onClick={() => setShowAddPopup(true)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              background: "#525252",
+              color: "#FFFFFF",
+              // ⬅️ ADJUSTED: Smaller font size/padding on mobile
+              fontSize: isMobile ? "14px" : "16px",
+              borderRadius: "10px",
+              border: "none",
+              padding: isMobile ? "8px 10px" : "10px 20px",
+              cursor: "pointer",
+            }}
+          >
+            <Plus size={isMobile ? 16 : 18} />
+            {isMobile ? "Add" : "Add Job / Internship"}
+          </button>
+        </div>
+      </div>
 
-            <button
-              onClick={() => handleDelete(job._id)}
-              style={{
-                width: "120px",
-                height: "34px",
-                borderRadius: "10px",
-                background: "#666",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-                marginTop: "auto",
-                marginLeft: "auto",
-              }}
-            >
-              <Trash2 size={16} /> Delete
-            </button>
-          </div>
-        ))}
-      </div>
+      {/* Cards */}
+      <div
+        style={{
+          // ⬅️ CRUCIAL: Responsive width/margin adjustments
+          width: isMobile ? "100%" : "90%",
+          display: "grid",
+          // ⬅️ CRUCIAL: Dynamic columns
+          gridTemplateColumns: `repeat(${columns}, 1fr)`,
+          gap: isMobile ? "20px" : "30px",
+          marginLeft: isMobile ? "0" : "50px",
+          marginTop: isMobile ? "30px" : "50px",
+          marginBottom: "100px",
+          boxSizing: 'border-box',
+          // CRUCIAL FIX: Ensures all cards stretch to the same height
+          alignItems: 'stretch',
+        }}
+      >
+        {filteredJobs.map((job) => (
+          <div
+            key={job._id}
+            style={{
+              // ⬅️ CRUCIAL: Card width must be 100% of the grid cell
+              width: "100%",
+              // ⬅️ ADJUSTED: Height to auto/min-height for responsiveness
+              height: "auto",
+              minHeight: isMobile ? "220px" : "280px",
+              borderRadius: "12px",
+              border: "1px solid #FFFFFF33",
+              // ⬅️ ADJUSTED: Reduced padding on mobile
+              padding: isMobile ? "15px" : "20px",
+              background:
+                "radial-gradient(196% 302% at 6% 25%, #101010 0%, #595959 100%)",
+              display: "flex",
+              flexDirection: "column",
+              boxSizing: 'border-box',
+            }}
+          >
+            <p
+              style={{
+                // ⬅️ ADJUSTED: Smaller font size on mobile
+                fontSize: isMobile ? "20px" : "24px",
+                fontWeight: 600,
+                marginBottom: isMobile ? "0px" : "0",
+                marginTop: 0
+              }}
+            >
+              {job.companyName}
+            </p>
+            <p
+              style={{
+                // ⬅️ ADJUSTED: Smaller font size on mobile
+                fontSize: isMobile ? "14px" : "16px",
+                marginTop: "0",
+                marginBottom: isMobile ? "10px" : "10px",
+              }}
+            >
+              {job.type}
+            </p>
+            <p
+              style={{
+                // ⬅️ ADJUSTED: Smaller font size on mobile
+                fontSize: isMobile ? "16px" : "18px",
+                fontWeight: 500,
+                marginTop: isMobile ? "5px" : "5px",
+                marginBottom: isMobile ? "5px" : "5px",
+              }}
+            >
+              {job.roleTitle}
+            </p>
+            <p
+              style={{
+                // ⬅️ ADJUSTED: Smaller font size on mobile
+                fontSize: isMobile ? "14px" : "16px",
+                marginTop: isMobile ? "5px" : "5px",
+                marginBottom: isMobile ? "10px" : "10px",
+              }}
+            >
+              {job.ctcOrStipend}
+            </p>
 
-      {showAddPopup && (
-        <AddJob
-          onClose={() => setShowAddPopup(false)}
-          onSave={handleSaveJob}
-          reload={loadJobs}
-        />
-      )}
-    </div>
-  );
+            <p
+              style={{
+                // ⬅️ ADJUSTED: Smaller font size on mobile
+                fontSize: isMobile ? "12px" : "14px",
+                marginTop: "5px",
+                cursor: "pointer",
+                marginBottom: isMobile ? "15px" : "10px",
+              }}
+            >
+              Website –{" "}
+              <a
+                href={job.companyWebsite}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#5FA8FF" }}
+              >
+                {job.companyName}
+              </a>
+            </p>
+
+            <button
+              onClick={() => handleDelete(job._id)}
+              style={{
+                // ⬅️ ADJUSTED: Smaller size on mobile
+                width: isMobile ? "100px" : "120px",
+                height: isMobile ? "30px" : "34px",
+                borderRadius: "10px",
+                background: "#666",
+                color: "white",
+                border: "none",
+                cursor: "pointer",
+                marginTop: "auto",
+                // CRUCIAL FIX: Centered delete button on mobile
+                marginLeft: isMobile ? 'auto' : "auto",
+                marginRight: isMobile ? 'auto' : "0",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '5px',
+                fontSize: isMobile ? '14px' : '16px',
+              }}
+            >
+              <Trash2 size={isMobile ? 14 : 16} /> Delete
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {showAddPopup && (
+        <AddJob
+          onClose={() => setShowAddPopup(false)}
+          onSave={handleSaveJob}
+          reload={loadJobs}
+        />
+      )}
+    </div>
+  );
 }

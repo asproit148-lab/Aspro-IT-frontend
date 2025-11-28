@@ -1,367 +1,422 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowLeft, Award, Clock, Video, Download } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PaymentFlow from "../components/PaymentFlow";
 import { sendEnrollment } from "../api/email";
 
+const mobileBreakpoint = 992;
+
 export default function Enroll() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const courseName = location.state?.course || "";
-  const courseId = location.state?.courseId || "";
-  const price = location.state?.price || 0;
-  const originalPrice = location.state?.originalPrice || 0;
-const discount = location.state?.discount || 0;
+    const location = useLocation();
+    const navigate = useNavigate();
+    const courseName = location.state?.course || "";
+    const courseId = location.state?.courseId || "";
+    const price = location.state?.price || 0;
+    const originalPrice = location.state?.originalPrice || 0;
+    const discount = location.state?.discount || 0;
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    address: "",
-    state: "",
-    zip: "",
-    phone: "",
-  });
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < mobileBreakpoint);
+        };
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
-  const [mode, setMode] = useState("");
-  const [batch, setBatch] = useState("");
-  const [showPaymentPopup, setShowPaymentPopup] = useState(false);
-  const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        address: "",
+        state: "",
+        zip: "",
+        phone: "",
+    });
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+    const [mode, setMode] = useState("");
+    const [batch, setBatch] = useState("");
+    const [showPaymentPopup, setShowPaymentPopup] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {
-    // Empty fields validation
-  if (
-    !formData.name ||
-    !formData.email ||
-    !formData.address ||
-    !formData.state ||
-    !formData.zip ||
-    !formData.phone ||
-    !mode ||
-    !batch
-  ) {
-    alert("Please fill all required fields!");
-    return;
-  }
-
-  // Email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(formData.email)) {
-    alert("Please enter a valid email address!");
-    return;
-  }
-
-  // Zip must be 6 digits
-  const zipRegex = /^[0-9]{6}$/;
-  if (!zipRegex.test(formData.zip)) {
-    alert("Zip code must be exactly 6 digits!");
-    return;
-  }
-
-  // Phone must be 10 digits
-  const phoneRegex = /^[0-9]{10}$/;
-  if (!phoneRegex.test(formData.phone)) {
-    alert("Phone number must be exactly 10 digits!");
-    return;
-  }
-
-    const payload = {
-      name: formData.name,
-      email: formData.email,
-      address: formData.address,
-      state: formData.state,
-      zip_code: formData.zip,
-      course_name: courseName,
-      Mode_of_training: mode,
-      batch_type: batch,
-      phone_no: formData.phone,
+    const handleChange = (e) => {
+        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    try {
-      setLoading(true);
-      console.log("Sending payload:", payload);
-      const res = await sendEnrollment(payload);
-      console.log("Enrollment success:", res);
-      setShowPaymentPopup(true);
-    } catch (error) {
-      console.error("Enrollment failed:", error);
-      alert(error.response?.data?.error || "Enrollment failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    const handleSubmit = async () => {
+        // Empty fields validation
+        if (
+            !formData.name ||
+            !formData.email ||
+            !formData.address ||
+            !formData.state ||
+            !formData.zip ||
+            !formData.phone ||
+            !mode ||
+            !batch
+        ) {
+            alert("Please fill all required fields!");
+            return;
+        }
 
-  return (
-    <div
-      style={{
-        backgroundColor: "black",
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            alert("Please enter a valid email address!");
+            return;
+        }
+
+        // Zip must be 6 digits
+        const zipRegex = /^[0-9]{6}$/;
+        if (!zipRegex.test(formData.zip)) {
+            alert("Zip code must be exactly 6 digits!");
+            return;
+        }
+
+        // Phone must be 10 digits
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(formData.phone)) {
+            alert("Phone number must be exactly 10 digits!");
+            return;
+        }
+
+        const payload = {
+            name: formData.name,
+            email: formData.email,
+            address: formData.address,
+            state: formData.state,
+            zip_code: formData.zip,
+            course_name: courseName,
+            Mode_of_training: mode,
+            batch_type: batch,
+            phone_no: formData.phone,
+        };
+
+        try {
+            setLoading(true);
+            console.log("Sending payload:", payload);
+            const res = await sendEnrollment(payload);
+            console.log("Enrollment success:", res);
+            setShowPaymentPopup(true);
+        } catch (error) {
+            console.error("Enrollment failed:", error);
+            alert(error.response?.data?.error || "Enrollment failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Styling helpers
+    const inputStyle = (minWidth) => ({
+        fontSize: "12px",
+        minWidth: isMobile ? "100%" : minWidth,
+        width: isMobile ? "100%" : "auto", // Ensure it respects container width
+        paddingLeft: "20px",
+        height: "40px",
+        borderRadius: "8px",
+        border: "0.5px solid #FFFFFF",
+        background: "transparent",
         color: "white",
-        fontFamily: "Poppins, sans-serif",
-        marginRight: "20px",
-        padding: "40px 0 60px 30px",
-        transition: "0.3s ease",
-      }}
-    >
-      {/* Heading */}
-      <div
-        style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "25px", cursor: "pointer" }}
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeft size={36} color="white" />
-        <h1 style={{ fontWeight: 600, fontSize: "32px", lineHeight: "100%", margin: 0, color: "white" }}>
-          Enrollment Details
-        </h1>
-      </div>
+        boxSizing: "border-box",
+    });
 
-      {/* Main Flex Container */}
-      <div style={{ display: "flex", gap: "25px", alignItems: "flex-start" }}>
-        {/* FORM CONTAINER */}
+    const formRowStyle = {
+        display: "flex",
+        // ⬅️ ADJUSTED: Stack on mobile
+        flexDirection: isMobile ? "column" : "row",
+        justifyContent: "space-between",
+        // ⬅️ ADJUSTED: Reduced gap on mobile
+        gap: isMobile ? "15px" : "24px", 
+        width: "100%",
+        boxSizing: "border-box",
+    };
+
+    const formColumnStyle = {
+        display: "flex",
+        flexDirection: "column",
+        gap: "15px",
+        width: isMobile ? "100%" : "50%", // Make columns take full width on mobile
+        boxSizing: "border-box",
+    };
+
+
+    return (
         <div
-          style={{
-            width: "64%",
-            minHeight: "552px",
-            borderRadius: "16px",
-            background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
-            boxShadow: "0px 4px 16px 0px #FFFFFF40",
-            padding: "24px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "24px",
-          }}
-        >
-          {/* Row 1 - Name & Email */}
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: "15px", gap: "24px" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-              <label style={{ fontWeight: 500, fontSize: "20px" }}>Name<span style={{ color: "#FF4D4D" }}> *</span></label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Full Name"
-                style={{
-                  fontSize: "12px",
-                  minWidth: "350px",
-                  paddingLeft: "20px",
-                  height: "40px",
-                  borderRadius: "8px",
-                  border: "0.5px solid #FFFFFF",
-                  background: "transparent",
-                  color: "white",
-                }}
-              />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-              <label style={{ fontWeight: 500, fontSize: "20px" }}>E-mail<span style={{ color: "#FF4D4D" }}> *</span></label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="example@gmail.com"
-                style={{
-                  fontSize: "12px",
-                  minWidth: "350px",
-                  height: "40px",
-                  paddingLeft: "20px",
-                  borderRadius: "8px",
-                  border: "0.5px solid #FFFFFF",
-                  background: "transparent",
-                  color: "white",
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Row 2 - Address */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-            <label style={{ fontWeight: 500, fontSize: "20px" }}>Address<span style={{ color: "#FF4D4D" }}> *</span></label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              placeholder="Residential address"
-              style={{
-                fontSize: "12px",
-                minWidth: "745px",
-                height: "40px",
-                borderRadius: "8px",
-                border: "0.5px solid #FFFFFF",
-                background: "transparent",
+            style={{
+                backgroundColor: "black",
                 color: "white",
-                paddingLeft: "20px",
-              }}
+                fontFamily: "Poppins, sans-serif",
+                // ⬅️ ADJUSTED: Simplified padding/margin for mobile
+                marginRight: isMobile ? "0" : "20px", 
+                padding: isMobile ? "20px" : "40px 0 60px 30px",
+                transition: "0.3s ease",
+            }}
+        >
+            {/* Heading */}
+            <div
+                style={{ 
+                    display: "flex", 
+                    alignItems: "center", 
+                    gap: isMobile ? "8px" : "12px", // ⬅️ ADJUSTED GAP
+                    marginBottom: isMobile ? "20px" : "25px", 
+                    cursor: "pointer",
+                    // Added left padding for mobile if main container padding is only on the left
+                    paddingLeft: isMobile ? "0" : "30px", 
+                }}
+                onClick={() => navigate(-1)}
+            >
+                <ArrowLeft size={isMobile ? 24 : 36} color="white" /> {/* ⬅️ ADJUSTED SIZE */}
+                <h1 style={{ fontWeight: 600, fontSize: isMobile ? "24px" : "32px", lineHeight: "100%", margin: 0, color: "white" }}>
+                    Enrollment Details
+                </h1>
+            </div>
+
+            {/* Main Flex Container */}
+            <div 
+                style={{ 
+                    display: "flex", 
+                    gap: isMobile ? "20px" : "25px", // ⬅️ ADJUSTED GAP
+                    // ⬅️ ADJUSTED: Stack on mobile
+                    flexDirection: isMobile ? "column" : "row", 
+                    // ⬅️ ADJUSTED: Center items vertically on mobile
+                    alignItems: isMobile ? "center" : "flex-start", 
+                    // Added horizontal padding for mobile view containment
+                    padding: isMobile ? "0" : "0 30px 0 0",
+                }}
+            >
+                {/* FORM CONTAINER */}
+                <div
+                    style={{
+                        // ⬅️ ADJUSTED: Full width on mobile
+                        width: isMobile ? "95%" : "64%", 
+                        minHeight: "auto", // Allow height to adjust
+                        borderRadius: "16px",
+                        background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
+                        boxShadow: "0px 4px 16px 0px #FFFFFF40",
+                        padding: isMobile ? "18px" : "24px", // ⬅️ ADJUSTED PADDING
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: isMobile ? "18px" : "24px", // ⬅️ ADJUSTED GAP
+                        boxSizing: "border-box",
+                    }}
+                >
+                    {/* Row 1 - Name & Email */}
+                    <div style={{ ...formRowStyle, marginTop: isMobile ? "5px" : "15px" }}>
+                        <div style={formColumnStyle}>
+                            <label style={{ fontWeight: 500, fontSize: isMobile ? "18px" : "20px" }}>Name<span style={{ color: "#FF4D4D" }}> *</span></label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                placeholder="Full Name"
+                                style={inputStyle("350px")}
+                            />
+                        </div>
+                        <div style={formColumnStyle}>
+                            <label style={{ fontWeight: 500, fontSize: isMobile ? "18px" : "20px" }}>E-mail<span style={{ color: "#FF4D4D" }}> *</span></label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder="example@gmail.com"
+                                style={inputStyle("350px")}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Row 2 - Address */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+                        <label style={{ fontWeight: 500, fontSize: isMobile ? "18px" : "20px" }}>Address<span style={{ color: "#FF4D4D" }}> *</span></label>
+                        <input
+                            type="text"
+                            name="address"
+                            value={formData.address}
+                            onChange={handleChange}
+                            placeholder="Residential address"
+                            // ⬅️ ADJUSTED: Use inputStyle for responsiveness
+                            style={inputStyle("745px")}
+                        />
+                    </div>
+
+                    {/* Row 3 - State & Zip */}
+                    <div style={formRowStyle}>
+                        <div style={formColumnStyle}>
+                            <label style={{ fontWeight: 500, fontSize: isMobile ? "18px" : "20px" }}>State<span style={{ color: "#FF4D4D" }}> *</span></label>
+                            <input
+                                type="text"
+                                name="state"
+                                value={formData.state}
+                                onChange={handleChange}
+                                placeholder="eg: Delhi"
+                                style={inputStyle("350px")}
+                            />
+                        </div>
+                        <div style={formColumnStyle}>
+                            <label style={{ fontWeight: 500, fontSize: isMobile ? "18px" : "20px" }}>Zip Code<span style={{ color: "#FF4D4D" }}> *</span></label>
+                            <input
+                                type="text"
+                                name="zip"
+                                value={formData.zip}
+                                onChange={handleChange}
+                                placeholder="eg: 112223"
+                                style={inputStyle("350px")}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Row 4 - Course & Mode */}
+                    <div style={{ ...formRowStyle, gap: isMobile ? "15px" : "23px", alignItems: "flex-end" }}> {/* Align mode to bottom */}
+                        <div style={formColumnStyle}>
+                            <label style={{ fontWeight: 500, fontSize: isMobile ? "18px" : "20px" }}>Course Name<span style={{ color: "#FF4D4D" }}> *</span></label>
+                            <input
+                                type="text"
+                                value={courseName}
+                                readOnly
+                                style={{
+                                    // ⬅️ ADJUSTED: Use inputStyle base
+                                    ...inputStyle("350px"), 
+                                    paddingLeft: "20px", 
+                                    fontSize: "14px",
+                                    height: "40px",
+                                }}
+                            />
+                        </div>
+                        <div style={{ ...formColumnStyle, gap: "15px" }}>
+                            {/* Adjusted marginTop on label to align with other labels vertically on desktop */}
+                            <label style={{ fontWeight: 500, fontSize: isMobile ? "18px" : "20px", marginTop: isMobile ? "0" : "0" }}>Mode of Training<span style={{ color: "#FF4D4D" }}> *</span></label>
+                            <div style={{ display: "flex", gap: isMobile ? "10px" : "20px", alignItems: "center" }}>
+                                {["Online", "Offline"].map((val) => (
+                                    <label key={val} style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: isMobile ? "16px" : "18px" }}>
+                                        <input
+                                            type="radio"
+                                            name="mode"
+                                            value={val}
+                                            checked={mode === val}
+                                            onChange={(e) => setMode(e.target.value)}
+                                        />
+                                        {val}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Row 5 - Batch & Phone */}
+                    <div style={formRowStyle}>
+                        <div style={formColumnStyle}>
+                            <label style={{ fontWeight: 500, fontSize: isMobile ? "18px" : "20px" }}>Batch Type<span style={{ color: "#FF4D4D" }}> *</span></label>
+                            <div style={{ display: "flex", gap: isMobile ? "10px" : "20px", alignItems: "center" }}>
+                                {["1 on 1", "Group"].map((val) => (
+                                    <label key={val} style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: isMobile ? "16px" : "18px" }}>
+                                        <input
+                                            type="radio"
+                                            name="batch"
+                                            value={val}
+                                            checked={batch === val}
+                                            onChange={(e) => setBatch(e.target.value)}
+                                        />
+                                        {val}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                        <div style={formColumnStyle}>
+                            <label style={{ fontWeight: 500, fontSize: isMobile ? "18px" : "20px" }}>Phone Number<span style={{ color: "#FF4D4D" }}> *</span></label>
+                            <input
+                                type="text"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                placeholder="909xxxxxxx"
+                                style={inputStyle("350px")}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* PRICE DETAILS CONTAINER */}
+                <div 
+                    style={{ 
+                        // ⬅️ ADJUSTED: Full width on mobile
+                        width: isMobile ? "95%" : "36%", 
+                        minHeight: "auto", 
+                        borderRadius: "16px", 
+                        background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)", 
+                        boxShadow: "0px 4px 16px 0px #FFFFFF40", 
+                        padding: "20px", 
+                        display: "flex", 
+                        flexDirection: "column",
+                        boxSizing: "border-box",
+                    }}
+                >
+                    {/* Prices */}
+                    <div style={{ display: "flex", width: "100%", alignItems: "baseline", gap: "20px", marginBottom: "5px", marginTop: isMobile ? "10px" : "40px" }}> {/* ⬅️ ADJUSTED MARGIN */}
+                        {/* ⬅️ ADJUSTED SIZE */}
+                        <div style={{ fontSize: isMobile ? "36px" : "42px", width: "auto", fontWeight: 700, color: "#FFFFFF" }}>₹{price}</div>
+                        {/* ⬅️ ADJUSTED SIZE */}
+                        <div style={{ fontSize: isMobile ? "20px" : "24px", width: "auto", fontWeight: 700, color: "rgba(255,255,255,0.5)", textDecoration: "line-through" }}>₹{originalPrice}</div>
+                        
+                        <div style={{ 
+                            marginLeft: "auto", 
+                            minWidth: isMobile ? "60px" : "70px", 
+                            height: isMobile ? "28px" : "32px", 
+                            borderRadius: "25px", 
+                            color: "#0DA745", 
+                            background: "#0DA74540", 
+                            display: "flex", 
+                            alignItems: "center", 
+                            justifyContent: "center", 
+                            fontSize: isMobile ? "12px" : "14px", 
+                            fontWeight: 700 
+                        }}>
+                            {discount}% OFF
+                        </div>
+                    </div>
+
+                    <p style={{ fontSize: "16px", fontWeight: 500, color: "#FF6969", marginBottom: "30px" }}>Sale ends in 24 hours!</p>
+
+                    {/* Button */}
+                    <button
+                        style={{ 
+                            // ⬅️ ADJUSTED: Full width on mobile
+                            width: "100%", 
+                            height: isMobile ? "48px" : "54px", // ⬅️ ADJUSTED HEIGHT
+                            borderRadius: "8px", 
+                            border: "1px solid #FFFFFF", 
+                            background: "transparent", 
+                            color: "#FFFFFF", 
+                            fontSize: isMobile ? "22px" : "28px", // ⬅️ ADJUSTED SIZE
+                            fontWeight: 600, 
+                            cursor: "pointer", 
+                            transition: "all 0.3s ease" 
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0px 4px 16px 0px #FFFFFF40"; e.currentTarget.style.background = "rgba(255,255,255,0.25)"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.background = "transparent"; }}
+                        onClick={handleSubmit}
+                        disabled={loading}
+                    >
+                        {loading ? "Submitting..." : "Proceed to Payment"}
+                    </button>
+
+                    {/* Divider & Course Includes */}
+                    <div style={{ width: "100%", borderTop: "1px solid white", opacity: "0.4", marginTop: isMobile ? "20px" : "40px", marginBottom: "60px" }}></div> {/* ⬅️ ADJUSTED MARGIN */}
+                    <p style={{ fontSize: isMobile ? "12px" : "14px", fontWeight: 700, marginBottom: "16px" }}>This course includes:</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? "12px" : "16px" }}> {/* ⬅️ ADJUSTED GAP */}
+                        {[{ icon: <Award size={isMobile ? 20 : 25} color="#0DA745" />, text: "Certification of completion" }, { icon: <Clock size={isMobile ? 20 : 25} color="#0DA745" />, text: "Full time access" }, { icon: <Video size={isMobile ? 20 : 25} color="#0DA745" />, text: "On-demand videos" }, { icon: <Download size={isMobile ? 20 : 25} color="#0DA745" />, text: "Downloadable resources" }].map((item, index) => (
+                            <div key={index} style={{ display: "flex", alignItems: "center", gap: "10px" }}>{item.icon}<span style={{ fontSize: isMobile ? "10px" : "12px" }}>{item.text}</span></div> 
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            <PaymentFlow
+                open={showPaymentPopup}
+                onClose={() => setShowPaymentPopup(false)}
+                courseId={courseId}
+                price={price}
             />
-          </div>
-
-          {/* Row 3 - State & Zip */}
-          <div style={{ display: "flex", justifyContent: "space-between", gap: "24px" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-              <label style={{ fontWeight: 500, fontSize: "20px" }}>State<span style={{ color: "#FF4D4D" }}> *</span></label>
-              <input
-                type="text"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                placeholder="eg: Delhi"
-                style={{
-                  fontSize: "12px",
-                  minWidth: "350px",
-                  height: "40px",
-                  borderRadius: "8px",
-                  border: "0.5px solid #FFFFFF",
-                  background: "transparent",
-                  color: "white",
-                  paddingLeft: "20px",
-                }}
-              />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-              <label style={{ fontWeight: 500, fontSize: "20px" }}>Zip Code<span style={{ color: "#FF4D4D" }}> *</span></label>
-              <input
-                type="text"
-                name="zip"
-                value={formData.zip}
-                onChange={handleChange}
-                placeholder="eg: 112223"
-                style={{
-                  fontSize: "12px",
-                  minWidth: "350px",
-                  height: "40px",
-                  borderRadius: "8px",
-                  border: "0.5px solid #FFFFFF",
-                  background: "transparent",
-                  color: "white",
-                  paddingLeft: "20px",
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Row 4 - Course & Mode */}
-          <div style={{ display: "flex", gap: "23px", position: "relative" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-              <label style={{ fontWeight: 500, fontSize: "20px" }}>Course Name<span style={{ color: "#FF4D4D" }}> *</span></label>
-              <input
-                type="text"
-                value={courseName}
-                readOnly
-                style={{
-                  minWidth: "350px",
-                  height: "40px",
-                  borderRadius: "8px",
-                  padding: "0 20px",
-                  border: "0.5px solid #FFFFFF",
-                  background: "transparent",
-                  color: "white",
-                  fontSize: "14px",
-                }}
-              />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-              <label style={{ fontWeight: 500, fontSize: "20px", marginTop: "10px" }}>Mode of Training<span style={{ color: "#FF4D4D" }}> *</span></label>
-              <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-                {["Online", "Offline"].map((val) => (
-                  <label key={val} style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "18px" }}>
-                    <input
-                      type="radio"
-                      name="mode"
-                      value={val}
-                      checked={mode === val}
-                      onChange={(e) => setMode(e.target.value)}
-                    />
-                    {val}
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Row 5 - Batch & Phone */}
-          <div style={{ display: "flex", justifyContent: "space-between", gap: "24px" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-              <label style={{ fontWeight: 500, fontSize: "20px" }}>Batch Type<span style={{ color: "#FF4D4D" }}> *</span></label>
-              <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-                {["1 on 1", "Group"].map((val) => (
-                  <label key={val} style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "18px" }}>
-                    <input
-                      type="radio"
-                      name="batch"
-                      value={val}
-                      checked={batch === val}
-                      onChange={(e) => setBatch(e.target.value)}
-                    />
-                    {val}
-                  </label>
-                ))}
-              </div>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-              <label style={{ fontWeight: 500, fontSize: "20px" }}>Phone Number<span style={{ color: "#FF4D4D" }}> *</span></label>
-              <input
-                type="text"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="909xxxxxxx"
-                style={{
-                  fontSize: "12px",
-                  minWidth: "350px",
-                  height: "40px",
-                  borderRadius: "8px",
-                  border: "0.5px solid #FFFFFF",
-                  background: "transparent",
-                  color: "white",
-                  paddingLeft: "20px",
-                }}
-              />
-            </div>
-          </div>
         </div>
-
-        {/* PRICE DETAILS CONTAINER */}
-        <div style={{ width: "36%", minHeight: "557px", borderRadius: "16px", background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)", boxShadow: "0px 4px 16px 0px #FFFFFF40", padding: "20px", display: "flex", flexDirection: "column" }}>
-          {/* Prices */}
-          <div style={{ display: "flex", width: "auto", alignItems: "baseline", gap: "20px", marginBottom: "5px", marginTop: "40px" }}>
-            <div style={{ fontSize: "42px", width: "auto", fontWeight: 700, color: "#FFFFFF" }}>₹{price}</div>
-            <div style={{ fontSize: "24px", width: "auto", fontWeight: 700, color: "rgba(255,255,255,0.5)", textDecoration: "line-through" }}>₹{originalPrice}</div>
-            <div style={{ marginLeft: "auto", minWidth: "70px", height: "32px", borderRadius: "25px", color: "#0DA745", background: "#0DA74540", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", fontWeight: 700 }}>{discount}% OFF</div>
-          </div>
-
-          <p style={{ fontSize: "16px", fontWeight: 500, color: "#FF6969", marginBottom: "30px" }}>Sale ends in 24 hours!</p>
-
-          {/* Button */}
-          <button
-            style={{ width: "95%", height: "54px", borderRadius: "8px", border: "1px solid #FFFFFF", background: "transparent", color: "#FFFFFF", fontSize: "28px", fontWeight: 600, cursor: "pointer", transition: "all 0.3s ease" }}
-            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0px 4px 16px 0px #FFFFFF40"; e.currentTarget.style.background = "rgba(255,255,255,0.25)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.background = "transparent"; }}
-            onClick={handleSubmit}
-            disabled={loading}
-          >
-            {loading ? "Submitting..." : "Proceed to Payment"}
-          </button>
-
-          {/* Divider & Course Includes */}
-          <div style={{ width: "95%", borderTop: "1px solid white", opacity: "0.4", marginTop: "40px", marginBottom: "30px" }}></div>
-          <p style={{ fontSize: "14px", fontWeight: 700, marginBottom: "16px" }}>This course includes:</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            {[{ icon: <Award size={25} color="#0DA745" />, text: "Certification of completion" }, { icon: <Clock size={25} color="#0DA745" />, text: "Full time access" }, { icon: <Video size={25} color="#0DA745" />, text: "On-demand videos" }, { icon: <Download size={25} color="#0DA745" />, text: "Downloadable resources" }].map((item, index) => (
-              <div key={index} style={{ display: "flex", alignItems: "center", gap: "10px" }}>{item.icon}<span style={{ fontSize: "12px" }}>{item.text}</span></div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <PaymentFlow
-  open={showPaymentPopup}
-  onClose={() => setShowPaymentPopup(false)}
-  courseId={courseId}
-  price={price}
-/>
-    </div>
-  );
+    );
 }

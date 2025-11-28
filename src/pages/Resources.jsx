@@ -78,7 +78,7 @@ export default function Resources() {
   // --- Responsive Style Definitions ---
   
   const mainContentStyle = {
-    width: "100%",
+    width: isMobile ? "90%" : "100%", 
     minHeight: "600px",
     display: "flex",
     flexDirection: "column",

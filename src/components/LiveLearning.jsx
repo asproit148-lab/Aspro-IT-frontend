@@ -37,7 +37,7 @@ export default function LiveLearning() {
     <section
       id="live-learning"
       style={{
-        width: "100%",
+        width: isMobile ? "90%" : "100%", 
         position: "relative",
         background: "#1B1B1B",
         boxShadow:

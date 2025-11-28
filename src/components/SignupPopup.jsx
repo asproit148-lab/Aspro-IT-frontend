@@ -1,11 +1,140 @@
 import React, { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
+import styled from "@emotion/styled";
+import { GoogleLogin } from "@react-oauth/google";
 import { registerUser } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
-import { GoogleLogin } from "@react-oauth/google";
+import { IoArrowBack } from "react-icons/io5";
 
-export default function SignupPopup({ onClose }) {
+// ------------ Reused Styling From LoginPopup ------------
+
+const PopupOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  padding: 20px;
+`;
+
+const PopupContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 28px 24px;
+  background: #0b1c39;
+  border: 1px solid #ffffff40;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  max-height: 90vh;
+  overflow-y: auto;
+`;
+
+const CloseButton = styled.span`
+  position: absolute;
+  top: 10px;
+  right: 18px;
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+`;
+
+const BackButton = styled.span`
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  font-size: 26px;
+  color: white;
+  cursor: pointer;
+`;
+
+const Title = styled.h1`
+  font-family: Poppins, sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  margin-top: 18px;
+  margin-bottom: 0;
+
+  @media (max-width: 480px) {
+    font-size: 26px;
+    margin-top: 18px;
+    margin-bottom: 0;
+  }
+`;
+
+const SubTitle = styled.p`
+  font-family: Poppins, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #6d829f;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 18px;
+`;
+
+const Label = styled.label`
+  width: 100%;
+  font-family: Poppins, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #c9c9c9;
+  margin-bottom: 6px;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  height: 46px;
+  border-radius: 4px;
+  border: 1px solid #2a2a2a;
+  background: #142339;
+  color: #c9c9c9;
+  padding: 10px 12px;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-bottom: 14px;
+  outline: none;
+
+  &:focus {
+    border-color: #3f7ec8;
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  height: 48px;
+  background: #052e5a;
+  color: white;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  border: 1px solid #2a2a2a;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.2s ease;
+
+  &:hover {
+    border: 1px solid #fff;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;
+
+export default function SignupPopup({ onClose, onBack }) {
   const { signInWithGoogle } = useAuth();
+
+  // ---- Your original signup logic (NO CHANGES) ----
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,24 +146,21 @@ export default function SignupPopup({ onClose }) {
       return;
     }
 
-    // Full name validation
-  if (fullName.trim().length < 3) {
-    alert("Full name must be at least 3 characters");
-    return;
-  }
+    if (fullName.trim().length < 3) {
+      alert("Full name must be at least 3 characters");
+      return;
+    }
 
-  // Email format validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    alert("Please enter a valid email address");
-    return;
-  }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
 
-  // Password length validation
-  if (password.length < 6) {
-    alert("Password must be at least 6 characters long");
-    return;
-  }
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters long");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -48,232 +174,72 @@ export default function SignupPopup({ onClose }) {
     }
   };
 
+  const handleGoogleSuccess = async (res) => {
+    setLoading(true);
+    try {
+      const response = await signInWithGoogle(res.credential);
+      if (!response.success) alert(response.message || "Google login failed");
+      else {
+        alert("Google Login Successful!");
+        onClose();
+      }
+    } catch {
+      alert("Google login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        background: "rgba(0, 0, 0, 0.5)",
-        backdropFilter: "blur(4px)",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          position: "relative",
-          width: "461px",
-          minHeight: "580px",
-          border: "2px solid #FFFFFF",
-          borderRadius: "12px",
-          background: "#0B1C39",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          padding: "24px",
-          gap: "8px",
-          boxSizing: "border-box",
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Close Button */}
-        <span
-          style={{
-            position: "absolute",
-            top: "4px",
-            right: "12px",
-            fontSize: "32px",
-            fontWeight: "bold",
-            color: "#FFFFFF",
-            cursor: "pointer",
-          }}
-          onClick={onClose}
-        >
-          ×
-        </span>
+    <PopupOverlay>
+      <PopupContainer>
 
-        <h1
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 600,
-            fontSize: "32px",
-            color: "#FFFFFF",
-            width: "360px",
-            textAlign: "center",
-            marginTop: "10px",
-            marginBottom: 0,
-          }}
-        >
-          welcome to Aspro IT
-        </h1>
+        {/* Back arrow */}
+        <BackButton onClick={onBack}>
+          <IoArrowBack />
+        </BackButton>
 
-        <p
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 600,
-            fontSize: "16px",
-            color: "#6D829F",
-            textAlign: "center",
-            marginTop: 0,
-          }}
-        >
-          signup to explore the courses
-        </p>
+        {/* Close button */}
+        <CloseButton onClick={onClose}>×</CloseButton>
 
-        {/* Full Name */}
-        <p
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "14px",
-            fontWeight: 500,
-            color: "#C9C9C9",
-            alignSelf: "flex-start",
-            marginLeft: "24px",
-            marginBottom: 0,
-          }}
-        >
-          Full Name
-        </p>
-        <input
+        <Title>Create Account</Title>
+        <SubTitle>Signup to explore the courses</SubTitle>
+
+        <Label>Full Name</Label>
+        <Input
           type="text"
           placeholder="Enter your full name"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          style={{
-            width: "360px",
-            height: "44px",
-            borderRadius: "3.3px",
-            border: "0.82px solid #2A2A2A",
-            background: "#142339",
-            paddingLeft: "12px",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "16px",
-            fontWeight: 600,
-            color: "#FFFFFF",
-            outline: "none",
-          }}
         />
 
-        {/* Email */}
-        <p
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "14px",
-            fontWeight: 500,
-            color: "#C9C9C9",
-            alignSelf: "flex-start",
-            marginLeft: "24px",
-            marginBottom: 0,
-          }}
-        >
-          Email Address
-        </p>
-        <input
+        <Label>Email Address</Label>
+        <Input
           type="email"
           placeholder="You@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{
-            width: "360px",
-            height: "44px",
-            borderRadius: "3.3px",
-            border: "0.82px solid #2A2A2A",
-            background: "#142339",
-            paddingLeft: "12px",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "16px",
-            fontWeight: 600,
-            color: "#FFFFFF",
-            outline: "none",
-          }}
         />
 
-        {/* Password */}
-        <p
-          style={{
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "14px",
-            fontWeight: 500,
-            color: "#C9C9C9",
-            alignSelf: "flex-start",
-            marginLeft: "24px",
-            marginBottom: 0,
-          }}
-        >
-          Password
-        </p>
-        <input
+        <Label>Password</Label>
+        <Input
           type="password"
           placeholder="Enter your password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={{
-            width: "360px",
-            height: "44px",
-            borderRadius: "3.3px",
-            border: "0.82px solid #2A2A2A",
-            background: "#142339",
-            paddingLeft: "12px",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "16px",
-            fontWeight: 600,
-            color: "#FFFFFF",
-            outline: "none",
-          }}
         />
 
-        <button
-          style={{
-            width: "363px",
-            height: "54px",
-            background: "#052E5A",
-            border: "2px solid #2A2A2A",
-            color: "#FFFFFF",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 700,
-            fontSize: "18px",
-            cursor: "pointer",
-            marginTop: "16px",
-            marginBottom: "12px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onMouseEnter={(e) => (e.target.style.border = "2px solid #FFFFFF")}
-          onMouseLeave={(e) => (e.target.style.border = "1px solid #2A2A2A")}
-          onClick={handleSignup}
-          disabled={loading}
-        >
+        <Button disabled={loading} onClick={handleSignup}>
           {loading ? "Signing up..." : "Signup"}
-        </button>
+        </Button>
 
-        <GoogleLogin
-  onSuccess={async (res) => {
-    setLoading(true);
-    const googleToken = res.credential;
-
-    const response = await signInWithGoogle(googleToken);
-
-    if (!response.success) {
-      alert(response.message || "Google login failed");
-      setLoading(false);
-      return;
-    }
-
-    alert("Google Login Successful!");
-    onClose();
-    setLoading(false);
-  }}
-  onError={() => alert("Google login failed")}
-/>
-
-      </div>
-    </div>
+        <div style={{ marginTop: "12px" }}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => alert("Google login failed")}
+          />
+        </div>
+      </PopupContainer>
+    </PopupOverlay>
   );
 }

@@ -34,8 +34,7 @@ export default function Certificates() {
   // --- Responsive Style Definitions ---
 
   const heroSectionStyle = {
-    width: "100%",
-    // Ensure height is not too tall on small screens
+    width: isMobile ? "95%" : "100%", 
     minHeight: isMobile ? "400px" : "550px", 
     backgroundImage: `url(${bg})`,
     backgroundSize: "cover",

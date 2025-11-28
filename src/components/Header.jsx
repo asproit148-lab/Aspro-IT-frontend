@@ -1,5 +1,6 @@
-// src/components/Header.jsx
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import styled from "@emotion/styled";
+// REMOVED: import { shouldForwardProp } from "@styled-system/should-forward-prop"; 
 import logo from "../assets/logo.png";
 import { Link, useLocation } from "react-router-dom";
 import LoginPopup from "../components/LoginPopup";
@@ -15,14 +16,24 @@ import {
   Phone,
   ChevronDown,
   ChevronUp,
-  Menu, // Hamburger
-  X, // Close icon
+  Menu,
+  X,
   Download,
 } from "lucide-react";
 
 // --- Constants ---
-const desktopBreakpoint = 1024; // Standard breakpoint for showing/hiding Hamburger
+const desktopBreakpoint = 1024;
 const textColor = "#3D96E0";
+
+/* --- PROP FORWARDING HELPER (Manual Definition) --- */
+// This function ensures that any prop starting with '$' (our transient props) 
+// is NOT passed down to the underlying HTML DOM element.
+const customShouldForwardProp = (propName) => {
+    // Blocks props starting with $, like $isMobile, $isActive, etc.
+    return !propName.startsWith('$');
+};
+/* ---------------------------------------------------- */
+
 
 // --- Custom Hook to check screen size (for a cleaner approach) ---
 const useIsMobile = (breakpoint) => {
@@ -39,6 +50,317 @@ const useIsMobile = (breakpoint) => {
   return isMobile;
 };
 
+// --- Styled Components ---
+
+const StyledHeader = styled.header`
+  width: 100%;
+  background-color: black;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 25px 0px #00508A;
+`;
+
+// Applying the prop filter to all components that receive '$' props
+const HeaderContainer = styled('div', { shouldForwardProp: customShouldForwardProp })`
+  max-width: 1400px;
+  margin: 0 auto;
+  height: ${props => props.$isMobile ? "70px" : "105px"};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: ${props => props.$isMobile ? "0 20px" : "0 40px"};
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+`;
+
+const LogoWrapper = styled('div', { shouldForwardProp: customShouldForwardProp })`
+  width: ${props => props.$isMobile ? "120px" : "180px"};
+  height: auto;
+  object-fit: contain;
+`;
+
+const LogoImage = styled('img', { shouldForwardProp: customShouldForwardProp })`
+  width: ${props => props.$isMobile ? "120px" : "221px"};
+  height: ${props => props.$isMobile ? "auto" : "63px"};
+  object-fit: contain;
+`;
+
+const DesktopNav = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: nowrap;
+`;
+
+// Link component receives filter
+const NavItem = styled(Link, { shouldForwardProp: customShouldForwardProp })`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: ${props => props.$isMobile ? 500 : 400};
+  color: ${props => props.$isMobile ? (props.$isActive ? textColor : "white") : textColor};
+  cursor: pointer;
+  padding: ${props => props.$isMobile ? "10px 15px" : "6px 0"};
+  width: ${props => props.$isMobile ? "100%" : "auto"};
+  justify-content: flex-start;
+  background-color: transparent;
+  border-radius: 0;
+  transition: 0.3s;
+  box-sizing: border-box;
+
+  // FIX 2: Add hover effect for mobile menu links
+  ${props => props.$isMobile && `
+    &:hover, &:focus, &:active {
+      background-color: rgba(61, 150, 224, 0.1); // Light blue overlay on hover/touch
+    }
+  `}
+`;
+
+// div component receives filter
+const DropdownTrigger = styled('div', { shouldForwardProp: customShouldForwardProp })`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: ${props => props.$isMobile ? 500 : 400};
+  color: ${props => props.$isMobile ? (props.$isActive ? textColor : "white") : textColor};
+  cursor: pointer;
+  padding: ${props => props.$isMobile ? "10px 15px" : "6px 0"};
+  width: ${props => props.$isMobile ? "100%" : "auto"};
+  justify-content: flex-start;
+  background-color: transparent;
+  border-radius: 0;
+  transition: 0.3s;
+  box-sizing: border-box;
+
+  // FIX 2: Add hover effect for mobile menu dropdown triggers
+  ${props => props.$isMobile && `
+    &:hover, &:focus, &:active {
+      background-color: rgba(61, 150, 224, 0.1); // Light blue overlay on hover/touch
+    }
+  `}
+`;
+
+// Link component receives filter
+// FIX 3: New styled component based on Link for Desktop Dropdown Triggers (e.g., About)
+// This lets it be a link AND a mouse-enter trigger.
+const NavLinkWithDropdown = styled(Link, { shouldForwardProp: customShouldForwardProp })`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: ${textColor};
+  cursor: pointer;
+  padding: 6px 0;
+  width: auto;
+  justify-content: flex-start;
+  background-color: transparent;
+  border-radius: 0;
+  transition: 0.3s;
+  box-sizing: border-box;
+`;
+
+// div component receives filter
+const DropdownContainer = styled('div', { shouldForwardProp: customShouldForwardProp })`
+  position: ${props => props.$isMobile ? "static" : "absolute"};
+  top: ${props => props.$isMobile ? "0" : "40px"};
+  left: ${props => props.$isMobile ? "0" : "0"};
+  background: ${props => props.$isMobile ? "transparent" : "#212121"};
+  border-radius: ${props => props.$isMobile ? "0" : "8px"};
+  box-shadow: ${props => props.$isMobile ? "none" : "0px 1px 20px rgba(61,150,224,0.5)"};
+  display: flex;
+  flex-direction: column;
+  
+  // 🔽 UPDATES HERE
+  min-width: 160px; // Ensure a minimum size
+  width: fit-content; // Allow width to shrink-wrap the items
+  // 🔼 UPDATES HERE
+
+  z-index: 999;
+  padding: ${props => props.$isMobile ? "0" : "0"};
+  margin-top: ${props => props.$isMobile ? "5px" : "0"};
+  box-sizing: border-box;
+`;
+
+// Link component receives filter
+const DropdownItem = styled(Link, { shouldForwardProp: customShouldForwardProp })`
+  ${props => {
+    let borderRadius = "0";
+    if (!props.$isMobile) {
+      if (props.$index === 0) borderRadius = "8px 8px 0 0";
+      else if (props.$index === props.$arrLength - 1) borderRadius = "0 0 8px 8px";
+    }
+    return `border-radius: ${borderRadius};`;
+  }}
+
+  // 🔽 UPDATES HERE: We need to ensure the width is 100% of the container,
+  // NOT relying on $desktopWidth or auto, to prevent padding overflow.
+  width: ${props => props.$isMobile ? "calc(100% - 30px)" : "100%"}; 
+  
+  height: auto;
+  padding: ${props => props.$isMobile ? "8px 15px 8px 30px" : "10px 15px"}; // Increased padding slightly for better look
+  color: ${props => props.$isMobile ? "#ccc" : "white"};
+  font-family: 'Poppins', sans-serif;
+  font-size: ${props => props.$isMobile ? "18px" : "16px"};
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.3s;
+  box-sizing: border-box;
+  
+  &:hover {
+    background: ${props => props.$isMobile ? "#222" : "#555"}; 
+  }
+`;
+
+const DesktopLoginButton = styled.button`
+  padding: 10px 24px;
+  border-radius: 36px;
+  border: 3px solid #FFFFFF;
+  background: transparent;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+
+  &:hover {
+    border: 3px solid #00A8FF;
+  }
+`;
+
+// div component receives filter
+const UserIconWrapper = styled('div', { shouldForwardProp: customShouldForwardProp })`
+  width: ${props => props.$isMobile ? "40px" : "48px"};
+  height: ${props => props.$isMobile ? "40px" : "48px"};
+  border-radius: 50%;
+  border: ${props => props.$isMobile ? "2px solid #FFFFFF" : "3px solid #FFFFFF"};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: transparent;
+  position: relative;
+  transition: 0.3s;
+  // FIX 1: Adjust margin for mobile to make space for the button
+  margin-right: ${props => props.$isMobile ? "10px" : "0"}; 
+`;
+
+// div component receives filter
+const UserDropdown = styled('div', { shouldForwardProp: customShouldForwardProp })`
+  position: absolute;
+  top: ${props => props.$isMobile ? "50px" : "60px"};
+  right: 0;
+  background: #1E1E1E;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.25);
+  min-width: 120px;
+  overflow: hidden;
+  z-index: 999;
+  box-sizing: border-box;
+`;
+
+// button component receives filter
+const LogoutButton = styled('button', { shouldForwardProp: customShouldForwardProp })`
+  width: 100%;
+  padding: ${props => props.$isMobile ? "10px 14px" : "12px 16px"};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: ${props => props.$isMobile ? "14px" : "16px"};
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: 0.3s;
+  box-sizing: border-box;
+
+  &:hover {
+    background: #343434;
+  }
+`;
+
+// FIX 1: Group container for all mobile header elements (user icon, login button, menu)
+const MobileRightSide = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+// FIX 1: Mobile Login Button in the main header
+const MobileHeaderLoginButton = styled.button`
+  padding: 8px 16px;
+  margin-right: 10px; // Spacing before the hamburger menu
+  border-radius: 36px;
+  border: 2px solid #00A8FF;
+  background: transparent;
+  color: #00A8FF;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(0, 168, 255, 0.1);
+  }
+`;
+
+const MobileMenuButton = styled.button`
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+`;
+
+const MobileMenuContent = styled.div`
+  position: absolute; 
+  top: 70px; 
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 70px); 
+  background-color: #111111;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  overflow-y: auto; 
+  box-shadow: 0px 4px 25px 0px #00508A;
+  box-sizing: border-box;
+`;
+
+const BodyScrollLock = ({ isLocked }) => {
+  useEffect(() => {
+    if (isLocked) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = 'var(--scrollbar-width, 0)'; 
+    } else {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = 'unset';
+    };
+  }, [isLocked]);
+  return null;
+};
 
 // --- Component Start ---
 export default function Header() {
@@ -51,6 +373,8 @@ export default function Header() {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  
+  // Local states for dropdown visibility
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
@@ -96,559 +420,329 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   };
   
-  // Custom Link/Button style function for reusability
-  const getNavItemStyle = (isMobile, isActive = false) => ({
-    display: "flex",
-    alignItems: "center",
-    gap: "6px",
-    textDecoration: "none",
-    fontFamily: "Poppins, sans-serif",
-    fontSize: isMobile ? "18px" : "20px",
-    fontWeight: isMobile ? 500 : 400,
-    color: isMobile ? (isActive ? textColor : "white") : textColor,
-    cursor: "pointer",
-    padding: isMobile ? "10px 15px" : "6px 0",
-    transition: "0.3s",
-    width: isMobile ? "100%" : "auto",
-    justifyContent: isMobile ? "flex-start" : "flex-start",
-    backgroundColor: "transparent",
-    borderRadius: "0",
-  });
-
-  // Custom Dropdown Menu Container Style
-  const getDropdownStyle = (isMobile) => ({
-    position: isMobile ? "static" : "absolute",
-    top: isMobile ? "0" : "40px",
-    left: isMobile ? "0" : "0",
-    background: isMobile ? "transparent" : "#212121",
-    borderRadius: isMobile ? "0" : "8px",
-    boxShadow: isMobile ? "none" : "0px 1px 20px rgba(61,150,224,0.5)",
-    display: "flex",
-    flexDirection: "column",
-    minWidth: isMobile ? "100%" : "160px",
-    zIndex: 999,
-    padding: isMobile ? "0" : "0",
-    marginTop: isMobile ? "5px" : "0",
-  });
-
-  // Custom Dropdown Item Style
-  const getDropdownItemStyle = (isMobile, index, arrLength) => {
-    // Determine border radius based on position in the dropdown array
-    let borderRadius = "0";
-    if (!isMobile) {
-      if (index === 0) borderRadius = "8px 8px 0 0";
-      else if (index === arrLength - 1) borderRadius = "0 0 8px 8px";
-    }
-
-    return {
-      width: isMobile ? "calc(100% - 30px)" : "auto",
-      height: "auto",
-      padding: isMobile ? "8px 15px 8px 30px" : "5px 10px",
-      background: isMobile ? "transparent" : "#343434",
-      color: isMobile ? "#ccc" : "white",
-      fontFamily: "Poppins, sans-serif",
-      fontSize: "16px",
-      display: "flex",
-      alignItems: "center",
-      textDecoration: "none",
-      cursor: "pointer",
-      transition: "0.3s",
-      borderRadius: borderRadius,
-      "&:hover": {
-        background: isMobile ? "#222" : "gray",
-      },
-    };
-  };
+  // Handler for desktop 'About' link click (FIX 3)
+  const handleAboutClick = (e) => {
+    // Navigate to /about-us
+    handleLinkClick(); 
+  }
 
   return (
-    <header
-      style={{
-        width: "100%",
-        backgroundColor: "black",
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-        boxShadow: "0px 4px 25px 0px #00508A",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1400px",
-          margin: "0 auto",
-          height: isMobile ? "70px" : "105px", // Mobile header height adjustment
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: isMobile ? "0 20px" : "0 40px",
-          flexWrap: "nowrap",
-        }}
-      >
-        {/* Logo */}
-        <div style={{ width: isMobile ? "120px" : "180px", height: "auto", objectFit: "contain" }}>
-          <Link to="/" onClick={handleLinkClick}>
-            <img
-              src={logo}
-              alt="logo"
-              style={{
-                width: isMobile ? "120px" : "221px",
-                height: isMobile ? "auto" : "63px",
-                objectFit: "contain",
-              }}
-            />
-          </Link>
-        </div>
-
-        {/* Desktop Nav (Hidden on Mobile) */}
-        {!isMobile && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "30px",
-              flexWrap: "nowrap",
-            }}
-          >
-            {/* Home */}
-            <Link to="/" style={getNavItemStyle(false, location.pathname === "/")}>
-              <Home size={20} /> Home
+    <>
+      <BodyScrollLock isLocked={isMobile && isMobileMenuOpen} />
+      
+      <StyledHeader>
+        <HeaderContainer $isMobile={isMobile}>
+          {/* Logo */}
+          <LogoWrapper $isMobile={isMobile}>
+            <Link to="/" onClick={handleLinkClick}>
+              <LogoImage src={logo} alt="logo" $isMobile={isMobile} />
             </Link>
+          </LogoWrapper>
 
-            {/* Download Dropdown */}
-            <div
-              style={{ position: "relative" }}
-              onMouseEnter={() => setIsDownloadOpen(true)}
-              onMouseLeave={() => setIsDownloadOpen(false)}
-            >
-              <div style={getNavItemStyle(false)}>
-                Download{" "}
-                {isDownloadOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-              </div>
+          {/* Desktop Nav (Hidden on Mobile) */}
+          {!isMobile && (
+            <DesktopNav>
+              {/* Home */}
+              <NavItem to="/" $isMobile={false} $isActive={location.pathname === "/"} onClick={handleLinkClick}>
+                <Home size={20} /> Home
+              </NavItem>
 
-              {isDownloadOpen && (
-                <div style={getDropdownStyle(false)}>
-                  {[
-                    { name: "Resources", link: "/resources" },
-                    { name: "Certificates", link: "/certificates" },
-                  ].map((item, index, arr) => (
-                    <Link
-                      key={index}
-                      to={item.link}
-                      onClick={handleLinkClick}
-                      style={{
-                        ...getDropdownItemStyle(false, index, arr.length),
-                        width: "138px", // Desktop specific width
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = "gray")}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = "#343434")}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Courses Dropdown */}
-            <div
-              style={{ position: "relative" }}
-              onMouseEnter={() => setIsCoursesOpen(true)}
-              onMouseLeave={() => setIsCoursesOpen(false)}
-            >
-              <div style={getNavItemStyle(false)}>
-                <BookOpen size={20} /> Courses{" "}
-                {isCoursesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-              </div>
-
-              {isCoursesOpen && (
-                <div style={getDropdownStyle(false)}>
-                  {courses
-                    .filter((course) => course.Course_title)
-                    .map((course, index, arr) => (
-                      <Link
-                        key={course._id}
-                        to={`/courses/${course._id}`}
-                        onClick={handleLinkClick}
-                        style={{
-                          ...getDropdownItemStyle(false, index, arr.length),
-                          width: "227px", // Desktop specific width
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = "gray")}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = "#343434")}
-                      >
-                        {course.Course_title}
-                      </Link>
-                    ))}
-                </div>
-              )}
-            </div>
-
-            {/* About Dropdown */}
-            <div
-              style={{ position: "relative" }}
-              onMouseEnter={() => setIsAboutOpen(true)}
-              onMouseLeave={() => setIsAboutOpen(false)}
-            >
-              <div style={getNavItemStyle(false)}>
-                <Info size={20} />About{" "}
-                {isAboutOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-              </div>
-
-              {isAboutOpen && (
-                <div style={getDropdownStyle(false)}>
-                  {[
-                    { name: "Blogs", link: "/blogs" },
-                    { name: "Services", link: "/our-services" },
-                  ].map((item, index, arr) => (
-                    <Link
-                      key={index}
-                      to={item.link}
-                      onClick={handleLinkClick}
-                      style={{
-                        ...getDropdownItemStyle(false, index, arr.length),
-                        width: "138px", // Desktop specific width
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = "gray")}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = "#343434")}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Contact */}
-            <Link to="/contact" style={getNavItemStyle(false, location.pathname === "/contact")}>
-              <Phone size={20} /> Contact
-            </Link>
-          </div>
-        )}
-
-        {/* Desktop Login / User Icon (Hidden on Mobile) */}
-        {!isMobile && (
-          <div>
-            {user ? (
+              {/* Download Dropdown */}
               <div
-                onClick={() => setShowUserDropdown(!showUserDropdown)}
-                style={{
-                  width: "48px",
-                  height: "48px",
-                  borderRadius: "50%",
-                  border: "3px solid #FFFFFF",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  backgroundColor: "transparent",
-                  position: "relative",
-                  transition: "0.3s",
-                }}
-                title="Profile"
+                style={{ position: "relative" }}
+                onMouseEnter={() => setIsDownloadOpen(true)}
+                onMouseLeave={() => setIsDownloadOpen(false)}
               >
-                <User size={24} color="white" />
-                {showUserDropdown && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "60px",
-                      right: 0,
-                      background: "#1E1E1E",
-                      borderRadius: "8px",
-                      boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",
-                      minWidth: "120px",
-                      overflow: "hidden",
-                      zIndex: 999,
-                    }}
-                  >
-                    <button
-                      style={{
-                        width: "100%",
-                        padding: "12px 16px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "8px",
-                        border: "none",
-                        background: "transparent",
-                        color: "white",
-                        fontSize: "16px",
-                        fontFamily: "Poppins, sans-serif",
-                        cursor: "pointer",
-                        transition: "0.3s",
-                      }}
-                      onClick={handleSignOut}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = "#343434")}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                    >
-                      <LogOut size={16} />
-                      Logout
-                    </button>
-                  </div>
+                <DropdownTrigger $isMobile={false}>
+                  Download{" "}
+                  {isDownloadOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </DropdownTrigger>
+
+                {isDownloadOpen && (
+                  <DropdownContainer $isMobile={false}>
+                    {[
+                      { name: "Resources", link: "/resources" },
+                      { name: "Certificates", link: "/certificates" },
+                    ].map((item, index, arr) => (
+                      <DropdownItem
+                        key={index}
+                        to={item.link}
+                        onClick={handleLinkClick}
+                        $isMobile={false}
+                        $index={index}
+                        $arrLength={arr.length}
+                        $desktopWidth="138px"
+                      >
+                        {item.name}
+                      </DropdownItem>
+                    ))}
+                  </DropdownContainer>
                 )}
               </div>
-            ) : (
-              <button
-                style={{
-                  padding: "10px 24px",
-                  borderRadius: "36px",
-                  border: "3px solid #FFFFFF",
-                  background: "transparent",
-                  color: "white",
-                  fontFamily: "Poppins, sans-serif",
-                  fontSize: "18px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  transition: "0.3s",
-                  whiteSpace: "nowrap",
-                }}
-                onClick={handleLoginClick}
-                onMouseEnter={(e) => (e.target.style.border = "3px solid #00A8FF")}
-                onMouseLeave={(e) => (e.target.style.border = "3px solid #FFFFFF")}
-              >
-                Log in
-              </button>
-            )}
-          </div>
-        )}
 
-        {/* Mobile Hamburger Menu Icon (Shown on Mobile) */}
-        {isMobile && (
-          <div style={{ display: "flex", alignItems: "center" }}>
-             {/* Mobile User Icon */}
-             {user && (
-                <div
-                    onClick={() => setShowUserDropdown(!showUserDropdown)}
-                    style={{
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "50%",
-                        border: "2px solid #FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        marginRight: "15px",
-                        position: "relative",
-                    }}
-                    title="Profile"
-                >
-                    <User size={20} color="white" />
-                    {showUserDropdown && (
-                        <div
-                            style={{
-                                position: "absolute",
-                                top: "50px",
-                                right: 0,
-                                background: "#1E1E1E",
-                                borderRadius: "8px",
-                                boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",
-                                minWidth: "120px",
-                                overflow: "hidden",
-                                zIndex: 999,
-                            }}
+              {/* Courses Dropdown */}
+              <div
+                style={{ position: "relative" }}
+                onMouseEnter={() => setIsCoursesOpen(true)}
+                onMouseLeave={() => setIsCoursesOpen(false)}
+              >
+                <DropdownTrigger $isMobile={false}>
+                  <BookOpen size={20} /> Courses{" "}
+                  {isCoursesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </DropdownTrigger>
+
+                {isCoursesOpen && (
+                  <DropdownContainer $isMobile={false}>
+                    {courses
+                      .filter((course) => course.Course_title)
+                      .map((course, index, arr) => (
+                        <DropdownItem
+                          key={course._id}
+                          to={`/courses/${course._id}`}
+                          onClick={handleLinkClick}
+                          $isMobile={false}
+                          $index={index}
+                          $arrLength={arr.length}
+                          $desktopWidth="227px"
                         >
-                            <button
-                                style={{
-                                    width: "100%",
-                                    padding: "10px 14px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: "8px",
-                                    border: "none",
-                                    background: "transparent",
-                                    color: "white",
-                                    fontSize: "14px",
-                                    fontFamily: "Poppins, sans-serif",
-                                    cursor: "pointer",
-                                }}
-                                onClick={handleSignOut}
-                                onMouseEnter={(e) => (e.currentTarget.style.background = "#343434")}
-                                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                            >
-                                <LogOut size={14} />
-                                Logout
-                            </button>
-                        </div>
-                    )}
-                </div>
-            )}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "white",
-                cursor: "pointer",
-                padding: "5px",
-              }}
-            >
-              {isMobileMenuOpen ? <X size={30} /> : <Menu size={30} />}
-            </button>
-          </div>
-        )}
-
-        {/* Mobile Menu Content (Conditionally rendered) */}
-        {isMobile && isMobileMenuOpen && (
-          <div
-            style={{
-              position: "fixed",
-              top: "70px", // Below the mobile header height
-              left: 0,
-              width: "100%",
-              height: "calc(100vh - 70px)",
-              backgroundColor: "#111111",
-              zIndex: 90,
-              display: "flex",
-              flexDirection: "column",
-              padding: "20px 0",
-              overflowY: "auto",
-              boxShadow: "0px 4px 25px 0px #00508A",
-            }}
-          >
-            {/* Home */}
-            <Link
-              to="/"
-              onClick={handleLinkClick}
-              style={getNavItemStyle(true, location.pathname === "/")}
-            >
-              <Home size={20} /> Home
-            </Link>
-
-            {/* Download Dropdown (Mobile) */}
-            <div style={{ position: "relative" }}>
-              <div
-                onClick={() => setIsDownloadOpen(!isDownloadOpen)}
-                style={getNavItemStyle(true, location.pathname.startsWith("/resources") || location.pathname.startsWith("/certificates"))}
-              >
-                <Download size={20} /> Download{" "}
-                {isDownloadOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                          {course.Course_title}
+                        </DropdownItem>
+                      ))}
+                  </DropdownContainer>
+                )}
               </div>
 
-              {isDownloadOpen && (
-                <div style={getDropdownStyle(true)}>
-                  {[
-                    { name: "Resources", link: "/resources" },
-                    { name: "Certificates", link: "/certificates" },
-                  ].map((item, index, arr) => (
-                    <Link
-                      key={index}
-                      to={item.link}
-                      onClick={handleLinkClick}
-                      style={getDropdownItemStyle(true, index, arr.length)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Courses Dropdown (Mobile) */}
-            <div style={{ position: "relative" }}>
+              {/* About Dropdown (FIX 3: Trigger is now a Link) */}
               <div
-                onClick={() => setIsCoursesOpen(!isCoursesOpen)}
-                style={getNavItemStyle(true, location.pathname.startsWith("/courses/"))}
+                style={{ position: "relative" }}
+                onMouseEnter={() => setIsAboutOpen(true)}
+                onMouseLeave={() => setIsAboutOpen(false)}
               >
-                <BookOpen size={20} /> Courses{" "}
-                {isCoursesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-              </div>
+                <NavLinkWithDropdown 
+                  to="/about-us" // Link to /about-us on click
+                  onClick={handleAboutClick}
+                  $isMobile={false}
+                  $isActive={location.pathname.startsWith("/about-us") || location.pathname.startsWith("/blogs") || location.pathname.startsWith("/our-services")}
+                >
+                  <Info size={20} /> About{" "}
+                  {isAboutOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </NavLinkWithDropdown>
 
-              {isCoursesOpen && (
-                <div style={getDropdownStyle(true)}>
-                  {courses
-                    .filter((course) => course.Course_title)
-                    .map((course, index, arr) => (
-                      <Link
-                        key={course._id}
-                        to={`/courses/${course._id}`}
+                {isAboutOpen && (
+                  <DropdownContainer $isMobile={false}>
+                    {[
+                      { name: "Blogs", link: "/blogs" },
+                      { name: "Services", link: "/our-services" },
+                    ].map((item, index, arr) => (
+                      <DropdownItem
+                        key={index}
+                        to={item.link}
                         onClick={handleLinkClick}
-                        style={getDropdownItemStyle(true, index, arr.length)}
+                        $isMobile={false}
+                        $index={index}
+                        $arrLength={arr.length}
+                        $desktopWidth="138px"
                       >
-                        {course.Course_title}
-                      </Link>
+                        {item.name}
+                      </DropdownItem>
                     ))}
-                </div>
-              )}
-            </div>
-
-            {/* About Dropdown (Mobile) */}
-            <div style={{ position: "relative" }}>
-              <div
-                onClick={() => setIsAboutOpen(!isAboutOpen)}
-                style={getNavItemStyle(true, location.pathname.startsWith("/about-us") || location.pathname.startsWith("/blogs") || location.pathname.startsWith("/our-services"))}
-              >
-                <Info size={20} /> About{" "}
-                {isAboutOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                  </DropdownContainer>
+                )}
               </div>
 
-              {isAboutOpen && (
-                <div style={getDropdownStyle(true)}>
-                  {[
-                    { name: "Blogs", link: "/blogs" },
-                    { name: "Services", link: "/our-services" },
-                  ].map((item, index, arr) => (
-                    <Link
-                      key={index}
-                      to={item.link}
-                      onClick={handleLinkClick}
-                      style={getDropdownItemStyle(true, index, arr.length)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
+              {/* Contact */}
+              <NavItem to="/contact" $isMobile={false} $isActive={location.pathname === "/contact"} onClick={handleLinkClick}>
+                <Phone size={20} /> Contact
+              </NavItem>
+            </DesktopNav>
+          )}
+
+          {/* Desktop Login / User Icon (Hidden on Mobile) */}
+          {!isMobile && (
+            <div>
+              {user ? (
+                <UserIconWrapper onClick={() => setShowUserDropdown(!showUserDropdown)} $isMobile={false} title="Profile">
+                  <User size={24} color="white" />
+                  {showUserDropdown && (
+                    <UserDropdown $isMobile={false}>
+                      <LogoutButton onClick={handleSignOut} $isMobile={false}>
+                        <LogOut size={16} />
+                        Logout
+                      </LogoutButton>
+                    </UserDropdown>
+                  )}
+                </UserIconWrapper>
+              ) : (
+                <DesktopLoginButton onClick={handleLoginClick}>
+                  Log in
+                </DesktopLoginButton>
               )}
             </div>
+          )}
 
-            {/* Contact */}
-            <Link
-              to="/contact"
-              onClick={handleLinkClick}
-              style={getNavItemStyle(true, location.pathname === "/contact")}
-            >
-              <Phone size={20} /> Contact
-            </Link>
+          {/* Mobile Right Side (Shown on Mobile) */}
+          {isMobile && (
+            <MobileRightSide>
+              {/* FIX 1: Mobile Login Button in the main header */}
+              {!user && (
+                <MobileHeaderLoginButton onClick={handleLoginClick}>
+                  Log in
+                </MobileHeaderLoginButton>
+              )}
 
-            {/* Mobile Login Button */}
-            {!user && (
-              <button
-                style={{
-                  width: "20%",
-                  padding: "10px 24px",
-                  margin: "20px 20px 0 20px",
-                  borderRadius: "36px",
-                  border: "3px solid #00A8FF",
-                  background: "transparent",
-                  color: "#00A8FF",
-                  fontFamily: "Poppins, sans-serif",
-                  fontSize: "18px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  transition: "0.3s",
-                }}
-                onClick={handleLoginClick}
-                onMouseEnter={(e) => (e.target.style.background = "rgba(0, 168, 255, 0.1)")}
-                onMouseLeave={(e) => (e.target.style.background = "transparent")}
-              >
-                Log in
-              </button>
-            )}
-          </div>
+              {/* Mobile User Icon */}
+              {user && (
+                <UserIconWrapper onClick={() => setShowUserDropdown(!showUserDropdown)} $isMobile={true} title="Profile">
+                  <User size={20} color="white" />
+                  {showUserDropdown && (
+                    <UserDropdown $isMobile={true}>
+                      <LogoutButton onClick={handleSignOut} $isMobile={true}>
+                        <LogOut size={14} />
+                        Logout
+                      </LogoutButton>
+                    </UserDropdown>
+                  )}
+                </UserIconWrapper>
+              )}
+              
+              {/* Mobile Menu Button */}
+              <MobileMenuButton onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                {isMobileMenuOpen ? <X size={30} /> : <Menu size={30} />}
+              </MobileMenuButton>
+            </MobileRightSide>
+          )}
+
+          {/* Mobile Menu Content (Conditionally rendered) */}
+          {isMobile && isMobileMenuOpen && (
+            <MobileMenuContent>
+              {/* Home */}
+              <NavItem to="/" $isMobile={true} $isActive={location.pathname === "/"} onClick={handleLinkClick}>
+                <Home size={20} /> Home
+              </NavItem>
+
+              {/* Download Dropdown (Mobile) */}
+              <div style={{ position: "relative" }}>
+                <DropdownTrigger 
+                  onClick={() => setIsDownloadOpen(!isDownloadOpen)}
+                  $isMobile={true}
+                  $isActive={location.pathname.startsWith("/resources") || location.pathname.startsWith("/certificates")}
+                >
+                  <Download size={20} /> Download{" "}
+                  {isDownloadOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </DropdownTrigger>
+
+                {isDownloadOpen && (
+                  <DropdownContainer $isMobile={true}>
+                    {[
+                      { name: "Resources", link: "/resources" },
+                      { name: "Certificates", link: "/certificates" },
+                    ].map((item, index, arr) => (
+                      <DropdownItem
+                        key={index}
+                        to={item.link}
+                        onClick={handleLinkClick}
+                        $isMobile={true}
+                        $index={index}
+                        $arrLength={arr.length}
+                      >
+                        {item.name}
+                      </DropdownItem>
+                    ))}
+                  </DropdownContainer>
+                )}
+              </div>
+
+              {/* Courses Dropdown (Mobile) */}
+              <div style={{ position: "relative" }}>
+                <DropdownTrigger 
+                  onClick={() => setIsCoursesOpen(!isCoursesOpen)}
+                  $isMobile={true}
+                  $isActive={location.pathname.startsWith("/courses/")}
+                >
+                  <BookOpen size={20} /> Courses{" "}
+                  {isCoursesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </DropdownTrigger>
+
+                {isCoursesOpen && (
+                  <DropdownContainer $isMobile={true}>
+                    {courses
+                      .filter((course) => course.Course_title)
+                      .map((course, index, arr) => (
+                        <DropdownItem
+                          key={course._id}
+                          to={`/courses/${course._id}`}
+                          onClick={handleLinkClick}
+                          $isMobile={true}
+                          $index={index}
+                          $arrLength={arr.length}
+                        >
+                          {course.Course_title}
+                        </DropdownItem>
+                      ))}
+                  </DropdownContainer>
+                )}
+              </div>
+
+              {/* About Dropdown (Mobile) */}
+              <div style={{ position: "relative" }}>
+                <DropdownTrigger 
+                  onClick={() => setIsAboutOpen(!isAboutOpen)}
+                  $isMobile={true}
+                  $isActive={location.pathname.startsWith("/about-us") || location.pathname.startsWith("/blogs") || location.pathname.startsWith("/our-services")}
+                >
+                  <Info size={20} /> About{" "}
+                  {isAboutOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </DropdownTrigger>
+
+                {isAboutOpen && (
+                  <DropdownContainer $isMobile={true}>
+                    {/* The first item is now /about-us, aligning with the desktop click action */}
+                    {[
+                      { name: "About Us", link: "/about-us" }, // Changed to be explicit
+                      { name: "Blogs", link: "/blogs" },
+                      { name: "Services", link: "/our-services" },
+                    ].map((item, index, arr) => (
+                      <DropdownItem
+                        key={index}
+                        to={item.link}
+                        onClick={handleLinkClick}
+                        $isMobile={true}
+                        $index={index}
+                        $arrLength={arr.length}
+                      >
+                        {item.name}
+                      </DropdownItem>
+                    ))}
+                  </DropdownContainer>
+                )}
+              </div>
+
+              {/* Contact */}
+              <NavItem to="/contact" $isMobile={true} $isActive={location.pathname === "/contact"} onClick={handleLinkClick}>
+                <Phone size={20} /> Contact
+              </NavItem>
+
+            </MobileMenuContent>
+          )}
+        </HeaderContainer>
+        {/* Login Popup */}
+        {showLoginPopup && (
+          <LoginPopup
+            onClose={() => setShowLoginPopup(false)}
+            onSignup={() => {
+              setShowLoginPopup(false);
+              setIsSignupOpen(true);
+            }}
+          />
         )}
-      </div>
-      {/* Login Popup */}
-      {showLoginPopup && (
-        <LoginPopup
-          onClose={() => setShowLoginPopup(false)}
-          onSignup={() => {
-            setShowLoginPopup(false);
-            setIsSignupOpen(true);
-          }}
-        />
-      )}
-      {/* Signup Popup */}
-      {isSignupOpen && <SignupPopup onClose={() => setIsSignupOpen(false)} />}
-    </header>
+        {/* Signup Popup */}
+        {isSignupOpen && <SignupPopup 
+        onClose={() => setIsSignupOpen(false)} 
+        onBack={() => {
+      setIsSignupOpen(false);
+      setShowLoginPopup(true);   // <-- FIX
+    }}/>}
+      </StyledHeader>
+    </>
   );
-}
+} 
