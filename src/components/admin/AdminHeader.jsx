@@ -14,7 +14,7 @@ import {
     FileText,
     Briefcase,
     SquareUserRound,
-    Menu, // Import Menu icon
+    Menu,
 } from "lucide-react";
 
 const mobileBreakpoint = 992; 
@@ -26,7 +26,6 @@ export default function AdminHeader() {
     const [hovered, setHovered] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
-    // State to control the mobile side navigation drawer visibility
     const [showMobileNav, setShowMobileNav] = useState(false); 
 
     useEffect(() => {
@@ -77,12 +76,10 @@ export default function AdminHeader() {
                     top: 0,
                     left: 0,
                     width: "100%",
-                    // ⬅️ CRUCIAL: Desktop height 105px, Mobile height 60px
                     height: isMobile ? "60px" : "105px",
                     backgroundColor: "#000000",
                     zIndex: 1000,
                     boxShadow: "0px 4px 25px 0px #00508A",
-                    // ⬅️ CRUCIAL: Use flex only on mobile for alignment, else rely on absolute positioning
                     display: isMobile ? 'flex' : 'block', 
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -103,11 +100,9 @@ export default function AdminHeader() {
                 {/* Logo Section */}
                 <div
                     style={{
-                        // ⬅️ CRUCIAL: Use fixed absolute positioning for desktop
                         position: isMobile ? 'static' : 'absolute',
                         top: isMobile ? "10px" : "21px",
                         left: isMobile ? "0" : "105px", 
-                        // Allow flexbox to center/position on mobile
                         margin: isMobile ? '0' : '0', 
                         order: isMobile ? 2 : 'unset',
                         
@@ -122,7 +117,6 @@ export default function AdminHeader() {
                             src={logo}
                             alt="logo"
                             style={{
-                                // ⬅️ CRUCIAL: Reduced logo size on mobile
                                 width: isMobile ? "120px" : "221px",
                                 height: isMobile ? "35px" : "63px",
                                 objectFit: "contain",
@@ -134,10 +128,8 @@ export default function AdminHeader() {
                 {/* Right Section */}
                 <div
                     style={{
-                        // ⬅️ CRUCIAL: Use fixed absolute positioning for desktop
                         position: isMobile ? 'static' : 'absolute',
                         top: isMobile ? "10px" : "30px",
-                        // ⬅️ CRUCIAL: Desktop right is 0, Mobile uses flex alignment
                         right: isMobile ? "0" : "0", 
                         display: "flex",
                         alignItems: "center",
@@ -219,17 +211,14 @@ export default function AdminHeader() {
             <div
                 style={{
                     position: "fixed",
-                    // ⬅️ CRUCIAL: Starts below the header
                     top: isMobile ? "60px" : "105px", 
                     
-                    // ⬅️ CRUCIAL: Mobile slide-in/out logic for drawer, static 0 for desktop
                     left: 0, 
                     transform: isMobile 
                         ? `translateX(${showMobileNav ? 0 : -200}px)` 
                         : 'translateX(0)',
                     transition: 'transform 0.3s ease, width 0.3s ease',
                     
-                    // ⬅️ CRUCIAL: Desktop width 100px, Mobile width 200px
                     width: isMobile ? "200px" : "100px",
                     height: isMobile ? "calc(100vh - 60px)" : "calc(100vh - 105px)",
                     
@@ -286,7 +275,6 @@ export default function AdminHeader() {
                                 style={{
                                     fontFamily: "Poppins, sans-serif",
                                     fontWeight: 400,
-                                    // ⬅️ CRUCIAL: Larger font in drawer (14px), small under icon (10px)
                                     fontSize: isMobile ? "14px" : "10px", 
                                     textAlign: isMobile ? "left" : "center",
                                     marginBottom: 0,

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-// ⚠️ Note: I am keeping the original imports as requested to make no change in logic, 
-// even though 'courses' should be dynamically fetched for better practice.
 import { courses } from "../components/courses/CourseData"; 
 import { sendEnquiry } from "../api/email";
 
@@ -10,7 +8,6 @@ const desktopBreakpoint = 992;
 export default function Qualities() {
   const [isMobile, setIsMobile] = useState(false);
   
-  // Existing state variables
   const [selectedCourse, setSelectedCourse] = useState("");
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
   const [mode, setMode] = useState("");
@@ -18,7 +15,6 @@ export default function Qualities() {
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
 
-  // --- Effect Hook for Responsiveness ---
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < desktopBreakpoint);
@@ -28,10 +24,7 @@ export default function Qualities() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
-  // --- Submit Handler (Logic Unchanged) ---
   const handleSubmit = async () => {
-    // Empty field validation
     if (!name || !email || !mobile || !selectedCourse || !mode) {
       alert("Please fill all fields");
       return;
@@ -76,8 +69,6 @@ export default function Qualities() {
     }
   };
   
-  // --- Responsive Style Definitions ---
-
   const sectionStyle = {
     width: isMobile ? "80%" : "100%", 
     margin: isMobile ? "20px auto 0" : "40px auto 0", 
@@ -92,7 +83,6 @@ export default function Qualities() {
 
   const contentWrapperStyle = {
     display: "flex",
-    // Stack horizontally on desktop, vertically on mobile
     flexDirection: isMobile ? "column" : "row",
     justifyContent: isMobile ? "center" : "space-between",
     alignItems: isMobile ? "center" : "flex-start",
@@ -101,7 +91,7 @@ export default function Qualities() {
     gap: isMobile ? "30px" : "40px",
   };
 
-  // Left Content (Heading)
+  // Left Content
   const leftContentStyle = {
     width: isMobile ? "100%" : "622px",
     height: isMobile ? "auto" : "440px",
@@ -109,7 +99,6 @@ export default function Qualities() {
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    // Smaller font size on mobile
     fontSize: isMobile ? "36px" : "64px",
     fontWeight: 600,
     lineHeight: "125%",
@@ -119,7 +108,6 @@ export default function Qualities() {
   // Right Form Container
   const rightFormStyle = {
     width: isMobile ? "100%" : "622px",
-    // Constrain max width for centering on typical mobile screens
     maxWidth: isMobile ? "350px" : "622px", 
     height: isMobile ? "auto" : "440px",
     borderRadius: "36px",
@@ -130,7 +118,6 @@ export default function Qualities() {
       -4px 0px 8px 0px #00000040 inset,
       4px 0px 8px 0px #00000040 inset
     `,
-    // Adjusted padding for mobile
     padding: isMobile ? "30px" : "5px 30px 0",
     marginBottom: isMobile ? "0" : "50px",
     marginTop: isMobile ? "0" : "30px",
@@ -141,11 +128,9 @@ export default function Qualities() {
   
   // Form Heading
   const formHeadingStyle = {
-    // Smaller font size on mobile
     fontSize: isMobile ? "24px" : "32px",
     fontWeight: 600,
     marginBottom: "10px",
-    // Center alignment on mobile
     marginLeft: isMobile ? "0" : "28px", 
     textAlign: isMobile ? "center" : "left", 
   };
@@ -153,7 +138,6 @@ export default function Qualities() {
   // Input Row Container
   const inputRowStyle = {
     display: "flex",
-    // Stack inputs vertically on mobile
     flexDirection: isMobile ? "column" : "row", 
     gap: isMobile ? "20px" : "18px",
     alignItems: "center",
@@ -167,19 +151,17 @@ export default function Qualities() {
     padding: "0 15px",
     border: "none",
     outline: "none",
-    // Use 100% width on mobile inputs
     width: isMobile ? "100%" : "auto", 
     flexGrow: isMobile ? 1 : 0,
   };
   
-  // Specific Input Widths (will be overridden to 100% on mobile by inputBaseStyle)
   const nameInputStyle = { ...inputBaseStyle, width: isMobile ? "100%" : "257px" };
   const emailInputStyle = { ...inputBaseStyle, width: isMobile ? "100%" : "263px" };
   const mobileInputStyle = { ...inputBaseStyle, width: isMobile ? "100%" : "257px" };
-  const courseDropdownStyle = { position: "relative", width: isMobile ? "100%" : "263px" };
+  const courseDropdownStyle = { position: "relative", width: isMobile ? "70%" : "260px" };
   
   const courseDropdownToggleStyle = {
-    width: "100%", // Ensures full width within its container
+    width: "100%", 
     height: "45px",
     borderRadius: "18px",
     padding: "0 15px",
@@ -196,7 +178,7 @@ export default function Qualities() {
     <section style={sectionStyle}>
       <div style={contentWrapperStyle}>
         
-        {/* Left Content (Heading) */}
+        {/* Left Content  */}
         <div style={leftContentStyle}>
           Ready to Transform Your Career with AsproIT?
         </div>
@@ -259,7 +241,6 @@ export default function Qualities() {
                     flexDirection: "column",
                   }}
                 >
-                  {/* Using the imported 'courses' array (logic not changed) */}
                   {courses.map((course, index) => (
                     <div
                       key={index}
@@ -288,10 +269,9 @@ export default function Qualities() {
           <label 
             style={{ 
               fontWeight: 500, 
-              fontSize: "16px",
-              // Center the label text on mobile
-              textAlign: isMobile ? "center" : "left", 
-              marginTop: isMobile ? "10px" : "0", 
+              fontSize: isMobile ? "16px" : "20px", 
+              textAlign: "center",
+              marginTop: isMobile ? "10px" : "10px", 
             }}
           >
             Mode of Training
@@ -301,7 +281,6 @@ export default function Qualities() {
             style={{ 
               display: "flex", 
               gap: "20px",
-              // Center radio buttons horizontally on mobile
               justifyContent: "center", 
             }}
           >

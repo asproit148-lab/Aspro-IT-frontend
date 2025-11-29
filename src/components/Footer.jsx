@@ -7,10 +7,8 @@ import instagram from "../assets/instagram.png";
 import x from "../assets/x.png";
 import linkedin from "../assets/linkedin.png";
 
-// --- Constants ---
 const desktopBreakpoint = 768;
 
-// --- Custom Hook to check screen size ---
 const useIsMobile = (breakpoint) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < breakpoint);
 
@@ -26,10 +24,8 @@ const useIsMobile = (breakpoint) => {
   return isMobile;
 };
 
-// --- Styled Components (Desktop-First Approach) ---
-
 const StyledFooter = styled.footer`
-  /* DESKTOP DEFAULTS (No change from original request) */
+  /* DESKTOP DEFAULTS */
   width: 100%;
   min-height: 450px;
   background: #101010;
@@ -99,8 +95,6 @@ const CompanyDescriptionWrapper = styled.div`
   font-size: 16px;
   line-height: 160%;
   color: #FFFFFF;
-  
-  /* Inherit text alignment from LeftSide */
   text-align: inherit; 
 `;
 
@@ -110,14 +104,14 @@ const RightSide = styled.div`
   flex-direction: row;
   gap: 10px;
   flex-wrap: wrap;
-  flex-grow: 1; /* Allows it to take up available space */
+  flex-grow: 1; 
   justify-content: flex-start;
 
   /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
     width: 100%;
-    gap: 40px 20px; /* Vertical and horizontal gap */
-    justify-content: space-around; /* Distribute columns */
+    gap: 40px 20px; 
+    justify-content: space-around; 
     flex-grow: 0;
   }
 `;
@@ -128,12 +122,12 @@ const ColumnContent = styled.div`
   flex-direction: column;
   gap: 15px;
   min-width: 150px;
-  flex: 1 1 0; /* Ensures even distribution, similar to original flex: '1 1 auto' */
+  flex: 1 1 0; 
   text-align: left;
 
   /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
-    min-width: 45%; /* Allows two columns per row on mobile/tablet */
+    min-width: 45%; 
     max-width: 50%;
     text-align: center;
     flex: none;
@@ -158,21 +152,20 @@ const ColumnHeading = styled.h3`
 `;
 
 const FooterText = styled.p`
-  /* DESKTOP DEFAULTS (Used for Address text and contact links) */
+  /* DESKTOP DEFAULTS  */
   text-decoration: none;
   color: #FFFFFF99;
   font-size: 24px;
   font-weight: 500;
   line-height: 32px;
   transition: all 0.3s ease;
-  white-space: nowrap; /* Default nowrap for desktop links/contacts */
-  text-align: inherit; /* Inherit alignment from ColumnContent */
-
+  white-space: nowrap; 
+  text-align: inherit;
   /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
     font-size: 16px;
     line-height: 24px;
-    white-space: normal; /* Allow wrapping on mobile for fit */
+    white-space: normal;
     text-align: center;
   }
 `;
@@ -191,14 +184,14 @@ const SocialIconsContainer = styled.div`
 
   /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
-    position: relative; /* Integrate into flow */
+    position: relative; 
     right: auto;
     bottom: auto;
     margin-top: 20px;
     justify-content: center;
     gap: 15px;
     width: 100%;
-    order: 4; /* Ensures it appears last in the vertical mobile flow */
+    order: 4; 
   }
 `;
 
@@ -221,12 +214,9 @@ const SocialIcon = styled.img`
   }
 `;
 
-// --- Component Start ---
-
 export default function Footer() {
   const isMobile = useIsMobile(desktopBreakpoint);
 
-  // Helper for applying link styling to anchor tags
   const LinkItem = ({ item, href = "#", enableWrap = false }) => (
     <FooterText 
       as="a" 
@@ -300,7 +290,6 @@ export default function Footer() {
             key={i}
             src={icon}
             alt="social-icon"
-            // Hover logic is now inside SocialIcon:hover
           />
         ))}
       </SocialIconsContainer>

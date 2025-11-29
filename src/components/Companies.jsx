@@ -8,8 +8,7 @@ import hcl from "../assets/hcl.png";
 import amazon from "../assets/amazon.png";
 import atlassian from "../assets/atlassian.png";
 
-const desktopBreakpoint = 768; // Using the standard breakpoint
-
+const desktopBreakpoint = 768; 
 export default function Companies() {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -22,14 +21,12 @@ export default function Companies() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Combine all logos for easier mapping/layout adjustment
   const allLogos = [walmart, infosys, samsung, tcs, wipro, hcl, amazon, atlassian];
 
   const sectionStyle = {
     width: "100%",
-    // ➡️ FIX 1: Make height dynamic on mobile to fit content
     height: isMobile ? "auto" : "650px",
-    padding: isMobile ? "40px 15px 60px 15px" : "0", // Add mobile padding
+    padding: isMobile ? "40px 15px 60px 15px" : "0", 
     background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
     boxShadow:
       "-4px -4px 16px 0px #FFFFFF0D inset, 4px 4px 16px 0px #FFFFFF0D inset",
@@ -41,7 +38,6 @@ export default function Companies() {
   };
 
   const headingStyle = {
-    // ➡️ FIX 2: Shrink width, margins, and font size on mobile
     width: isMobile ? "95%" : "100%", 
     height: isMobile ? "auto" : "72px",
     marginTop: isMobile ? "0" : "30px",
@@ -56,7 +52,6 @@ export default function Companies() {
 
   const spanStyle = {
     color: "#FAAD4F",
-    // ➡️ FIX 3: Shrink featured text size on mobile
     fontSize: isMobile ? "36px" : "64px",
     fontWeight: 700,
   };
@@ -66,23 +61,20 @@ export default function Companies() {
     flexDirection: "column",
     gap: isMobile ? "30px" : "25px",
     marginTop: isMobile ? "40px" : "80px",
-    maxWidth: isMobile ? "350px" : "1200px", // Constrain width on mobile
+    maxWidth: isMobile ? "350px" : "1200px",
     width: "100%",
     zIndex: 1,
   };
 
-  // ➡️ FIX 4: Use flexWrap on mobile rows to prevent overflow
   const rowStyle = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    // Smaller gap and allow wrapping on mobile
     gap: isMobile ? "20px" : "100px", 
     flexWrap: isMobile ? "wrap" : "nowrap",
   };
 
   const logoImageStyle = {
-    // ➡️ FIX 5: Smaller logos on mobile
     width: isMobile ? "100px" : "150px",
     height: isMobile ? "100px" : "150px",
     objectFit: "contain",
@@ -131,7 +123,7 @@ export default function Companies() {
         <div style={rowStyle}>
           {allLogos.slice(3).map((logo, i) => (
             <img
-              key={i + 3} // Ensure unique key
+              key={i + 3} 
               src={logo}
               alt="company logo"
               style={logoImageStyle}

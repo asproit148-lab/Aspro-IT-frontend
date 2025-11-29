@@ -8,7 +8,7 @@ const config = {
   withCredentials: true,
 };
 
-// Submit payment (user uploads screenshot)
+// Submit payment
 export const submitPayment = async (courseId, file) => {
   const formData = new FormData();
   formData.append("paymentScreenshot", file);

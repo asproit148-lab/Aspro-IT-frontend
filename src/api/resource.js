@@ -9,7 +9,6 @@ const config = {
 
 // Add Resource
 export const addResource = async (data) => {
-  // data should be FormData for file upload
   const res = await axios.post(`${API}/add-resource`, data, config);
   return res.data;
 };
@@ -17,13 +16,13 @@ export const addResource = async (data) => {
 // Get All Resources
 export const getAllResources = async () => {
   const res = await axios.get(`${API}/all-resources`, config);
-  return res.data.resources; // return array directly
+  return res.data.resources;
 };
 
 // Get Single Resource
 export const getResource = async (resourceId) => {
   const res = await axios.get(`${API}/resource-info/${resourceId}`, config);
-  return res.data.resource; // return object directly
+  return res.data.resource;
 };
 
 // Delete Resource

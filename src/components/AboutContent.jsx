@@ -1,26 +1,22 @@
 import React from "react";
 import styled from "@emotion/styled";
 
-// --- Constants ---
 const desktopBreakpoint = 768;
 
-// --- Styled Components ---
-
-// 1. Main Container Wrapper
 const StyledContentWrapper = styled.div`
   /* DESKTOP DEFAULTS */
   padding: 40px 50px;
   box-shadow: 0px 4px 25px 0px rgba(61, 150, 224, 0.4);
   margin: 0;
   height: auto;
-  width: 95%; /* Desktop width */
-  margin: 0 auto; /* Center the 98% width container */
+  width: 95%; 
+  margin: 0 auto; 
 
   /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
-    padding: 30px 20px; /* Reduced padding on mobile */
-    width: 90%; /* Take full width on mobile */
-    box-shadow: none; /* Optionally remove heavy shadow on small screens */
+    padding: 30px 20px; 
+    width: 90%; 
+    box-shadow: none; 
   }
 
   /* Very Small Mobile Optimization */
@@ -29,7 +25,6 @@ const StyledContentWrapper = styled.div`
   }
 `;
 
-// 2. Section Heading Style
 const Heading = styled.h2`
   /* DESKTOP DEFAULTS */
   font-family: "Poppins", sans-serif;
@@ -46,7 +41,6 @@ const Heading = styled.h2`
   }
 `;
 
-// 3. Paragraph Text Style
 const Text = styled.p`
   /* DESKTOP DEFAULTS */
   font-family: "Poppins", sans-serif;
@@ -67,7 +61,6 @@ const Text = styled.p`
   }
 `;
 
-// 4. Individual Content Section
 const ContentSection = styled.div`
   /* DESKTOP DEFAULTS */
   margin-bottom: 40px;
@@ -78,11 +71,9 @@ const ContentSection = styled.div`
   }
 
   &:last-child {
-    margin-bottom: 0; /* Remove bottom margin from the last section */
+    margin-bottom: 0; 
   }
 `;
-
-// --- Component Start ---
 
 export default function AboutContent() {
   return (

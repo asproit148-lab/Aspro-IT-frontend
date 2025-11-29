@@ -59,16 +59,13 @@ export default function CouponManagement() {
         return dateString ? dateString.split("T")[0] : 'N/A';
     };
 
-    // --- Component JSX ---
     return (
         <div
             style={{
-                // ⬅️ CRUCIAL: Desktop left offset is 100px, Mobile is 0
                 marginLeft: isMobile ? "0" : "30px",
                 background: "black",
                 color: "white",
                 fontFamily: "Poppins, sans-serif",
-                // ⬅️ CRUCIAL: Adjust padding top and horizontal padding
                 paddingTop: isMobile ? "80px" : "130px",
                 paddingLeft: isMobile ? "20px" : "120px",
                 paddingRight: isMobile ? "20px" : "20px",
@@ -83,10 +80,8 @@ export default function CouponManagement() {
                 <h1
                     style={{
                         fontWeight: 600,
-                        // ⬅️ ADJUSTED: Smaller font size on mobile
                         fontSize: isMobile ? "28px" : "36px",
                         color: "#FFFFFF",
-                        // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                         marginLeft: isMobile ? "0" : "0",
                         marginBottom: 0,
                         marginTop: 0,
@@ -101,7 +96,6 @@ export default function CouponManagement() {
                         color: "#FFFFFF",
                         opacity: 0.9,
                         marginTop: isMobile ? "8px" : "4px",
-                        // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                         marginLeft: isMobile ? "0" : "0",
                     }}
                 >
@@ -112,11 +106,9 @@ export default function CouponManagement() {
             {/* Top Bar */}
             <div
                 style={{
-                    // ⬅️ CRUCIAL: Full width on mobile, 90% on desktop, adjust margins
                     width: isMobile ? "100%" : "100%",
                     height: isMobile ? "60px" : "72px",
                     marginTop: isMobile ? "30px" : "40px",
-                    // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                     marginLeft: isMobile ? "0" : "20px",
                     borderRadius: "10px",
                     background: "linear-gradient(90.19deg, #323232 0%, #0F0F0F 59.13%)",
@@ -176,13 +168,10 @@ export default function CouponManagement() {
             <div
                 style={{
                     marginTop: isMobile ? "30px" : "50px",
-                    // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                     marginLeft: isMobile ? "0" : "50px",
-                    // ⬅️ CRUCIAL: Full width on mobile, 80% on desktop
                     width: isMobile ? "100%" : "80%",
                     background: "#282727",
                     borderRadius: "10px",
-                    // ⬅️ ADJUSTED: Reduced padding on mobile
                     padding: isMobile ? "10px 15px" : "10px 50px",
                 }}
             >

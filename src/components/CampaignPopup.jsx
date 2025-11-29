@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import styled from "@emotion/styled";
 import { getBanners } from "../api/campaign";
-// Assuming you have this utility component from our previous conversation
 import BodyScrollLock from "./BodyScrollLock"; 
 
 const desktopBreakpoint = 768;
-
-// --- Styled Components ---
 
 const PopupOverlay = styled.div`
   position: fixed;
@@ -18,7 +15,7 @@ const PopupOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  padding: 15px; /* Add padding for small mobile devices */
+  padding: 15px; 
 `;
 
 const PopupContent = styled.div`
@@ -33,13 +30,13 @@ const PopupContent = styled.div`
 
   /* Web/Desktop Styles */
   width: 548px;
-  max-height: 500px; /* Use max-height for better content adaptation */
+  max-height: 500px; 
 
-  /* Mobile Styles (Max-width: 768px) */
+  /* Mobile Styles) */
   @media (max-width: ${desktopBreakpoint}px) {
     width: 100%;
-    max-width: 400px; /* Constrain max width for slightly larger mobiles */
-    max-height: 90vh; /* Don't cover the whole screen height */
+    max-width: 400px; 
+    max-height: 90vh; 
     border-radius: 20px;
   }
 `;
@@ -63,7 +60,7 @@ const CloseButton = styled.button`
   @media (max-width: ${desktopBreakpoint}px) {
     top: 10px;
     right: 10px;
-    padding: 8px; /* Slightly larger tap target */
+    padding: 8px; 
   }
 `;
 
@@ -73,7 +70,6 @@ const BannerImageContainer = styled.div`
   height: 300px;
   
   @media (max-width: ${desktopBreakpoint}px) {
-    /* Mobile Image Height (e.g., smaller or aspect ratio based) */
     height: 200px; 
   }
 `;
@@ -86,7 +82,6 @@ const BannerImage = styled.img`
 
 const BottomSection = styled.div`
   width: 100%;
-  /* Use flex-grow instead of fixed height for better adaptability */
   flex-grow: 1; 
   padding: 20px;
   display: flex;
@@ -132,7 +127,7 @@ const ActionButton = styled.button`
   font-size: 14px;
 
   &:hover {
-    background-color: #5d0331; /* Slightly darker on hover */
+    background-color: #5d0331; 
   }
 
   /* Mobile Button Size */
@@ -144,19 +139,15 @@ const ActionButton = styled.button`
   }
 `;
 
-// --- Component Start ---
-
 export default function CampaignPopup() {
   const [show, setShow] = useState(true);
   const [banner, setBanner] = useState(null);
 
-  // 1. Auto-close timer logic
   useEffect(() => {
-    const timer = setTimeout(() => setShow(false), 10000); // 10 seconds
+    const timer = setTimeout(() => setShow(false), 5000); 
     return () => clearTimeout(timer);
   }, []);
 
-  // 2. Data fetching logic
   useEffect(() => {
     getBanners()
       .then((res) => {
@@ -174,17 +165,15 @@ export default function CampaignPopup() {
   const image = banner?.image;
   const title = banner?.title || "Limited Time Christmas Deal!";
 
-  // Function to handle button click and navigation
   const handleButtonClick = () => {
     if (banner?.url) {
       window.open(banner.url, "_blank", "noopener,noreferrer");
-      handleClose(); // Close popup after clicking
+      handleClose(); 
     }
   };
 
   return (
     <>
-      {/* 3. SCROLL LOCK FIX */}
       <BodyScrollLock isLocked={show} /> 
       
       <PopupOverlay>

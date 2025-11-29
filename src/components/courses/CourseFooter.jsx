@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// Assuming Footer is a responsive component or handles its own responsiveness
 import Footer from "../Footer"; 
 import { ChevronDown } from "lucide-react";
 
@@ -48,7 +47,6 @@ export default function CourseFooter() {
 
     return (
         <div style={{ backgroundColor: "#101010" }}>
-            {/* Footer component usage (assumed to be responsive) */}
             <Footer /> 
 
             {/* Line separator */}
@@ -58,26 +56,24 @@ export default function CourseFooter() {
                     height: "1px",
                     backgroundColor: "#FFFFFF40",
                     marginTop: "0",
-                    marginBottom: isMobile ? "15px" : "20px", // Minor adjustment
+                    marginBottom: isMobile ? "15px" : "20px", 
                 }}
             ></div>
 
             {/* FAQ Section */}
             <div
                 style={{
-                    // ⬅️ ADJUSTED: Use percentages/auto margin for mobile centering
                     width: isMobile ? "90%" : "80%", 
                     marginLeft: isMobile ? "5%" : "80px", 
                     marginRight: isMobile ? "5%" : "auto", 
                     marginBottom: isMobile ? "30px" : "20px",
-                    boxSizing: "border-box", // Ensure padding/margin are included in width
+                    boxSizing: "border-box", 
                 }}
             >
                 <h2
                     style={{
                         fontFamily: "Poppins, sans-serif",
                         fontWeight: 600,
-                        // ⬅️ ADJUSTED: Smaller font size on mobile
                         fontSize: isMobile ? "28px" : "36px", 
                         color: "#FFFFFF",
                         marginBottom: "15px",
@@ -94,7 +90,6 @@ export default function CourseFooter() {
                             style={{
                                 marginBottom: "10px",
                                 cursor: "pointer",
-                                // Added padding/border to separate items visually on hover/active on mobile
                                 padding: isMobile ? "5px 0" : "0", 
                             }}
                             onClick={() =>
@@ -112,10 +107,8 @@ export default function CourseFooter() {
                                     style={{
                                         fontFamily: "Poppins, sans-serif",
                                         fontWeight: 500,
-                                        // ⬅️ ADJUSTED: Smaller font size on mobile
                                         fontSize: isMobile ? "18px" : "20px", 
                                         color: "#FFFFFF",
-                                        // ⬅️ ADJUSTED: Increased line height for mobile readability
                                         lineHeight: isMobile ? "140%" : "100%", 
                                         margin: isMobile ? "5px 0" : "0",
                                     }}
@@ -123,7 +116,7 @@ export default function CourseFooter() {
                                     {item.question}
                                 </p>
                                 <ChevronDown
-                                    size={isMobile ? 20 : 22} // Minor size adjustment
+                                    size={isMobile ? 20 : 22} 
                                     color="#FFFFFF"
                                     style={{
                                         transform:
@@ -141,9 +134,7 @@ export default function CourseFooter() {
                                         fontSize: "16px",
                                         color: "#B0B0B0",
                                         marginTop: "10px",
-                                        // ⬅️ ADJUSTED: Removed left margin on mobile for alignment
                                         marginLeft: isMobile ? "0px" : "10px", 
-                                        // ⬅️ ADJUSTED: Increased line height for mobile readability
                                         lineHeight: "140%", 
                                         textAlign: "left",
                                     }}

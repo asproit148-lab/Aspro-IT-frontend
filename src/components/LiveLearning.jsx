@@ -109,7 +109,7 @@ export default function LiveLearning() {
           display: "grid",
           gridTemplateColumns: isMobile
             ? "1fr"
-            : "repeat(auto-fit, minmax(300px, 1fr))", // desktop unchanged
+            : "repeat(auto-fit, minmax(300px, 1fr))", 
           gap: "40px",
           width: "100%",
           maxWidth: "1280px",
@@ -124,7 +124,7 @@ export default function LiveLearning() {
             key={index}
             style={{
               width: "100%",
-              maxWidth: isMobile ? "100%" : "407px", // full width on mobile
+              maxWidth: isMobile ? "100%" : "407px", 
               borderRadius: "24px",
               background:
                 "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",

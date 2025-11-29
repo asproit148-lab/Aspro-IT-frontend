@@ -4,10 +4,8 @@ import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import bg from "../assets/homeBg.jpg";
 
-// --- Constants ---
 const desktopBreakpoint = 768;
 
-// --- Custom Hook to check screen size (reusable) ---
 const useIsMobile = (breakpoint) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < breakpoint);
 
@@ -22,8 +20,6 @@ const useIsMobile = (breakpoint) => {
 
   return isMobile;
 };
-
-// --- Styled Components ---
 
 const HeroContainer = styled.section`
   background-image: url(${bg});
@@ -156,12 +152,8 @@ const CTAButton = styled(motion.a)`
   }
 `;
 
-// --- Component Start ---
-
 export default function Hero() {
   const isMobile = useIsMobile(desktopBreakpoint);
-
-  // Note: The original mouse handlers are no longer needed, as hover is handled by CSS (CTAButton:hover)
 
   const handleScrollToSection = (e, id) => {
     e.preventDefault();
@@ -172,7 +164,6 @@ export default function Hero() {
 
   return (
     <HeroContainer>
-      {/* Overlay */}
       <Overlay />
 
       {/* Content */}

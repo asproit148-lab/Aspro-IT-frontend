@@ -17,11 +17,10 @@ export default function SubtleScroll() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Base motion container style
   const motionContainerStyle = {
     width: isMobile ? "90%" : "100%", 
-    height: isMobile ? "auto" : "536px", 
-    padding: isMobile ? "40px 20px" : "0", // Add vertical padding on mobile
+    height: isMobile ? "900px" : "536px", 
+    padding: isMobile ? "40px 20px" : "0", 
     background: "#101010",
     position: "relative",
     overflow: "hidden",
@@ -31,69 +30,58 @@ export default function SubtleScroll() {
     transition: "all 0.4s ease",
   };
 
-  // Content wrapper style (the inner motion.div)
   const contentWrapperStyle = {
     display: "flex",
-    // ➡️ FIX 2: Stack content vertically on mobile
     flexDirection: isMobile ? "column" : "row", 
     alignItems: "center",
-    // On mobile, center the items; on web, adjust based on isAwake
     justifyContent: isMobile ? "center" : (isAwake ? "flex-start" : "center"),
     width: "100%",
-    // ➡️ FIX 3: Remove large left padding on mobile
     paddingLeft: isMobile ? "0px" : (isAwake ? "86px" : "0px"),
-    gap: isMobile ? "20px" : "40px", // Reduce gap on mobile
+    gap: isMobile ? "20px" : "40px", 
     position: "relative",
     zIndex: 2,
     transition: "all 0.4s ease",
   };
 
-  // Left Image style
+  // Left Image 
   const imageStyle = {
-    // ➡️ FIX 4: Reduce image size significantly on mobile and ensure it fits
     width: isMobile ? "90%" : "514px",
     maxWidth: isMobile ? "400px" : "514px", 
     height: isMobile ? "auto" : "488px",
     borderRadius: "36px",
     objectFit: "cover",
     flexShrink: 0,
-    // Add margin for separation if stacked
     marginBottom: isMobile ? "20px" : "0", 
   };
 
   // Right Text container style
   const textContainerStyle = {
-    // ➡️ FIX 5: Use 100% width on mobile, and apply max-width for consistency
     width: isMobile ? "100%" : "640px",
     maxWidth: isMobile ? "100%" : "640px",
     color: "#FFFFFF",
     fontFamily: "Poppins, sans-serif",
     display: "flex",
     flexDirection: "column",
-    textAlign: isMobile ? "center" : "left", // Center text on mobile
-    padding: isMobile ? "0 10px" : "0", // Add slight inner padding on mobile
+    textAlign: isMobile ? "center" : "left", 
+    padding: isMobile ? "0 10px" : "0", 
   };
 
   // Heading style
   const headingStyle = {
     fontWeight: 600,
-    // ➡️ FIX 6: Shrink heading font size on mobile
     fontSize: isMobile ? "28px" : "36px", 
     lineHeight: "130%",
     marginBottom: "16px",
-    // Remove <br /> tags on mobile using a smaller element or conditional text
   };
 
   // Paragraph style
   const paragraphStyle = {
     fontWeight: 400,
-    // ➡️ FIX 7: Shrink paragraph font size on mobile
     fontSize: isMobile ? "16px" : "20px", 
     lineHeight: "150%",
     color: "#E0E0E0",
   };
   
-  // Conditionally render text to remove line breaks for mobile
   const headingText = "Summer Training and Internship Opportunity for College Students";
   const paragraphText = `✨ Kickstart Your Career This Summer! Are you a college student eager to turn your summer break into a career-defining opportunity? Join our Summer Training & Internship Program, carefully crafted for ambitious learners who want more than just classroom knowledge. Over the course of the program, you’ll gain real-world skills, practical hands-on experience, and valuable industry exposure, while collaborating with professionals and peers on projects that truly make an impact. By the end, you won’t just complete a program — you’ll walk away with the confidence, portfolio, and expertise to stand out in your future career journey.`;
   
@@ -131,7 +119,7 @@ export default function SubtleScroll() {
           }}
           style={contentWrapperStyle}
         >
-          {/* Subtle Glow Layer (Keep as is) */}
+          {/* Subtle Glow Layer */}
           <div
             style={{
               position: "absolute",
@@ -158,7 +146,6 @@ export default function SubtleScroll() {
               {headingText}
             </h2>
             <p style={paragraphStyle}>
-              {/* Note: I removed the manual <br /> tags from the original code and let the browser wrap the text naturally */}
               {paragraphText}
             </p>
           </div>

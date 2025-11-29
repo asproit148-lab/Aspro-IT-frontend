@@ -3,8 +3,8 @@ import { CircleCheckBig, CircleX } from "lucide-react";
 import { getPendingPayments, approvePayment, rejectPayment } from "../../api/payment";
 
 // Define breakpoints
-const largeBreakpoint = 1200; // For 3 columns to 2 columns
-const tabletBreakpoint = 768; // For 2 columns to 1 column
+const largeBreakpoint = 1200; 
+const tabletBreakpoint = 768; 
 
 export default function PaymentVerification() {
     const [pending, setPending] = useState([]);
@@ -13,7 +13,6 @@ export default function PaymentVerification() {
     const isMobile = screenWidth < tabletBreakpoint;
     const isTablet = screenWidth < largeBreakpoint;
 
-    // Effect to track screen size for responsiveness
     useEffect(() => {
         const handleResize = () => {
             setScreenWidth(window.innerWidth);
@@ -58,7 +57,6 @@ export default function PaymentVerification() {
         }
     };
 
-    // Determine number of columns based on screen size
     let columns = 3;
     if (screenWidth < largeBreakpoint && screenWidth >= tabletBreakpoint) {
         columns = 2;
@@ -75,7 +73,6 @@ export default function PaymentVerification() {
                 minHeight: "100vh",
                 boxSizing: 'border-box',
                 
-                // ⬅️ CRUCIAL: Responsive container adjustments
                 marginLeft: isMobile ? "0" : "30px", 
                 paddingTop: isMobile ? "80px" : "140px", 
                 paddingLeft: isMobile ? "20px" : "120px", 
@@ -89,11 +86,9 @@ export default function PaymentVerification() {
                 <h1
                     style={{
                         fontWeight: 600,
-                        // ⬅️ ADJUSTED: Smaller font size on mobile
                         fontSize: isMobile ? "28px" : "36px", 
                         lineHeight: "100%",
                         color: "#FFFFFF",
-                        // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                         marginLeft: isMobile ? "0" : "0", 
                         marginTop: 0,
                     }}
@@ -103,14 +98,11 @@ export default function PaymentVerification() {
                 <p
                     style={{
                         fontWeight: 400,
-                        // ⬅️ ADJUSTED: Smaller font size on mobile
                         fontSize: isMobile ? "14px" : "16px", 
-                        // ⬅️ ADJUSTED: Line height for better spacing
                         lineHeight: isMobile ? "100%" : "100%", 
                         color: "#FFFFFF",
                         opacity: 0.9,
                         marginTop: isMobile ? "8px" : "12px",
-                        // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                         marginLeft: isMobile ? "0" : "0", 
                         marginBottom: isMobile ? "20px" : "0",
                     }}
@@ -122,7 +114,6 @@ export default function PaymentVerification() {
             {/* Top Bar (Pending Count) */}
             <div
                 style={{
-                    // ⬅️ CRUCIAL: Responsive width/margin adjustments
                     width: isMobile ? "100%" : "90%",
                     height: isMobile ? "60px" : "72px",
                     marginTop: isMobile ? "30px" : "40px",
@@ -132,7 +123,7 @@ export default function PaymentVerification() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    padding: isMobile ? "0 15px" : "0 30px 4px 30px", // Adjusted padding for mobile
+                    padding: isMobile ? "0 15px" : "0 30px 4px 30px", 
                     boxSizing: 'border-box',
                 }}
             >
@@ -159,16 +150,13 @@ export default function PaymentVerification() {
                         {pending.length}
                     </p>
                 </div>
-                {/* No button here, keeping structure aligned with Campaigns/Blogs if one were added later */}
             </div>
 
             {/* Pending Cards Grid */}
             <div
                 style={{
-                    // ⬅️ CRUCIAL: Responsive width/margin adjustments
                     width: isMobile ? "100%" : "90%",
                     display: "grid",
-                    // ⬅️ CRUCIAL: Dynamic columns
                     gridTemplateColumns: `repeat(${columns}, 1fr)`,
                     gap: isMobile ? "20px" : "30px",
                     marginLeft: isMobile ? "0" : "50px",
@@ -181,13 +169,10 @@ export default function PaymentVerification() {
                     <div
                         key={item._id}
                         style={{
-                            // ⬅️ CRUCIAL: Card width must be 100% of the grid cell
                             width: "100%", 
-                            // ⬅️ ADJUSTED: Reduced height on mobile, use min-height for flexibility
                             minHeight: isMobile ? "300px" : "350px", 
                             background: "#343434",
                             borderRadius: "20px",
-                            // ⬅️ ADJUSTED: Reduced padding on mobile
                             padding: isMobile ? "15px" : "20px", 
                             display: "flex",
                             flexDirection: "column",
@@ -201,7 +186,6 @@ export default function PaymentVerification() {
                             alt="proof"
                             style={{
                                 width: "100%",
-                                // ⬅️ ADJUSTED: Reduced image height on mobile
                                 height: isMobile ? "150px" : "179px", 
                                 borderRadius: "16px",
                                 objectFit: "cover",
@@ -211,7 +195,6 @@ export default function PaymentVerification() {
                         <div>
                             <h3
                                 style={{
-                                    // ⬅️ ADJUSTED: Smaller font size on mobile
                                     fontSize: isMobile ? "16px" : "18px", 
                                     fontWeight: 500,
                                     marginTop: isMobile ? "8px" : "12px",
@@ -222,7 +205,6 @@ export default function PaymentVerification() {
                             </h3>
                             <p
                                 style={{
-                                    // ⬅️ ADJUSTED: Smaller font size on mobile
                                     fontSize: isMobile ? "14px" : "16px", 
                                     color: "#C9C9C9",
                                     fontWeight: 500,
@@ -246,14 +228,12 @@ export default function PaymentVerification() {
                             style={{
                                 display: "flex",
                                 justifyContent: "space-between",
-                                // ⬅️ ADJUSTED: Added small gap for mobile buttons
                                 gap: isMobile ? "8px" : "10px", 
                             }}
                         >
                             <button
                                 onClick={() => handleApprove(item._id)}
                                 style={{
-                                    // ⬅️ ADJUSTED: Sizing adjustment for mobile
                                     width: isMobile ? "48%" : "100px", 
                                     height: isMobile ? "30px" : "34px",
                                     borderRadius: "10px",
@@ -265,7 +245,6 @@ export default function PaymentVerification() {
                                     gap: "7px",
                                     border: "none",
                                     cursor: "pointer",
-                                    // ⬅️ ADJUSTED: Smaller font size on mobile
                                     fontSize: isMobile ? "14px" : "16px", 
                                 }}
                             >
@@ -276,7 +255,6 @@ export default function PaymentVerification() {
                             <button
                                 onClick={() => handleReject(item._id)}
                                 style={{
-                                    // ⬅️ ADJUSTED: Sizing adjustment for mobile
                                     width: isMobile ? "48%" : "100px",
                                     height: isMobile ? "30px" : "34px",
                                     borderRadius: "10px",
@@ -288,7 +266,6 @@ export default function PaymentVerification() {
                                     gap: "7px",
                                     border: "none",
                                     cursor: "pointer",
-                                    // ⬅️ ADJUSTED: Smaller font size on mobile
                                     fontSize: isMobile ? "14px" : "16px",
                                 }}
                             >

@@ -15,22 +15,17 @@ export default function CourseHeader() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // --- Style Definitions ---
-
   const headerStyle = {
     width: "100%",
-    // Use fixed height or minHeight on mobile for predictable sizing
-    minHeight: isMobile ? "70px" : "90px", // Slightly increased minHeight on mobile
+    minHeight: isMobile ? "70px" : "90px",
     backgroundColor: "black",
     borderBottom: "1px solid",
     borderImageSource: "linear-gradient(90deg, #8A38F5 12.98%, #F29B9B 76.44%)",
     borderImageSlice: 1,
     display: "flex",
     alignItems: "center",
-    // Conditional padding: fixed padding on mobile, responsive 'vw' on desktop
     padding: isMobile ? "0 20px" : "0 5vw", 
     backdropFilter: "blur(1px)",
-    // Ensure no horizontal overflow
     overflowX: 'hidden', 
     boxSizing: 'border-box',
   };
@@ -41,7 +36,6 @@ export default function CourseHeader() {
     lineHeight: "100%",
     letterSpacing: isMobile ? "1px" : "2px",
     color: "white",
-    // 🛑 INCREASED MOBILE FONT SIZE 🛑
     fontSize: isMobile ? "24px" : "2.2vw", 
     margin: 0, 
   };
@@ -49,7 +43,6 @@ export default function CourseHeader() {
   const spanTextStyle = {
     background: "linear-gradient(90deg, #E515D7 44.71%, #99A2E4 100%)",
     fontWeight: 700,
-    // 🛑 INCREASED MOBILE FONT SIZE 🛑
     fontSize: isMobile ? "28px" : "2.6vw", 
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",

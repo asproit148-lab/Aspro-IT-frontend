@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit3, Trash2 } from "lucide-react";
-// Assuming this path is correct
 import AddCourse from "../admin/AddCourse"; 
 import { getAllCourses, deleteCourse } from "../../api/course";
 
 // Define breakpoints
-const largeBreakpoint = 1200; // For 3 columns to 2 columns
-const tabletBreakpoint = 768; // For 2 columns to 1 column
+const largeBreakpoint = 1200; 
+const tabletBreakpoint = 768; 
 
 export default function CourseManagement() {
     const [courses, setCourses] = useState([]);
@@ -15,7 +14,7 @@ export default function CourseManagement() {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
     const isMobile = screenWidth < tabletBreakpoint;
-    const isTablet = screenWidth < largeBreakpoint; // True for both mobile and tablet
+    const isTablet = screenWidth < largeBreakpoint; 
 
     // Effect to track screen size for responsiveness
     useEffect(() => {
@@ -30,7 +29,6 @@ export default function CourseManagement() {
     const fetchCourses = async () => {
         try {
             const data = await getAllCourses();
-            // Note: Data structure mapping as per your original card usage
             setCourses(data.courses.map(c => ({
                 ...c,
                 _id: c._id,
@@ -80,14 +78,11 @@ export default function CourseManagement() {
     return (
         <div
             style={{
-                // ⬅️ CRUCIAL: Desktop left offset is 100px, Mobile is 0
                 marginLeft: isMobile ? "0" : "30px",
                 background: "black",
                 color: "white",
                 fontFamily: "Poppins, sans-serif",
-                // ⬅️ CRUCIAL: Adjust padding top based on header height
                 paddingTop: isMobile ? "80px" : "140px",
-                // ⬅️ CRUCIAL: General horizontal padding
                 paddingLeft: isMobile ? "20px" : "120px",
                 paddingRight: isMobile ? "20px" : "20px",
                 paddingBottom: "100px",
@@ -101,11 +96,9 @@ export default function CourseManagement() {
                 <h1
                     style={{
                         fontWeight: 600,
-                        // ⬅️ ADJUSTED: Smaller font size on mobile
                         fontSize: isMobile ? "28px" : "36px",
                         lineHeight: "100%",
                         color: "#FFFFFF",
-                        // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                         marginLeft: isMobile ? "0" : "0",
                         marginTop: 0,
                     }}
@@ -120,7 +113,6 @@ export default function CourseManagement() {
                         color: "#FFFFFF",
                         opacity: 0.9,
                         marginTop: isMobile ? "8px" : "12px",
-                        // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                         marginLeft: isMobile ? "0" : "0",
                     }}
                 >
@@ -131,11 +123,9 @@ export default function CourseManagement() {
             {/* Top Bar */}
             <div
                 style={{
-                    // ⬅️ CRUCIAL: Full width on mobile, 90% on desktop, adjust margins
                     width: isMobile ? "100%" : "100%",
                     height: isMobile ? "60px" : "72px",
                     marginTop: isMobile ? "30px" : "40px",
-                    // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                     marginLeft: isMobile ? "0" : "20px",
                     borderRadius: "10px",
                     background: "linear-gradient(90.19deg, #323232 0%, #0F0F0F 59.13%)",
@@ -196,10 +186,8 @@ export default function CourseManagement() {
                 style={{
                     width: isMobile ? "100%" : "90%",
                     display: "grid",
-                    // ⬅️ CRUCIAL: Dynamic columns based on screen width
                     gridTemplateColumns: `repeat(${columns}, 1fr)`,
                     gap: isMobile ? "20px" : "30px",
-                    // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                     marginLeft: isMobile ? "0" : "50px",
                     marginTop: isMobile ? "30px" : "50px",
                     marginBottom: "100px",
@@ -210,7 +198,7 @@ export default function CourseManagement() {
                     <div
                         key={course._id}
                         style={{
-                            width: "100%", // ⬅️ Full width of the grid column
+                            width: "100%", 
                             minHeight: isMobile ? "300px" : "350px", // Adjusted height for mobile
                             background: "#343434",
                             borderRadius: "20px",
@@ -227,7 +215,7 @@ export default function CourseManagement() {
                             alt={course.Course_title}
                             style={{
                                 width: "100%",
-                                height: isMobile ? "140px" : "179px", // Reduced image height on mobile
+                                height: isMobile ? "140px" : "179px", 
                                 borderRadius: "16px",
                                 objectFit: "cover",
                             }}

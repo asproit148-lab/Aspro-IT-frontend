@@ -8,8 +8,8 @@ import {
 } from "../../api/resource";
 
 // Define breakpoints
-const largeBreakpoint = 1200; // For 3 columns to 2 columns
-const tabletBreakpoint = 768; // For 2 columns to 1 column
+const largeBreakpoint = 1200; 
+const tabletBreakpoint = 768; 
 
 export default function ResourceManagement() {
   const [resources, setResources] = useState([]);
@@ -19,7 +19,6 @@ export default function ResourceManagement() {
   const isMobile = screenWidth < tabletBreakpoint;
   const isTablet = screenWidth < largeBreakpoint;
 
-  // Effect to track screen size for responsiveness
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
@@ -29,10 +28,9 @@ export default function ResourceManagement() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Fetch all resources from backend
   const fetchResources = async () => {
     try {
-      const allResources = await getAllResources(); // returns array directly
+      const allResources = await getAllResources(); 
       setResources(allResources);
     } catch (err) {
       console.error("Error fetching resources:", err);
@@ -90,7 +88,6 @@ export default function ResourceManagement() {
         fontFamily: "Poppins, sans-serif",
         minHeight: "100vh",
         boxSizing: 'border-box',
-        // ⬅️ CRUCIAL: Responsive container adjustments
         marginLeft: isMobile ? "0" : "30px",
         paddingTop: isMobile ? "80px" : "140px",
         paddingLeft: isMobile ? "20px" : "120px",
@@ -104,10 +101,8 @@ export default function ResourceManagement() {
         <h1
           style={{
             fontWeight: 600,
-            // ⬅️ ADJUSTED: Smaller font size on mobile
             fontSize: isMobile ? "28px" : "36px",
             color: "#FFFFFF",
-            // ⬅️ CRUCIAL: Remove fixed left margin on mobile
             marginLeft: isMobile ? "0" : "0",
             marginBottom: isMobile ? "4px" : "8px",
             marginTop: 0,
@@ -118,12 +113,10 @@ export default function ResourceManagement() {
         <p
           style={{
             fontWeight: 400,
-            // ⬅️ ADJUSTED: Smaller font size on mobile
             fontSize: isMobile ? "14px" : "16px",
             color: "#FFFFFF",
             opacity: 0.9,
             marginTop: isMobile ? "0" : "4px",
-            // ⬅️ CRUCIAL: Remove fixed left margin on mobile
             marginLeft: isMobile ? "0" : "0",
             marginBottom: isMobile ? "20px" : "0",
           }}
@@ -135,7 +128,6 @@ export default function ResourceManagement() {
       {/* Top Bar (Total Resources) */}
       <div
         style={{
-          // ⬅️ CRUCIAL: Responsive width/margin adjustments
           width: isMobile ? "100%" : "100%",
           height: isMobile ? "60px" : "72px",
           marginTop: isMobile ? "30px" : "40px",
@@ -145,7 +137,6 @@ export default function ResourceManagement() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          // ⬅️ ADJUSTED: Padding for mobile
           padding: isMobile ? "0 15px" : "0 30px",
           boxSizing: 'border-box',
         }}
@@ -153,7 +144,6 @@ export default function ResourceManagement() {
         <div>
           <p
             style={{
-              // ⬅️ ADJUSTED: Smaller font size on mobile
               fontSize: isMobile ? "16px" : "20px",
               fontWeight: 400,
               marginBottom: "2px",
@@ -164,7 +154,6 @@ export default function ResourceManagement() {
           </p>
           <p
             style={{
-              // ⬅️ ADJUSTED: Smaller font size on mobile
               fontSize: isMobile ? "20px" : "24px",
               fontWeight: 500,
               marginTop: isMobile ? "2px" : "0",
@@ -183,7 +172,6 @@ export default function ResourceManagement() {
             gap: "8px",
             background: "#525252",
             color: "#FFFFFF",
-            // ⬅️ ADJUSTED: Smaller font size/padding on mobile
             fontSize: isMobile ? "14px" : "16px",
             borderRadius: "10px",
             border: "none",
@@ -199,17 +187,14 @@ export default function ResourceManagement() {
       {/* Resource Cards */}
       <div
         style={{
-          // ⬅️ CRUCIAL: Responsive width/margin adjustments
           width: isMobile ? "100%" : "90%",
           display: "grid",
-          // ⬅️ CRUCIAL: Dynamic columns
           gridTemplateColumns: `repeat(${columns}, 1fr)`,
           gap: isMobile ? "20px" : "30px",
           marginLeft: isMobile ? "0" : "50px",
           marginTop: isMobile ? "30px" : "50px",
           marginBottom: "100px",
           boxSizing: 'border-box',
-          // CRUCIAL FIX: Ensures all cards stretch to the same height
           alignItems: 'stretch',
         }}
       >
@@ -217,13 +202,10 @@ export default function ResourceManagement() {
           <div
             key={res._id}
             style={{
-              // ⬅️ CRUCIAL: Card width must be 100% of the grid cell
               width: "100%",
-              // ⬅️ ADJUSTED: Reduced min-height on mobile
               minHeight: isMobile ? "180px" : "200px",
               background: "#343434",
               borderRadius: "20px",
-              // ⬅️ ADJUSTED: Reduced padding on mobile
               padding: isMobile ? "15px" : "20px",
               paddingLeft: "20px",
               display: "flex",
@@ -239,7 +221,6 @@ export default function ResourceManagement() {
             <div>
               <h3
                 style={{
-                  // ⬅️ ADJUSTED: Smaller font size on mobile
                   fontSize: isMobile ? "16px" : "18px",
                   fontWeight: 500,
                   marginBottom: "8px",
@@ -249,7 +230,6 @@ export default function ResourceManagement() {
               </h3>
               <p
                 style={{
-                  // ⬅️ ADJUSTED: Smaller font size on mobile
                   fontSize: isMobile ? "13px" : "15px",
                   color: "#C9C9C9",
                   lineHeight: "18px",
@@ -267,16 +247,14 @@ export default function ResourceManagement() {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                // ⬅️ ADJUSTED: Tighter gap on mobile
                 gap: isMobile ? "15px" : "20px",
                 marginTop: "16px",
-                width: '100%', // Ensure buttons take full width for better spacing
+                width: '100%', 
               }}
             >
               <button
                 onClick={() => handleViewResource(res.url)}
                 style={{
-                  // ⬅️ ADJUSTED: Sizing adjustment for mobile
                   width: isMobile ? "50%" : "130px",
                   height: isMobile ? "36px" : "36px",
                   borderRadius: "10px",
@@ -288,7 +266,6 @@ export default function ResourceManagement() {
                   gap: "7px",
                   border: "none",
                   cursor: "pointer",
-                  // ⬅️ ADJUSTED: Smaller font size on mobile
                   fontSize: isMobile ? "12px" : "14px",
                 }}
               >
@@ -299,7 +276,6 @@ export default function ResourceManagement() {
               <button
                 onClick={() => handleDeleteResource(res._id)}
                 style={{
-                  // ⬅️ ADJUSTED: Sizing adjustment for mobile
                   width: isMobile ? "50%" : "100px",
                   height: isMobile ? "36px" : "36px",
                   borderRadius: "10px",
@@ -311,7 +287,6 @@ export default function ResourceManagement() {
                   gap: "7px",
                   border: "none",
                   cursor: "pointer",
-                  // ⬅️ ADJUSTED: Smaller font size on mobile
                   fontSize: isMobile ? "12px" : "14px",
                 }}
               >

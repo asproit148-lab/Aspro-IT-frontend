@@ -5,8 +5,8 @@ import AddCampaign from "./AddCampaign";
 import { getBanners, deleteBanner } from "../../api/campaign";
 
 // Define breakpoints
-const largeBreakpoint = 1200; // For 3 columns to 2 columns
-const tabletBreakpoint = 768; // For 2 columns to 1 column
+const largeBreakpoint = 1200; 
+const tabletBreakpoint = 768;
 
 export default function Campaign() {
     const [campaigns, setCampaigns] = useState([]);
@@ -69,14 +69,11 @@ export default function Campaign() {
     return (
         <div
             style={{
-                // ⬅️ CRUCIAL: Adjust left offset based on fixed sidebar presence
                 marginLeft: isMobile ? "0" : "30px", 
                 background: "black",
                 color: "white",
                 fontFamily: "Poppins, sans-serif",
-                // ⬅️ CRUCIAL: Adjust padding top based on header height (105px desktop / 60px mobile)
                 paddingTop: isMobile ? "80px" : "140px", 
-                // ⬅️ CRUCIAL: General horizontal padding
                 paddingLeft: isMobile ? "20px" : "120px", 
                 paddingRight: isMobile ? "20px" : "20px",
                 paddingBottom: "100px",
@@ -90,11 +87,9 @@ export default function Campaign() {
                 <h1
                     style={{
                         fontWeight: 600,
-                        // ⬅️ ADJUSTED: Smaller font size on mobile
                         fontSize: isMobile ? "28px" : "36px", 
                         lineHeight: "100%",
                         color: "#FFFFFF",
-                        // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                         marginLeft: isMobile ? "0" : "0", 
                         marginTop: 0,
                     }}
@@ -109,7 +104,6 @@ export default function Campaign() {
                         color: "#FFFFFF",
                         opacity: 0.9,
                         marginTop: isMobile ? "8px" : "12px",
-                        // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                         marginLeft: isMobile ? "0" : "0", 
                     }}
                 >
@@ -120,11 +114,9 @@ export default function Campaign() {
             {/* Top Bar (Total Campaigns) */}
             <div
                 style={{
-                    // ⬅️ CRUCIAL: Full width on mobile, 90% on desktop, adjust margins
                     width: isMobile ? "100%" : "100%", 
                     height: isMobile ? "60px" : "72px",
                     marginTop: isMobile ? "30px" : "40px",
-                    // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                     marginLeft: isMobile ? "0" : "20px", 
                     borderRadius: "10px",
                     background: "linear-gradient(90.19deg, #323232 0%, #0F0F0F 59.13%)",
@@ -181,13 +173,10 @@ export default function Campaign() {
             {/* Campaign Cards Grid */}
             <div
                 style={{
-                    // ⬅️ CRUCIAL: Full width on mobile, 90% on desktop
                     width: isMobile ? "100%" : "90%", 
                     display: "grid",
-                    // ⬅️ CRUCIAL: Dynamic columns based on screen width
                     gridTemplateColumns: `repeat(${columns}, 1fr)`,
                     gap: isMobile ? "20px" : "30px",
-                    // ⬅️ CRUCIAL: Remove fixed left margin on mobile
                     marginLeft: isMobile ? "0" : "50px", 
                     marginTop: isMobile ? "30px" : "50px",
                     marginBottom: "100px",
@@ -198,13 +187,10 @@ export default function Campaign() {
                     <div
                         key={campaign.id}
                         style={{
-                            // ⬅️ CRUCIAL: Card width must be 100% of the grid cell
                             width: "100%", 
-                            // ⬅️ ADJUSTED: Reduced height on mobile
                             height: isMobile ? "280px" : "320px", 
                             background: "#343434",
                             borderRadius: "20px",
-                            // ⬅️ ADJUSTED: Reduced padding on mobile
                             padding: isMobile ? "15px" : "20px", 
                             display: "flex",
                             flexDirection: "column",
@@ -218,7 +204,6 @@ export default function Campaign() {
                             alt={campaign.title}
                             style={{
                                 width: "100%",
-                                // ⬅️ ADJUSTED: Reduced image height on mobile
                                 height: isMobile ? "140px" : "179px", 
                                 borderRadius: "16px",
                                 objectFit: "cover",
@@ -269,7 +254,6 @@ export default function Campaign() {
                 ))}
             </div>
 
-            {/* Add Campaign Modal (kept as is, assuming AddCampaign handles its own responsiveness) */}
             {showAddModal && (
                 <AddCampaign
                     onClose={() => setShowAddModal(false)}

@@ -20,25 +20,25 @@ export const registerUser = async (data) => {
   return res.data;
 };
 
-// Login (backend sets cookies)
+// Login
 export const loginUser = async (data) => {
   const res = await api.post("/login", data);
   return res.data;
 };
 
-// Get logged-in user info (requires cookie)
+// Get logged-in user info 
 export const getUserInfo = async () => {
   const res = await api.get("/get-info");
   return res.data;
 };
 
-// Logout (backend clears cookies). Protected route.
+// Logout
 export const logoutUser = async () => {
   const res = await api.post("/logout");
   return res.data;
 };
 
-// Refresh token (if you choose to call it manually)
+// Refresh token
 export const refreshToken = async () => {
   const res = await api.post("/refresh-token");
   return res.data;

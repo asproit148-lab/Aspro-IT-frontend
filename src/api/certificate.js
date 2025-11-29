@@ -17,11 +17,10 @@ export const downloadCertificate = async (data) => {
         headers: {
           "Content-Type": "application/json",
         },
-        responseType: "blob", // VERY IMPORTANT
+        responseType: "blob", 
       }
     );
 
-    // Convert blob to a download link
     const fileURL = window.URL.createObjectURL(new Blob([response.data]));
 
     const link = document.createElement("a");
@@ -38,14 +37,11 @@ export const downloadCertificate = async (data) => {
   }
 };
 
-
 // Get Logged-in User Certificates
 export const getMyCertificates = async () => {
   const res = await axios.get(`${API}/my-certificates`, config);
   return res.data;
 };
-
-
 
 // Get Certificate by ID
 export const getCertificateById = async (certificateId) => {
@@ -53,7 +49,7 @@ export const getCertificateById = async (certificateId) => {
   return res.data;
 };
 
-// Verify Certificate (Public)
+// Verify Certificate
 export const verifyCertificate = async (certificateNumber) => {
   const res = await axios.get(`${API}/verify/${certificateNumber}`);
   return res.data;

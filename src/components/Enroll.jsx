@@ -106,11 +106,10 @@ export default function Enroll() {
         }
     };
 
-    // Styling helpers
     const inputStyle = (minWidth) => ({
         fontSize: "12px",
         minWidth: isMobile ? "100%" : minWidth,
-        width: isMobile ? "100%" : "auto", // Ensure it respects container width
+        width: isMobile ? "100%" : "auto", 
         paddingLeft: "20px",
         height: "40px",
         borderRadius: "8px",
@@ -122,10 +121,8 @@ export default function Enroll() {
 
     const formRowStyle = {
         display: "flex",
-        // ⬅️ ADJUSTED: Stack on mobile
         flexDirection: isMobile ? "column" : "row",
         justifyContent: "space-between",
-        // ⬅️ ADJUSTED: Reduced gap on mobile
         gap: isMobile ? "15px" : "24px", 
         width: "100%",
         boxSizing: "border-box",
@@ -135,7 +132,7 @@ export default function Enroll() {
         display: "flex",
         flexDirection: "column",
         gap: "15px",
-        width: isMobile ? "100%" : "50%", // Make columns take full width on mobile
+        width: isMobile ? "100%" : "50%", 
         boxSizing: "border-box",
     };
 
@@ -146,7 +143,6 @@ export default function Enroll() {
                 backgroundColor: "black",
                 color: "white",
                 fontFamily: "Poppins, sans-serif",
-                // ⬅️ ADJUSTED: Simplified padding/margin for mobile
                 marginRight: isMobile ? "0" : "20px", 
                 padding: isMobile ? "20px" : "40px 0 60px 30px",
                 transition: "0.3s ease",
@@ -157,15 +153,14 @@ export default function Enroll() {
                 style={{ 
                     display: "flex", 
                     alignItems: "center", 
-                    gap: isMobile ? "8px" : "12px", // ⬅️ ADJUSTED GAP
+                    gap: isMobile ? "8px" : "12px", 
                     marginBottom: isMobile ? "20px" : "25px", 
                     cursor: "pointer",
-                    // Added left padding for mobile if main container padding is only on the left
                     paddingLeft: isMobile ? "0" : "30px", 
                 }}
                 onClick={() => navigate(-1)}
             >
-                <ArrowLeft size={isMobile ? 24 : 36} color="white" /> {/* ⬅️ ADJUSTED SIZE */}
+                <ArrowLeft size={isMobile ? 24 : 36} color="white" />
                 <h1 style={{ fontWeight: 600, fontSize: isMobile ? "24px" : "32px", lineHeight: "100%", margin: 0, color: "white" }}>
                     Enrollment Details
                 </h1>
@@ -175,28 +170,24 @@ export default function Enroll() {
             <div 
                 style={{ 
                     display: "flex", 
-                    gap: isMobile ? "20px" : "25px", // ⬅️ ADJUSTED GAP
-                    // ⬅️ ADJUSTED: Stack on mobile
+                    gap: isMobile ? "20px" : "25px", 
                     flexDirection: isMobile ? "column" : "row", 
-                    // ⬅️ ADJUSTED: Center items vertically on mobile
                     alignItems: isMobile ? "center" : "flex-start", 
-                    // Added horizontal padding for mobile view containment
                     padding: isMobile ? "0" : "0 30px 0 0",
                 }}
             >
                 {/* FORM CONTAINER */}
                 <div
                     style={{
-                        // ⬅️ ADJUSTED: Full width on mobile
                         width: isMobile ? "95%" : "64%", 
-                        minHeight: "auto", // Allow height to adjust
+                        minHeight: "auto", 
                         borderRadius: "16px",
                         background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
                         boxShadow: "0px 4px 16px 0px #FFFFFF40",
-                        padding: isMobile ? "18px" : "24px", // ⬅️ ADJUSTED PADDING
+                        padding: isMobile ? "18px" : "24px", 
                         display: "flex",
                         flexDirection: "column",
-                        gap: isMobile ? "18px" : "24px", // ⬅️ ADJUSTED GAP
+                        gap: isMobile ? "18px" : "24px", 
                         boxSizing: "border-box",
                     }}
                 >
@@ -235,7 +226,6 @@ export default function Enroll() {
                             value={formData.address}
                             onChange={handleChange}
                             placeholder="Residential address"
-                            // ⬅️ ADJUSTED: Use inputStyle for responsiveness
                             style={inputStyle("745px")}
                         />
                     </div>
@@ -275,7 +265,6 @@ export default function Enroll() {
                                 value={courseName}
                                 readOnly
                                 style={{
-                                    // ⬅️ ADJUSTED: Use inputStyle base
                                     ...inputStyle("350px"), 
                                     paddingLeft: "20px", 
                                     fontSize: "14px",
@@ -284,7 +273,6 @@ export default function Enroll() {
                             />
                         </div>
                         <div style={{ ...formColumnStyle, gap: "15px" }}>
-                            {/* Adjusted marginTop on label to align with other labels vertically on desktop */}
                             <label style={{ fontWeight: 500, fontSize: isMobile ? "18px" : "20px", marginTop: isMobile ? "0" : "0" }}>Mode of Training<span style={{ color: "#FF4D4D" }}> *</span></label>
                             <div style={{ display: "flex", gap: isMobile ? "10px" : "20px", alignItems: "center" }}>
                                 {["Online", "Offline"].map((val) => (
@@ -339,7 +327,6 @@ export default function Enroll() {
                 {/* PRICE DETAILS CONTAINER */}
                 <div 
                     style={{ 
-                        // ⬅️ ADJUSTED: Full width on mobile
                         width: isMobile ? "95%" : "36%", 
                         minHeight: "auto", 
                         borderRadius: "16px", 
@@ -353,9 +340,7 @@ export default function Enroll() {
                 >
                     {/* Prices */}
                     <div style={{ display: "flex", width: "100%", alignItems: "baseline", gap: "20px", marginBottom: "5px", marginTop: isMobile ? "10px" : "40px" }}> {/* ⬅️ ADJUSTED MARGIN */}
-                        {/* ⬅️ ADJUSTED SIZE */}
                         <div style={{ fontSize: isMobile ? "36px" : "42px", width: "auto", fontWeight: 700, color: "#FFFFFF" }}>₹{price}</div>
-                        {/* ⬅️ ADJUSTED SIZE */}
                         <div style={{ fontSize: isMobile ? "20px" : "24px", width: "auto", fontWeight: 700, color: "rgba(255,255,255,0.5)", textDecoration: "line-through" }}>₹{originalPrice}</div>
                         
                         <div style={{ 
@@ -380,14 +365,13 @@ export default function Enroll() {
                     {/* Button */}
                     <button
                         style={{ 
-                            // ⬅️ ADJUSTED: Full width on mobile
                             width: "100%", 
-                            height: isMobile ? "48px" : "54px", // ⬅️ ADJUSTED HEIGHT
+                            height: isMobile ? "48px" : "54px", 
                             borderRadius: "8px", 
                             border: "1px solid #FFFFFF", 
                             background: "transparent", 
                             color: "#FFFFFF", 
-                            fontSize: isMobile ? "22px" : "28px", // ⬅️ ADJUSTED SIZE
+                            fontSize: isMobile ? "22px" : "28px", 
                             fontWeight: 600, 
                             cursor: "pointer", 
                             transition: "all 0.3s ease" 
@@ -401,9 +385,9 @@ export default function Enroll() {
                     </button>
 
                     {/* Divider & Course Includes */}
-                    <div style={{ width: "100%", borderTop: "1px solid white", opacity: "0.4", marginTop: isMobile ? "20px" : "40px", marginBottom: "60px" }}></div> {/* ⬅️ ADJUSTED MARGIN */}
+                    <div style={{ width: "100%", borderTop: "1px solid white", opacity: "0.4", marginTop: isMobile ? "20px" : "40px", marginBottom: "60px" }}></div> 
                     <p style={{ fontSize: isMobile ? "12px" : "14px", fontWeight: 700, marginBottom: "16px" }}>This course includes:</p>
-                    <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? "12px" : "16px" }}> {/* ⬅️ ADJUSTED GAP */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? "12px" : "16px" }}> 
                         {[{ icon: <Award size={isMobile ? 20 : 25} color="#0DA745" />, text: "Certification of completion" }, { icon: <Clock size={isMobile ? 20 : 25} color="#0DA745" />, text: "Full time access" }, { icon: <Video size={isMobile ? 20 : 25} color="#0DA745" />, text: "On-demand videos" }, { icon: <Download size={isMobile ? 20 : 25} color="#0DA745" />, text: "Downloadable resources" }].map((item, index) => (
                             <div key={index} style={{ display: "flex", alignItems: "center", gap: "10px" }}>{item.icon}<span style={{ fontSize: isMobile ? "10px" : "12px" }}>{item.text}</span></div> 
                         ))}

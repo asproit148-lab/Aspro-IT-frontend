@@ -5,8 +5,6 @@ import { registerUser } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
 import { IoArrowBack } from "react-icons/io5";
 
-// ------------ Reused Styling From LoginPopup ------------
-
 const PopupOverlay = styled.div`
   position: fixed;
   inset: 0;
@@ -134,7 +132,6 @@ const Button = styled.button`
 export default function SignupPopup({ onClose, onBack }) {
   const { signInWithGoogle } = useAuth();
 
-  // ---- Your original signup logic (NO CHANGES) ----
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

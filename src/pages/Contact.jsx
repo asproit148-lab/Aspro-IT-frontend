@@ -15,7 +15,7 @@ export default function Contact() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [isMobile, setIsMobile] = useState(false); // State to track mobile view
+  const [isMobile, setIsMobile] = useState(false); 
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,12 +61,9 @@ export default function Contact() {
     }
   };
 
-  // --- RESPONSIVE STYLE DEFINITIONS ---
-
   const mainSectionStyle = {
     backgroundImage: `url(${bg})`,
     width: "100%",
-    // Changed minHeight to only apply on desktop
     minHeight: isMobile ? "auto" : "550px", 
     paddingTop: isMobile ? "40px" : "0", 
     paddingBottom: isMobile ? "40px" : "0", 
@@ -76,17 +73,13 @@ export default function Contact() {
     justifyContent: "space-between",
     alignItems: "center",
     margin: "0 auto",
-    // Conditional layout: row (desktop) vs column (mobile)
     flexDirection: isMobile ? "column" : "row",
-    // Conditional padding: tight on mobile, wide on desktop
     paddingLeft: isMobile ? "20px" : "40px",
     paddingRight: isMobile ? "20px" : "40px",
-    // Gap can be zero on mobile if the image is removed, but keeping 40px ensures space below the form.
     gap: isMobile ? "40px" : "25px", 
     boxSizing: 'border-box', 
   };
   
-  // leftSideStyle is only relevant if the image is present, but we keep it for desktop rendering.
   const leftSideStyle = {
     flex: isMobile ? 'none' : 1, 
     display: "flex",
@@ -96,7 +89,7 @@ export default function Contact() {
   };
   
   const contactImageStyle = {
-    maxWidth: "90%", // Only used on desktop now
+    maxWidth: "90%",
     height: "auto",
     boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
   };
@@ -107,7 +100,7 @@ export default function Contact() {
     flexDirection: "column",
     alignItems: isMobile ? "center" : "flex-start", 
     gap: "20px",
-    width: '100%', // Use full width of the padded container
+    width: '100%',
     padding: isMobile ? '0' : '20px 0',
   };
   
@@ -166,13 +159,13 @@ export default function Contact() {
       backgroundColor: "black", 
       color: "white", 
       fontFamily: "Poppins, sans-serif",
-      overflowX: "hidden", // Prevents horizontal scroll/zoom out
+      overflowX: "hidden",
     }}>
       <Header />
 
       <div style={mainSectionStyle}>
         
-        {/* Left Side (Image) - Renders ONLY on Desktop */}
+        {/* Left Side */}
         {!isMobile && (
           <div style={leftSideStyle}>
             <img
@@ -197,7 +190,6 @@ export default function Contact() {
               display: "flex",
               flexDirection: "column",
               gap: "20px",
-              // Center form fields on mobile if rightSide is centered
               alignItems: isMobile ? "center" : "flex-start",
             }}
           >

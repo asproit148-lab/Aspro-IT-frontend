@@ -8,8 +8,8 @@ import {
 } from "../../api/job";
 
 // Define breakpoints
-const largeBreakpoint = 1200; // For 3 columns to 2 columns
-const tabletBreakpoint = 768; // For 2 columns to 1 column
+const largeBreakpoint = 1200; 
+const tabletBreakpoint = 768; 
 
 export default function JobManagement() {
   const [filterType, setFilterType] = useState("All");
@@ -21,7 +21,6 @@ export default function JobManagement() {
   const isMobile = screenWidth < tabletBreakpoint;
   const isTablet = screenWidth < largeBreakpoint;
 
-  // Effect to track screen size for responsiveness
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
@@ -31,7 +30,7 @@ export default function JobManagement() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // FETCH FROM BACKEND
+  // FETCH
   const loadJobs = async () => {
     try {
       const res = await getAllOpportunities();
@@ -47,7 +46,7 @@ export default function JobManagement() {
     loadJobs();
   }, []);
 
-  // DELETE FROM BACKEND
+  // DELETE 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this opportunity?")) return;
 
@@ -59,7 +58,7 @@ export default function JobManagement() {
     }
   };
 
-  // ADD NEW JOB — reload or push to array
+  // ADD NEW JOB
   const handleSaveJob = (newJob) => {
     setJobs((prev) => [...prev, newJob]);
   };
@@ -69,7 +68,6 @@ export default function JobManagement() {
       ? jobs
       : jobs.filter((item) => item.type === filterType);
 
-  // Determine number of columns based on screen size
   let columns = 3;
   if (screenWidth < largeBreakpoint && screenWidth >= tabletBreakpoint) {
     columns = 2;
@@ -85,7 +83,6 @@ export default function JobManagement() {
         fontFamily: "Poppins, sans-serif",
         minHeight: "100vh",
         boxSizing: 'border-box',
-        // ⬅️ CRUCIAL: Responsive container adjustments
         marginLeft: isMobile ? "0" : "30px",
         paddingTop: isMobile ? "80px" : "140px",
         paddingLeft: isMobile ? "20px" : "120px",
@@ -99,10 +96,8 @@ export default function JobManagement() {
         <h1
           style={{
             fontWeight: 600,
-            // ⬅️ ADJUSTED: Smaller font size on mobile
             fontSize: isMobile ? "28px" : "36px",
             color: "#FFFFFF",
-            // ⬅️ CRUCIAL: Remove fixed left margin on mobile
             marginLeft: isMobile ? "0" : "0",
             marginBottom: isMobile ? "4px" : "8px",
             marginTop: 0,
@@ -114,11 +109,9 @@ export default function JobManagement() {
         <p
           style={{
             fontWeight: 400,
-            // ⬅️ ADJUSTED: Smaller font size on mobile
             fontSize: isMobile ? "14px" : "16px",
             opacity: 0.9,
             marginTop: isMobile ? "0" : "4px",
-            // ⬅️ CRUCIAL: Remove fixed left margin on mobile
             marginLeft: isMobile ? "0" : "0",
             marginBottom: isMobile ? "20px" : "0",
           }}
@@ -130,7 +123,6 @@ export default function JobManagement() {
       {/* Top Bar */}
       <div
         style={{
-          // ⬅️ CRUCIAL: Responsive width/margin adjustments
           width: isMobile ? "100%" : "100%",
           height: isMobile ? "auto" : "72px",
           marginTop: isMobile ? "30px" : "40px",
@@ -141,7 +133,6 @@ export default function JobManagement() {
           flexDirection: isMobile ? "column" : "row",
           alignItems: isMobile ? "flex-start" : "center",
           justifyContent: "space-between",
-          // ⬅️ ADJUSTED: Padding for mobile
           padding: isMobile ? "15px" : "0 30px 4px 30px",
           boxSizing: 'border-box',
           gap: isMobile ? "10px" : "0",
@@ -150,7 +141,6 @@ export default function JobManagement() {
         <div>
           <p
             style={{
-              // ⬅️ ADJUSTED: Smaller font size on mobile
               fontSize: isMobile ? "16px" : "20px",
               fontWeight: 400,
               marginBottom: "2px",
@@ -161,7 +151,6 @@ export default function JobManagement() {
           </p>
           <p
             style={{
-              // ⬅️ ADJUSTED: Smaller font size on mobile
               fontSize: isMobile ? "20px" : "24px",
               fontWeight: 500,
               marginTop: isMobile ? "2px" : "0",
@@ -182,12 +171,10 @@ export default function JobManagement() {
                 display: "flex",
                 alignItems: "center",
                 gap: "10px",
-                // ⬅️ CRUCIAL FIX: Removed fixed margin for responsiveness
                 padding: isMobile ? "8px 15px" : "10px 20px",
                 background: "#3D3D3D",
                 borderRadius: "10px",
                 cursor: "pointer",
-                // ⬅️ ADJUSTED: Smaller font size on mobile
                 fontSize: isMobile ? "14px" : "16px",
               }}
             >
@@ -201,7 +188,6 @@ export default function JobManagement() {
                   position: "absolute",
                   top: isMobile ? "40px" : "48px",
                   width: "150px",
-                  // ⬅️ CRUCIAL FIX: Position dropdown relative to its parent container
                   right: 0,
                   left: isMobile ? 'auto' : 'auto', // Auto keeps it aligned right on desktop
                   background: "#2B2B2B",
@@ -239,7 +225,6 @@ export default function JobManagement() {
               gap: "8px",
               background: "#525252",
               color: "#FFFFFF",
-              // ⬅️ ADJUSTED: Smaller font size/padding on mobile
               fontSize: isMobile ? "14px" : "16px",
               borderRadius: "10px",
               border: "none",
@@ -256,17 +241,14 @@ export default function JobManagement() {
       {/* Cards */}
       <div
         style={{
-          // ⬅️ CRUCIAL: Responsive width/margin adjustments
           width: isMobile ? "100%" : "90%",
           display: "grid",
-          // ⬅️ CRUCIAL: Dynamic columns
           gridTemplateColumns: `repeat(${columns}, 1fr)`,
           gap: isMobile ? "20px" : "30px",
           marginLeft: isMobile ? "0" : "50px",
           marginTop: isMobile ? "30px" : "50px",
           marginBottom: "100px",
           boxSizing: 'border-box',
-          // CRUCIAL FIX: Ensures all cards stretch to the same height
           alignItems: 'stretch',
         }}
       >
@@ -274,14 +256,11 @@ export default function JobManagement() {
           <div
             key={job._id}
             style={{
-              // ⬅️ CRUCIAL: Card width must be 100% of the grid cell
               width: "100%",
-              // ⬅️ ADJUSTED: Height to auto/min-height for responsiveness
               height: "auto",
               minHeight: isMobile ? "220px" : "280px",
               borderRadius: "12px",
               border: "1px solid #FFFFFF33",
-              // ⬅️ ADJUSTED: Reduced padding on mobile
               padding: isMobile ? "15px" : "20px",
               background:
                 "radial-gradient(196% 302% at 6% 25%, #101010 0%, #595959 100%)",
@@ -292,7 +271,6 @@ export default function JobManagement() {
           >
             <p
               style={{
-                // ⬅️ ADJUSTED: Smaller font size on mobile
                 fontSize: isMobile ? "20px" : "24px",
                 fontWeight: 600,
                 marginBottom: isMobile ? "0px" : "0",
@@ -303,7 +281,6 @@ export default function JobManagement() {
             </p>
             <p
               style={{
-                // ⬅️ ADJUSTED: Smaller font size on mobile
                 fontSize: isMobile ? "14px" : "16px",
                 marginTop: "0",
                 marginBottom: isMobile ? "10px" : "10px",
@@ -313,7 +290,6 @@ export default function JobManagement() {
             </p>
             <p
               style={{
-                // ⬅️ ADJUSTED: Smaller font size on mobile
                 fontSize: isMobile ? "16px" : "18px",
                 fontWeight: 500,
                 marginTop: isMobile ? "5px" : "5px",
@@ -324,7 +300,6 @@ export default function JobManagement() {
             </p>
             <p
               style={{
-                // ⬅️ ADJUSTED: Smaller font size on mobile
                 fontSize: isMobile ? "14px" : "16px",
                 marginTop: isMobile ? "5px" : "5px",
                 marginBottom: isMobile ? "10px" : "10px",
@@ -335,7 +310,6 @@ export default function JobManagement() {
 
             <p
               style={{
-                // ⬅️ ADJUSTED: Smaller font size on mobile
                 fontSize: isMobile ? "12px" : "14px",
                 marginTop: "5px",
                 cursor: "pointer",
@@ -356,7 +330,6 @@ export default function JobManagement() {
             <button
               onClick={() => handleDelete(job._id)}
               style={{
-                // ⬅️ ADJUSTED: Smaller size on mobile
                 width: isMobile ? "100px" : "120px",
                 height: isMobile ? "30px" : "34px",
                 borderRadius: "10px",
@@ -365,7 +338,6 @@ export default function JobManagement() {
                 border: "none",
                 cursor: "pointer",
                 marginTop: "auto",
-                // CRUCIAL FIX: Centered delete button on mobile
                 marginLeft: isMobile ? 'auto' : "auto",
                 marginRight: isMobile ? 'auto' : "0",
                 display: 'flex',

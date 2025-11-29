@@ -64,7 +64,6 @@ export default function LearningExperience() {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    // Ensure horizontal padding on mobile instead of margin
     margin: isMobile ? "30px 0" : "50px 0",
     padding: isMobile ? "0 15px" : "0 20px", 
     gap: isMobile ? "24px" : "30px",
@@ -119,24 +118,18 @@ export default function LearningExperience() {
         maxWidth: "1000px",
       };
 
-  // The style for the individual rows within the mobile container
   const rowStyle = {
     display: "flex",
-    // Center items horizontally in the row
     justifyContent: "center", 
     alignItems: "center",
     gap: isMobile ? "20px" : "50px",
     width: "100%",
-    // Ensure wrapping happens if needed (important for very small screens)
     flexWrap: "wrap", 
   };
 
   const cardStyle = (item) => ({
-    // Adjusted min width to ensure 3 fit comfortably on standard mobile view
     minWidth: isMobile ? "90px" : "90px", 
-    // Max width is defined by the item (but minWidth overrides if necessary)
     maxWidth: item.width,
-    // Consistent height
     height: isMobile ? "110px" : "120px", 
     display: "flex",
     flexDirection: "column",
@@ -146,7 +139,7 @@ export default function LearningExperience() {
     borderRadius: "35px",
     cursor: "pointer",
     transition: "all 0.3s ease",
-    padding: isMobile ? "8px" : "8px", // Reduced padding slightly on mobile for better fit
+    padding: isMobile ? "8px" : "8px", 
   });
 
   const iconContainerStyle = (item) => ({
@@ -209,7 +202,6 @@ export default function LearningExperience() {
                   key={`mobile-row1-${index}`}
                   onClick={item.onClick}
                   style={cardStyle(item)}
-                  // Only apply hover/mouse effects if not on mobile (better for touch)
                   onMouseEnter={!isMobile ? handleHover : undefined}
                   onMouseLeave={!isMobile ? handleHoverOut : undefined}
                 >

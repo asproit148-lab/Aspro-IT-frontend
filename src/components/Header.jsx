@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "@emotion/styled";
-// REMOVED: import { shouldForwardProp } from "@styled-system/should-forward-prop"; 
 import logo from "../assets/logo.png";
 import { Link, useLocation } from "react-router-dom";
 import LoginPopup from "../components/LoginPopup";
@@ -21,21 +20,13 @@ import {
   Download,
 } from "lucide-react";
 
-// --- Constants ---
 const desktopBreakpoint = 1024;
 const textColor = "#3D96E0";
 
-/* --- PROP FORWARDING HELPER (Manual Definition) --- */
-// This function ensures that any prop starting with '$' (our transient props) 
-// is NOT passed down to the underlying HTML DOM element.
 const customShouldForwardProp = (propName) => {
-    // Blocks props starting with $, like $isMobile, $isActive, etc.
     return !propName.startsWith('$');
 };
-/* ---------------------------------------------------- */
 
-
-// --- Custom Hook to check screen size (for a cleaner approach) ---
 const useIsMobile = (breakpoint) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < breakpoint);
 
@@ -50,8 +41,6 @@ const useIsMobile = (breakpoint) => {
   return isMobile;
 };
 
-// --- Styled Components ---
-
 const StyledHeader = styled.header`
   width: 100%;
   background-color: black;
@@ -62,7 +51,6 @@ const StyledHeader = styled.header`
   box-shadow: 0px 4px 25px 0px #00508A;
 `;
 
-// Applying the prop filter to all components that receive '$' props
 const HeaderContainer = styled('div', { shouldForwardProp: customShouldForwardProp })`
   max-width: 1400px;
   margin: 0 auto;
@@ -94,7 +82,6 @@ const DesktopNav = styled.div`
   flex-wrap: nowrap;
 `;
 
-// Link component receives filter
 const NavItem = styled(Link, { shouldForwardProp: customShouldForwardProp })`
   display: flex;
   align-items: center;
@@ -121,7 +108,6 @@ const NavItem = styled(Link, { shouldForwardProp: customShouldForwardProp })`
   `}
 `;
 
-// div component receives filter
 const DropdownTrigger = styled('div', { shouldForwardProp: customShouldForwardProp })`
   display: flex;
   align-items: center;
@@ -148,9 +134,6 @@ const DropdownTrigger = styled('div', { shouldForwardProp: customShouldForwardPr
   `}
 `;
 
-// Link component receives filter
-// FIX 3: New styled component based on Link for Desktop Dropdown Triggers (e.g., About)
-// This lets it be a link AND a mouse-enter trigger.
 const NavLinkWithDropdown = styled(Link, { shouldForwardProp: customShouldForwardProp })`
   display: flex;
   align-items: center;
@@ -170,7 +153,6 @@ const NavLinkWithDropdown = styled(Link, { shouldForwardProp: customShouldForwar
   box-sizing: border-box;
 `;
 
-// div component receives filter
 const DropdownContainer = styled('div', { shouldForwardProp: customShouldForwardProp })`
   position: ${props => props.$isMobile ? "static" : "absolute"};
   top: ${props => props.$isMobile ? "0" : "40px"};
@@ -181,10 +163,8 @@ const DropdownContainer = styled('div', { shouldForwardProp: customShouldForward
   display: flex;
   flex-direction: column;
   
-  // 🔽 UPDATES HERE
-  min-width: 160px; // Ensure a minimum size
-  width: fit-content; // Allow width to shrink-wrap the items
-  // 🔼 UPDATES HERE
+  min-width: 160px; 
+  width: fit-content; 
 
   z-index: 999;
   padding: ${props => props.$isMobile ? "0" : "0"};
@@ -192,7 +172,6 @@ const DropdownContainer = styled('div', { shouldForwardProp: customShouldForward
   box-sizing: border-box;
 `;
 
-// Link component receives filter
 const DropdownItem = styled(Link, { shouldForwardProp: customShouldForwardProp })`
   ${props => {
     let borderRadius = "0";
@@ -203,12 +182,10 @@ const DropdownItem = styled(Link, { shouldForwardProp: customShouldForwardProp }
     return `border-radius: ${borderRadius};`;
   }}
 
-  // 🔽 UPDATES HERE: We need to ensure the width is 100% of the container,
-  // NOT relying on $desktopWidth or auto, to prevent padding overflow.
   width: ${props => props.$isMobile ? "calc(100% - 30px)" : "100%"}; 
   
   height: auto;
-  padding: ${props => props.$isMobile ? "8px 15px 8px 30px" : "10px 15px"}; // Increased padding slightly for better look
+  padding: ${props => props.$isMobile ? "8px 15px 8px 30px" : "10px 15px"}; 
   color: ${props => props.$isMobile ? "#ccc" : "white"};
   font-family: 'Poppins', sans-serif;
   font-size: ${props => props.$isMobile ? "18px" : "16px"};
@@ -242,7 +219,6 @@ const DesktopLoginButton = styled.button`
   }
 `;
 
-// div component receives filter
 const UserIconWrapper = styled('div', { shouldForwardProp: customShouldForwardProp })`
   width: ${props => props.$isMobile ? "40px" : "48px"};
   height: ${props => props.$isMobile ? "40px" : "48px"};
@@ -255,11 +231,9 @@ const UserIconWrapper = styled('div', { shouldForwardProp: customShouldForwardPr
   background-color: transparent;
   position: relative;
   transition: 0.3s;
-  // FIX 1: Adjust margin for mobile to make space for the button
   margin-right: ${props => props.$isMobile ? "10px" : "0"}; 
 `;
 
-// div component receives filter
 const UserDropdown = styled('div', { shouldForwardProp: customShouldForwardProp })`
   position: absolute;
   top: ${props => props.$isMobile ? "50px" : "60px"};
@@ -273,7 +247,6 @@ const UserDropdown = styled('div', { shouldForwardProp: customShouldForwardProp 
   box-sizing: border-box;
 `;
 
-// button component receives filter
 const LogoutButton = styled('button', { shouldForwardProp: customShouldForwardProp })`
   width: 100%;
   padding: ${props => props.$isMobile ? "10px 14px" : "12px 16px"};
@@ -295,13 +268,11 @@ const LogoutButton = styled('button', { shouldForwardProp: customShouldForwardPr
   }
 `;
 
-// FIX 1: Group container for all mobile header elements (user icon, login button, menu)
 const MobileRightSide = styled.div`
   display: flex;
   align-items: center;
 `;
 
-// FIX 1: Mobile Login Button in the main header
 const MobileHeaderLoginButton = styled.button`
   padding: 8px 16px;
   margin-right: 10px; // Spacing before the hamburger menu
@@ -362,7 +333,6 @@ const BodyScrollLock = ({ isLocked }) => {
   return null;
 };
 
-// --- Component Start ---
 export default function Header() {
   const { user, signOut } = useAuth();
   const location = useLocation();
@@ -384,7 +354,7 @@ export default function Header() {
 
   const [courses, setCourses] = useState([]);
 
-  // Fetch courses on mount
+  // Fetch courses
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -411,7 +381,7 @@ export default function Header() {
   // Handler for sign-out
   const handleSignOut = () => {
     signOut();
-    handleLinkClick(); // Close all menus after sign out
+    handleLinkClick(); 
   };
 
   // Handler for login button
@@ -420,9 +390,7 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   };
   
-  // Handler for desktop 'About' link click (FIX 3)
   const handleAboutClick = (e) => {
-    // Navigate to /about-us
     handleLinkClick(); 
   }
 
@@ -512,14 +480,14 @@ export default function Header() {
                 )}
               </div>
 
-              {/* About Dropdown (FIX 3: Trigger is now a Link) */}
+              {/* About Dropdown */}
               <div
                 style={{ position: "relative" }}
                 onMouseEnter={() => setIsAboutOpen(true)}
                 onMouseLeave={() => setIsAboutOpen(false)}
               >
                 <NavLinkWithDropdown 
-                  to="/about-us" // Link to /about-us on click
+                  to="/about-us" 
                   onClick={handleAboutClick}
                   $isMobile={false}
                   $isActive={location.pathname.startsWith("/about-us") || location.pathname.startsWith("/blogs") || location.pathname.startsWith("/our-services")}
@@ -583,7 +551,6 @@ export default function Header() {
           {/* Mobile Right Side (Shown on Mobile) */}
           {isMobile && (
             <MobileRightSide>
-              {/* FIX 1: Mobile Login Button in the main header */}
               {!user && (
                 <MobileHeaderLoginButton onClick={handleLoginClick}>
                   Log in
@@ -696,9 +663,8 @@ export default function Header() {
 
                 {isAboutOpen && (
                   <DropdownContainer $isMobile={true}>
-                    {/* The first item is now /about-us, aligning with the desktop click action */}
                     {[
-                      { name: "About Us", link: "/about-us" }, // Changed to be explicit
+                      { name: "About Us", link: "/about-us" }, 
                       { name: "Blogs", link: "/blogs" },
                       { name: "Services", link: "/our-services" },
                     ].map((item, index, arr) => (
@@ -740,7 +706,7 @@ export default function Header() {
         onClose={() => setIsSignupOpen(false)} 
         onBack={() => {
       setIsSignupOpen(false);
-      setShowLoginPopup(true);   // <-- FIX
+      setShowLoginPopup(true);
     }}/>}
       </StyledHeader>
     </>

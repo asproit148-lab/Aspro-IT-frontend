@@ -10,9 +10,8 @@ const slugify = (title) =>
 export default function BlogCard() {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
-  const [isMobile, setIsMobile] = useState(false); // New state for responsiveness
+  const [isMobile, setIsMobile] = useState(false); 
 
-  // --- Effect Hook for Responsiveness ---
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < desktopBreakpoint);
@@ -22,7 +21,6 @@ export default function BlogCard() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // --- Logic for Fetching Blogs (Unchanged) ---
   useEffect(() => {
     (async () => {
       try {
@@ -41,12 +39,9 @@ export default function BlogCard() {
     })();
   }, []);
   
-  // --- Responsive Style Definitions ---
-
   const mainContainerStyle = { 
     backgroundColor: "black", 
     color: "white", 
-    // Adjust vertical padding for mobile
     paddingBottom: isMobile ? "40px" : "80px",
     paddingLeft: isMobile ? "20px" : "0", 
     paddingRight: isMobile ? "20px" : "0", 
@@ -55,10 +50,8 @@ export default function BlogCard() {
   const headingStyle = { 
     fontFamily: "Poppins, sans-serif", 
     fontWeight: 600, 
-    // Smaller font size on mobile
     fontSize: isMobile ? 36 : 48, 
     textAlign: "center", 
-    // Adjust vertical margin for mobile
     marginTop: isMobile ? 30 : 50, 
     marginBottom: isMobile ? 30 : 50 
   };
@@ -66,7 +59,6 @@ export default function BlogCard() {
   const cardsWrapperStyle = { 
     display: "flex", 
     justifyContent: "center", 
-    // Reduced gap for mobile
     gap: isMobile ? "20px" : "40px", 
     flexWrap: "wrap", 
     maxWidth: "1300px", 
@@ -75,7 +67,6 @@ export default function BlogCard() {
 
   const blogCardStyle = { 
     cursor: "pointer", 
-    // Take full width of the wrapper on mobile, constrained width on desktop
     width: isMobile ? "100%" : "520px", 
     maxWidth: isMobile ? "none" : "520px", 
     textAlign: "left", 
@@ -83,16 +74,14 @@ export default function BlogCard() {
 
   const imageStyle = {
     width: "100%",
-    // Adjust height proportionally for mobile or use a fixed aspect ratio if needed
     height: isMobile ? "200px" : "336px", 
-    borderRadius: "16px", // Slightly smaller radius for mobile
+    borderRadius: "16px", 
     objectFit: "cover",
   };
   
   const titleStyle = { 
     fontFamily: "Poppins, sans-serif", 
     fontWeight: 500, 
-    // Smaller font size on mobile
     fontSize: isMobile ? "28px" : "40px", 
     marginBottom: "10px" 
   };

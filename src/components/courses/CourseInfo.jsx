@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react"; // Import hooks
+import React, { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import hybrid from '../../assets/hybrid.png';
 import project from '../../assets/project.png';
 import liveclass from '../../assets/liveclass.png';
 
-const desktopBreakpoint = 992; // Define a breakpoint
+const desktopBreakpoint = 992; 
 
 export default function CourseInfo({ course }) {
     const [isMobile, setIsMobile] = useState(false);
 
-    // Effect hook to determine screen size
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth < desktopBreakpoint);
@@ -20,16 +19,13 @@ export default function CourseInfo({ course }) {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    // --- Responsive Style Definitions ---
-
     const sectionStyle = {
         width: isMobile ? "95%" : "100%",
-        minHeight: isMobile ? "auto" : "600px", // Adjust height for mobile
+        minHeight: isMobile ? "auto" : "600px", 
         backgroundColor: "#000",
         fontFamily: "Poppins",
         color: "white",
         position: "relative",
-        // Adjust padding for mobile to be less extreme
         padding: isMobile ? "20px 0 40px 0" : "40px 40px 80px 20px", 
         boxSizing: "border-box",
     };
@@ -37,24 +33,23 @@ export default function CourseInfo({ course }) {
     // Centered Container
     const contentWrapperStyle = {
         width: "100%",
-        padding: isMobile ? "0 15px" : "0 20px", // Adjust padding
+        padding: isMobile ? "0 15px" : "0 20px", 
         margin: "0 auto",
         display: "flex",
-        // Stack elements vertically on mobile, horizontally on desktop
         flexDirection: isMobile ? "column" : "row", 
         gap: isMobile ? "30px" : "40px",
-        alignItems: isMobile ? "center" : "flex-start", // Center content on mobile
-        maxWidth: "1200px", // Use max width
+        alignItems: isMobile ? "center" : "flex-start", 
+        maxWidth: "1200px", 
         position: "relative",
         zIndex: 2,
     };
 
     // LEFT CARD
     const leftCardStyle = {
-        width: isMobile ? "100%" : "50%", // 100% width on mobile
-        minHeight: isMobile ? "auto" : "570px", // Auto height on mobile
+        width: isMobile ? "100%" : "50%", 
+        minHeight: isMobile ? "auto" : "570px", 
         borderRadius: "36px",
-        padding: isMobile ? "20px" : "24px", // Adjusted padding
+        padding: isMobile ? "20px" : "24px", 
         boxSizing: "border-box",
         background:
             "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
@@ -65,10 +60,10 @@ export default function CourseInfo({ course }) {
 
     // RIGHT CARD
     const rightCardStyle = {
-        width: isMobile ? "100%" : "50%", // 100% width on mobile
-        minHeight: isMobile ? "auto" : "570px", // Auto height on mobile
+        width: isMobile ? "100%" : "50%", 
+        minHeight: isMobile ? "auto" : "570px", 
         borderRadius: "36px",
-        padding: isMobile ? "20px" : "28px", // Adjusted padding
+        padding: isMobile ? "20px" : "28px", 
         boxSizing: "border-box",
         background:
             "radial-gradient(149.8% 402.76% at 29.27% 24.1%, #101010 11.88%, #595959 100%)",
@@ -94,8 +89,8 @@ export default function CourseInfo({ course }) {
                             alignItems: "center",
                             gap: "8px",
                             color: "#B272DEBF",
-                            fontSize: isMobile ? "16px" : "20px", // ⬅️ ADJUSTED FONT SIZE
-                            marginBottom: isMobile ? "10px" : "14px", // ⬅️ ADJUSTED MARGIN
+                            fontSize: isMobile ? "16px" : "20px", //  ADJUSTED FONT SIZE
+                            marginBottom: isMobile ? "10px" : "14px", //  ADJUSTED MARGIN
                         }}
                     >
                         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
@@ -110,7 +105,7 @@ export default function CourseInfo({ course }) {
                         <h1
                             style={{
                                 margin: 0,
-                                fontSize: isMobile ? "32px" : "48px", // ⬅️ ADJUSTED FONT SIZE
+                                fontSize: isMobile ? "32px" : "48px", //  ADJUSTED FONT SIZE
                                 fontWeight: 700,
                                 lineHeight: "1.2", // Tightened line height on mobile
                                 color: "#FFFFFF",
@@ -129,7 +124,7 @@ export default function CourseInfo({ course }) {
                             flexWrap: "wrap",
                             gap: "10px",
                             marginBottom: "18px",
-                            width: isMobile ? "100%" : "460px", // ⬅️ ADJUSTED WIDTH
+                            width: isMobile ? "100%" : "460px", //  ADJUSTED WIDTH
                         }}
                     >
                         {[
@@ -161,7 +156,7 @@ export default function CourseInfo({ course }) {
                         style={{
                             display: "flex",
                             alignItems: "baseline",
-                            gap: isMobile ? "10px" : "20px", // ⬅️ ADJUSTED GAP
+                            gap: isMobile ? "10px" : "20px", // ADJUSTED GAP
                             marginBottom: "14px",
                             flexWrap: "wrap", // Allow wrapping on small screens
                         }}
@@ -172,7 +167,7 @@ export default function CourseInfo({ course }) {
                         </div>
                         <div
                             style={{
-                                fontSize: isMobile ? "16px" : "20px", // ⬅️ ADJUSTED FONT SIZE
+                                fontSize: isMobile ? "16px" : "20px", //  ADJUSTED FONT SIZE
                                 color: "rgba(255,255,255,0.5)",
                                 textDecoration: "line-through",
                             }}
@@ -212,14 +207,14 @@ export default function CourseInfo({ course }) {
                         >
                             <button
                                 style={{
-                                    minWidth: isMobile ? "100%" : "520px", // ⬅️ ADJUSTED: 100% width on mobile
+                                    minWidth: isMobile ? "100%" : "520px", //  ADJUSTED: 100% width on mobile
                                     width: isMobile ? "100%" : "auto", // Added full width fallback
-                                    height: isMobile ? "50px" : "66px", // ⬅️ ADJUSTED HEIGHT
+                                    height: isMobile ? "50px" : "66px", //  ADJUSTED HEIGHT
                                     borderRadius: "8px",
                                     border: "1px solid #FFFFFF",
                                     background: "transparent",
                                     color: "#FFFFFF",
-                                    fontSize: isMobile ? "20px" : "28px", // ⬅️ ADJUSTED FONT SIZE
+                                    fontSize: isMobile ? "20px" : "28px", // ADJUSTED FONT SIZE
                                     fontWeight: 600,
                                     cursor: "pointer",
                                     transition: "all 0.3s ease",
@@ -259,8 +254,8 @@ export default function CourseInfo({ course }) {
                             display: "grid",
                             // ⬅️ ADJUSTED: Single column on mobile
                             gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", 
-                            rowGap: isMobile ? "16px" : "24px", // ⬅️ ADJUSTED GAP
-                            columnGap: isMobile ? "20px" : "40px", // ⬅️ ADJUSTED GAP
+                            rowGap: isMobile ? "16px" : "24px", //  ADJUSTED GAP
+                            columnGap: isMobile ? "20px" : "40px", //  ADJUSTED GAP
                         }}
                     >
                         <div style={{ width: "100%", height: "auto" }}>
@@ -333,7 +328,7 @@ export default function CourseInfo({ course }) {
                         style={{
                             display: "flex",
                             justifyContent: "space-around",
-                            marginTop: isMobile ? "20px" : "28px", // ⬅️ ADJUSTED MARGIN
+                            marginTop: isMobile ? "20px" : "28px", //  ADJUSTED MARGIN
                             flexWrap: "wrap", // Allow wrapping on mobile
                             gap: isMobile ? "20px" : "0",
                         }}
@@ -356,8 +351,8 @@ export default function CourseInfo({ course }) {
                             >
                                 <div
                                     style={{
-                                        width: isMobile ? "60px" : "70px", // ⬅️ ADJUSTED SIZE
-                                        height: isMobile ? "60px" : "70px", // ⬅️ ADJUSTED SIZE
+                                        width: isMobile ? "60px" : "70px", //  ADJUSTED SIZE
+                                        height: isMobile ? "60px" : "70px", //  ADJUSTED SIZE
                                         borderRadius: "50%",
                                         background: circle.color,
                                         boxShadow: `0px 1px 12px 0px ${circle.color}`,
@@ -370,8 +365,8 @@ export default function CourseInfo({ course }) {
                                         src={circle.img}
                                         alt={circle.label}
                                         style={{
-                                            width: isMobile ? "30px" : "40px", // ⬅️ ADJUSTED ICON SIZE
-                                            height: isMobile ? "30px" : "40px", // ⬅️ ADJUSTED ICON SIZE
+                                            width: isMobile ? "30px" : "40px", //  ADJUSTED ICON SIZE
+                                            height: isMobile ? "30px" : "40px", //  ADJUSTED ICON SIZE
                                             objectFit: "contain",
                                         }}
                                     />
@@ -387,7 +382,7 @@ export default function CourseInfo({ course }) {
                             width: "100%",
                             display: "flex",
                             flexWrap: "wrap",
-                            gap: isMobile ? "10px" : "16px", // ⬅️ ADJUSTED GAP
+                            gap: isMobile ? "10px" : "16px", //  ADJUSTED GAP
                             marginTop: isMobile ? "20px" : "28px",
                         }}
                     >
@@ -400,7 +395,7 @@ export default function CourseInfo({ course }) {
                             <div
                                 key={item.k}
                                 style={{
-                                    width: isMobile ? "100%" : "48%", // ⬅️ ADJUSTED: 100% width on mobile
+                                    width: isMobile ? "100%" : "48%", 
                                     height: "48px",
                                     borderRadius: "8px",
                                     padding: "12px 16px",

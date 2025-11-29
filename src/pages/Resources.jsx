@@ -8,9 +8,8 @@ const desktopBreakpoint = 992;
 export default function Resources() {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false); // New state for responsiveness
+  const [isMobile, setIsMobile] = useState(false); 
 
-  // --- Effect Hook for Responsiveness ---
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < desktopBreakpoint);
@@ -20,7 +19,6 @@ export default function Resources() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // --- Logic for Fetching Resources (Unchanged) ---
   useEffect(() => {
     const fetchResources = async () => {
       try {
@@ -36,13 +34,10 @@ export default function Resources() {
     fetchResources();
   }, []);
 
-  // --- Logic for Downloading Resources (Unchanged) ---
   const handleDownload = async (resource) => {
     try {
-      // Use backend proxy to download
       const downloadUrl = `${import.meta.env.VITE_API_URL}/api/resources/download-resource/${resource._id}`;
       
-      // Fetch with proper headers
       const response = await fetch(downloadUrl, {
         method: 'GET',
         headers: {
@@ -54,7 +49,6 @@ export default function Resources() {
         throw new Error('Download failed');
       }
 
-      // Get the blob from response
       const blob = await response.blob();
       
       // Create download link
@@ -65,7 +59,6 @@ export default function Resources() {
       document.body.appendChild(link);
       link.click();
       
-      // Cleanup
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
 
@@ -75,7 +68,6 @@ export default function Resources() {
     }
   };
 
-  // --- Responsive Style Definitions ---
   
   const mainContentStyle = {
     width: isMobile ? "90%" : "100%", 
@@ -83,7 +75,6 @@ export default function Resources() {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    // Adjust padding significantly for mobile
     padding: isMobile ? "20px 20px 40px 20px" : "20px 120px 60px 120px",
     gap: isMobile ? "20px" : "30px",
     backgroundImage: `url(${bg})`,  
@@ -95,7 +86,6 @@ export default function Resources() {
 
   const headingStyle = {
     position: "relative",
-    // Smaller font size on mobile
     fontSize: isMobile ? "36px" : "48px",
     fontWeight: 600,
     color: "#FFFFFF",
@@ -108,37 +98,33 @@ export default function Resources() {
     display: "flex", 
     flexDirection: "column", 
     gap: "20px", 
-    // Ensure 100% width on mobile, and center the content
     width: isMobile ? "100%" : "80%", 
     margin: isMobile ? "0 auto" : "0", 
   };
   
   const resourceItemStyle = {
     display: "flex",
-    // Stack title/description and button vertically on mobile
     flexDirection: isMobile ? "column" : "row",
     justifyContent: "space-between",
     alignItems: isMobile ? "flex-start" : "center",
     background: "rgba(255, 255, 255, 0.1)",
     borderRadius: "12px",
-    // Adjusted padding for mobile
     padding: isMobile ? "16px" : "16px 24px",
     backdropFilter: "blur(6px)",
     boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
     transition: "all 0.3s ease",
-    gap: isMobile ? "12px" : "0", // Add gap when stacking
+    gap: isMobile ? "12px" : "0", 
   };
   
   const resourceTitleContainerStyle = {
     display: "flex", 
     flexDirection: "column", 
     gap: "8px", 
-    // Allow title/description to take up available space
     flex: isMobile ? "none" : 1,
   };
   
   const downloadButtonStyle = {
-    width: isMobile ? "100%" : "180px", // Full width button on mobile
+    width: isMobile ? "100%" : "180px",
     height: "45px",
     borderRadius: "25px",
     border: "none",
@@ -165,7 +151,6 @@ export default function Resources() {
         {/* Resources List */}
         <div style={resourcesListContainerStyle}>
           {loading ? (
-            // Use a simple loading message
             <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>Loading resources...</p>
           ) : resources.length === 0 ? (
             <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>No resources available</p>

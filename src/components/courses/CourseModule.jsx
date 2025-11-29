@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
-const desktopBreakpoint = 992; // Define a breakpoint
+const desktopBreakpoint = 992; 
 
 export default function CourseModule({ skills, modules, faqs }) {
     const [openModule, setOpenModule] = useState(null);
@@ -30,7 +30,6 @@ export default function CourseModule({ skills, modules, faqs }) {
                 fontFamily: "Poppins, sans-serif",
             }}
         >
-            {/* Header - Made height dynamic/relative to content for safety */}
             <div
                 style={{
                     position: "sticky",
@@ -39,9 +38,9 @@ export default function CourseModule({ skills, modules, faqs }) {
                     display: "flex",
                     justifyContent: "left",
                     alignItems: "center",
-                    paddingLeft: isMobile ? "20px" : "80px", // ⬅️ ADJUSTED
+                    paddingLeft: isMobile ? "20px" : "80px", 
                     gap: "72px",
-                    height: "0px", // Keeping height 0 as per original
+                    height: "0px", 
                     backgroundColor: "#101010",
                     borderBottom: "2px solid",
                     borderImage: "linear-gradient(90deg, #CD41DA 0%, #9B9EE3 100%) 1",
@@ -54,10 +53,10 @@ export default function CourseModule({ skills, modules, faqs }) {
             </div>
 
             {/* Skills Section */}
-            <div style={{ padding: `${isMobile ? "30px" : "60px"} ${basePadding}` }}> {/* ⬅️ ADJUSTED PADDING */}
+            <div style={{ padding: `${isMobile ? "30px" : "60px"} ${basePadding}` }}> 
                 <h2
                     style={{
-                        fontSize: headerFontSize, // ⬅️ ADJUSTED FONT SIZE
+                        fontSize: headerFontSize, 
                         fontWeight: 600,
                         marginTop: 0,
                         marginBottom: "24px",
@@ -71,8 +70,8 @@ export default function CourseModule({ skills, modules, faqs }) {
                     style={{
                         display: "flex",
                         flexWrap: "wrap",
-                        gap: isMobile ? "12px" : "24px", // ⬅️ ADJUSTED GAP
-                        maxWidth: isMobile ? "100%" : "595px", // ⬅️ ADJUSTED MAX WIDTH
+                        gap: isMobile ? "12px" : "24px", 
+                        maxWidth: isMobile ? "100%" : "595px", 
                     }}
                 >
                     {skills.map((skill, index) => (
@@ -95,8 +94,8 @@ export default function CourseModule({ skills, modules, faqs }) {
             {/* Modules Section */}
             <div
                 style={{
-                    padding: `${isMobile ? "20px" : "30px"} ${basePadding}`, // ⬅️ ADJUSTED PADDING
-                    minWidth: isMobile ? "auto" : "1000px", // ⬅️ ADJUSTED MIN WIDTH
+                    padding: `${isMobile ? "20px" : "30px"} ${basePadding}`, 
+                    minWidth: isMobile ? "auto" : "1000px", 
                     width: "100%",
                     boxSizing: "border-box",
                     margin: "0 auto",
@@ -104,7 +103,7 @@ export default function CourseModule({ skills, modules, faqs }) {
             >
                 <h2
                     style={{
-                        fontSize: headerFontSize, // ⬅️ ADJUSTED FONT SIZE
+                        fontSize: headerFontSize, 
                         fontWeight: 600,
                         color: "#FFFFFF",
                         marginBottom: 0,
@@ -145,7 +144,7 @@ export default function CourseModule({ skills, modules, faqs }) {
                         >
                             <h3
                                 style={{
-                                    fontSize: isMobile ? "20px" : "24px", // ⬅️ ADJUSTED FONT SIZE
+                                    fontSize: isMobile ? "20px" : "24px", 
                                     fontWeight: 700,
                                     color: "#FFFFFF",
                                 }}
@@ -155,8 +154,8 @@ export default function CourseModule({ skills, modules, faqs }) {
 
                             <div
                                 style={{
-                                    width: isMobile ? "30px" : "36px", // ⬅️ ADJUSTED SIZE
-                                    height: isMobile ? "30px" : "36px", // ⬅️ ADJUSTED SIZE
+                                    width: isMobile ? "30px" : "36px", 
+                                    height: isMobile ? "30px" : "36px", 
                                     borderRadius: "50%",
                                     background: "linear-gradient(180deg, #CB46DB 0%, #8A38F5 100%)",
                                     display: "flex",
@@ -177,7 +176,7 @@ export default function CourseModule({ skills, modules, faqs }) {
                             <ul
                                 style={{
                                     marginTop: "8px",
-                                    marginLeft: isMobile ? "8px" : "16px", // ⬅️ ADJUSTED MARGIN
+                                    marginLeft: isMobile ? "8px" : "16px", 
                                     paddingLeft: "8px",
                                     listStyleType: "disc",
                                 }}
@@ -208,14 +207,14 @@ export default function CourseModule({ skills, modules, faqs }) {
             <div
                 style={{
                     marginTop: "60px",
-                    padding: `0 ${basePadding}`, // ⬅️ ADJUSTED PADDING
+                    padding: `0 ${basePadding}`, 
                 }}
             >
                 {/* Heading */}
                 <h2
                     style={{
                         fontWeight: 600,
-                        fontSize: headerFontSize, // ⬅️ ADJUSTED FONT SIZE
+                        fontSize: headerFontSize, 
                         lineHeight: "100%",
                         marginBottom: "30px",
                     }}
@@ -227,17 +226,16 @@ export default function CourseModule({ skills, modules, faqs }) {
                 <div
                     style={{
                         display: "flex",
-                        // Center on mobile, left align on desktop
                         justifyContent: isMobile ? "center" : "left", 
-                        gap: isMobile ? "20px" : "40px", // ⬅️ ADJUSTED GAP
+                        gap: isMobile ? "20px" : "40px", 
                         flexWrap: "wrap",
                     }}
                 >
                     {/* Review 1 */}
                     <div
                         style={{
-                            width: isMobile ? "100%" : "300px", // ⬅️ ADJUSTED WIDTH
-                            maxWidth: "350px", // Added max width for mobile constraint
+                            width: isMobile ? "100%" : "300px", 
+                            maxWidth: "350px", 
                             minHeight: "240px",
                             background: "#101010",
                             borderRadius: "24px",
@@ -256,7 +254,7 @@ export default function CourseModule({ skills, modules, faqs }) {
                             style={{
                                 display: "flex",
                                 alignItems: "center",
-                                gap: isMobile ? "20px" : "50px", // ⬅️ ADJUSTED GAP
+                                gap: isMobile ? "20px" : "50px", 
                                 marginTop: "12px",
                                 marginBottom: "0",
                                 // Ensure full width usage on mobile
@@ -290,10 +288,10 @@ export default function CourseModule({ skills, modules, faqs }) {
 
                         <p
                             style={{
-                                width: isMobile ? "95%" : "285px", // ⬅️ ADJUSTED WIDTH
+                                width: isMobile ? "95%" : "285px", 
                                 fontWeight: 400,
                                 fontSize: "16px",
-                                lineHeight: "1.4", // Adjusted line height for readability
+                                lineHeight: "1.4", 
                                 color: "#FFFFFF",
                                 opacity: 0.9,
                                 textAlign: "center",
@@ -309,7 +307,7 @@ export default function CourseModule({ skills, modules, faqs }) {
                     {/* Review 2 */}
                     <div
                         style={{
-                            width: isMobile ? "100%" : "300px", // ⬅️ ADJUSTED WIDTH
+                            width: isMobile ? "100%" : "300px", 
                             maxWidth: "350px", // Added max width for mobile constraint
                             minHeight: "240px",
                             background: "#101010",
@@ -330,10 +328,9 @@ export default function CourseModule({ skills, modules, faqs }) {
                             style={{
                                 display: "flex",
                                 alignItems: "center",
-                                gap: isMobile ? "20px" : "50px", // ⬅️ ADJUSTED GAP
+                                gap: isMobile ? "20px" : "50px", 
                                 marginTop: "12px",
                                 marginBottom: "0",
-                                // Ensure full width usage on mobile
                                 width: isMobile ? "100%" : "auto", 
                                 justifyContent: isMobile ? "space-around" : "flex-start",
                                 padding: isMobile ? "0 10px" : "0",
@@ -363,10 +360,10 @@ export default function CourseModule({ skills, modules, faqs }) {
                         </div>
                         <p
                             style={{
-                                width: isMobile ? "95%" : "285px", // ⬅️ ADJUSTED WIDTH
+                                width: isMobile ? "95%" : "285px", 
                                 fontWeight: 400,
                                 fontSize: "16px",
-                                lineHeight: "1.4", // Adjusted line height for readability
+                                lineHeight: "1.4", 
                                 color: "#FFFFFF",
                                 opacity: 0.9,
                                 textAlign: "center",
@@ -382,10 +379,10 @@ export default function CourseModule({ skills, modules, faqs }) {
             </div>
 
             {/* FAQs Section */}
-            <div style={{ padding: `${isMobile ? "30px" : "50px"} ${basePadding}` }}> {/* ⬅️ ADJUSTED PADDING */}
+            <div style={{ padding: `${isMobile ? "30px" : "50px"} ${basePadding}` }}> 
                 <h2
                     style={{
-                        fontSize: headerFontSize, // ⬅️ ADJUSTED FONT SIZE
+                        fontSize: headerFontSize, 
                         fontWeight: 600,
                         letterSpacing: "2%",
                         color: "#FFFFFF",
@@ -400,9 +397,9 @@ export default function CourseModule({ skills, modules, faqs }) {
                     style={{
                         border: "1px solid #424242",
                         borderRadius: "36px",
-                        paddingLeft: isMobile ? "10px" : "20px", // ⬅️ ADJUSTED PADDING
-                        paddingRight: isMobile ? "10px" : "20px", // ⬅️ ADJUSTED PADDING
-                        maxWidth: isMobile ? "100%" : "1000px", // ⬅️ ADJUSTED MAX WIDTH
+                        paddingLeft: isMobile ? "10px" : "20px", 
+                        paddingRight: isMobile ? "10px" : "20px", 
+                        maxWidth: isMobile ? "100%" : "1000px", 
                     }}
                 >
                     {faqs.map((faq, index) => (
@@ -420,7 +417,7 @@ export default function CourseModule({ skills, modules, faqs }) {
                                 {openFaq === index ? <ChevronUp size={isMobile ? 20 : 24} /> : <ChevronDown size={isMobile ? 20 : 24} />}
                                 <h4
                                     style={{
-                                        fontSize: isMobile ? "16px" : "20px", // ⬅️ ADJUSTED FONT SIZE
+                                        fontSize: isMobile ? "16px" : "20px", 
                                         fontWeight: 600,
                                         margin: 0,
                                         color: "#FFFFFF",
@@ -433,7 +430,7 @@ export default function CourseModule({ skills, modules, faqs }) {
                             {openFaq === index && (
                                 <p
                                     style={{
-                                        margin: isMobile ? "4px 0 10px 24px" : "4px 0 10px 34px", // ⬅️ ADJUSTED MARGIN
+                                        margin: isMobile ? "4px 0 10px 24px" : "4px 0 10px 34px", 
                                         fontSize: "16px",
                                         color: "#d1d1d1",
                                     }}

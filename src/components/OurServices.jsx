@@ -20,10 +20,7 @@ export default function OurServices() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // --- Responsive Style Definitions ---
-
   const sectionPadding = {
-    // Large padding for desktop, small padding for mobile
     paddingLeft: isMobile ? "20px" : "86px",
     paddingRight: isMobile ? "20px" : "86px",
   };
@@ -32,7 +29,6 @@ export default function OurServices() {
     marginTop: isMobile ? "60px" : "100px",
     marginBottom: isMobile ? "40px" : "100px",
     display: "grid",
-    // Single column on mobile, two columns on desktop
     gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
     alignItems: "center",
     gap: isMobile ? "30px" : "56px",
@@ -40,8 +36,7 @@ export default function OurServices() {
   };
   
   const textStyle = {
-    fontSize: isMobile ? "16px" : "20px", // Reduced font size for mobile
-    // Using a simple line height percentage like 160% (1.6) is often better than 100% for readability
+    fontSize: isMobile ? "16px" : "20px", 
     lineHeight: isMobile ? "1.6" : "1.6", 
     color: "white",
     padding: isMobile ? "0" : "24px",
@@ -49,7 +44,7 @@ export default function OurServices() {
   };
 
   const headingStyle = {
-    fontSize: isMobile ? "28px" : "48px", // Reduced size for mobile hero text
+    fontSize: isMobile ? "28px" : "48px", 
     fontWeight: "bold",
     background: "linear-gradient(to bottom, #0745E4, #9700AE)",
     WebkitBackgroundClip: "text",
@@ -59,7 +54,7 @@ export default function OurServices() {
   };
 
   const subHeadingStyle = {
-    fontSize: isMobile ? "24px" : "32px", // Reduced size for mobile hero sub-text
+    fontSize: isMobile ? "24px" : "32px", 
     fontWeight: "600",
     marginLeft: isMobile ? "0" : "12px",
     color: "white",
@@ -68,14 +63,14 @@ export default function OurServices() {
   };
   
   const sectionTitleStyle = {
-    fontSize: isMobile ? "28px" : "36px", // Reduced size for section titles
+    fontSize: isMobile ? "28px" : "36px", 
     fontWeight: "600",
     marginBottom: "16px",
     textAlign: isMobile ? "left" : "center",
   };
   
   const imageStyle = {
-    width: "100%", // Image takes full column width
+    width: "100%", 
     height: isMobile ? "250px" : "350px", 
     objectFit: "cover",
     borderRadius: "12px",
@@ -87,12 +82,12 @@ export default function OurServices() {
   return (
     <div style={{ 
       width: "100%", 
-      maxWidth: "100%", // Explicitly constrain maximum width
+      maxWidth: "100%", 
       backgroundColor: "#0A0A0A", 
       color: "white", 
       fontFamily: "Poppins",
-      overflowX: "hidden", // Prevents horizontal scroll
-      boxSizing: 'border-box', // Crucial for padding/width calculation
+      overflowX: "hidden", 
+      boxSizing: 'border-box', 
     }}>
 
       {/* Hero Image */}
@@ -103,7 +98,6 @@ export default function OurServices() {
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
 
-        {/* Bottom Overlay Bar - Responsive Flex Layout */}
         <div
           style={{
             position: "absolute",
@@ -116,7 +110,7 @@ export default function OurServices() {
             flexDirection: isMobile ? "column" : "row",
             alignItems: "center",
             justifyContent: "center",
-            padding: "0 10px", // Small padding to prevent content hugging the edges
+            padding: "0 10px", 
             boxSizing: 'border-box',
           }}
         >
@@ -129,7 +123,7 @@ export default function OurServices() {
         </div>
       </div>
 
-      {/* Intro Section - Responsive */}
+      {/* Intro Section */}
       <div
         style={contentSectionStyle}
       >
@@ -157,7 +151,6 @@ export default function OurServices() {
         />
       </div>
 
-      {/* --- Horizontal Rule for separation --- */}
       <hr style={{ borderTop: '1px solid #333', margin: isMobile ? '40px 20px' : '80px 86px' }} />
 
       {/* Section 1: IT & Support - Responsive */}
@@ -189,7 +182,6 @@ export default function OurServices() {
         </div>
       </div>
 
-      {/* --- Horizontal Rule for separation --- */}
       <hr style={{ borderTop: '1px solid #333', margin: isMobile ? '40px 20px' : '80px 86px' }} />
 
       {/* Section 2: Development - Responsive */}
@@ -216,7 +208,6 @@ export default function OurServices() {
         />
       </div>
 
-      {/* --- Horizontal Rule for separation --- */}
       <hr style={{ borderTop: '1px solid #333', margin: isMobile ? '40px 20px' : '80px 86px' }} />
 
       {/* Section 3: Training - Responsive */}

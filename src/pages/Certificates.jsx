@@ -8,9 +8,8 @@ const desktopBreakpoint = 992;
 export default function Certificates() {
   const [name, setName] = useState("");
   const [enrollId, setEnrollId] = useState("");
-  const [isMobile, setIsMobile] = useState(false); // New state for responsiveness
+  const [isMobile, setIsMobile] = useState(false); 
 
-  // --- Effect Hook for Responsiveness ---
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < desktopBreakpoint);
@@ -20,18 +19,14 @@ export default function Certificates() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // --- Logic for Downloading Certificate (Unchanged) ---
   const handleDownload = async() => {
     if (!name || !enrollId) {
       alert("Please enter your Name and Enrollment ID.");
       return;
     }
-
-    // Call the API function with the required data (Logic Unchanged)
     await downloadCertificate({ name, enrollmentId: enrollId });
   };
 
-  // --- Responsive Style Definitions ---
 
   const heroSectionStyle = {
     width: isMobile ? "95%" : "100%", 
@@ -49,7 +44,6 @@ export default function Certificates() {
   };
 
   const headingStyle = {
-    // Smaller font size on mobile
     fontSize: isMobile ? "32px" : "48px",
     fontWeight: 600,
     color: "#FFFFFF",
@@ -59,16 +53,15 @@ export default function Certificates() {
 
   const inputContainerStyle = {
     display: "flex",
-    flexDirection: "column", // Stack inputs vertically on mobile
+    flexDirection: "column", 
     alignItems: "center",
-    gap: isMobile ? "15px" : "30px", // Reduced gap for mobile
+    gap: isMobile ? "15px" : "30px", 
     width: "100%",
   };
 
   const inputBaseStyle = {
-    // Full width on mobile, constrained width on desktop
     width: isMobile ? "85%" : "30%", 
-    maxWidth: "450px", // Max width for inputs on mobile
+    maxWidth: "450px", 
     height: isMobile ? "50px" : "60px",
     borderRadius: "10px",
     border: "none",
@@ -78,13 +71,12 @@ export default function Certificates() {
     background: "#FFFFFF",
     color: "#000000",
     fontFamily: "Poppins, sans-serif",
-    boxSizing: "border-box", // Include padding in the element's total width and height
+    boxSizing: "border-box", 
   };
 
   const downloadButtonStyle = {
-    // Full width on mobile, constrained width on desktop
     width: isMobile ? "85%" : "25%", 
-    maxWidth: "450px", // Max width for button on mobile
+    maxWidth: "450px", 
     height: isMobile ? "45px" : "50px",
     borderRadius: "30px",
     border: "none",

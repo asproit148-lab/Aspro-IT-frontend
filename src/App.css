@@ -35,9 +35,8 @@ body {
     box-sizing: border-box;
 }
 
-/* Ensure body doesn't add extra space */
 body {
-    overflow-x: hidden; /* Prevents horizontal scrollbar */
+    overflow-x: hidden;
     margin: 0;
     padding: 0;
 }
