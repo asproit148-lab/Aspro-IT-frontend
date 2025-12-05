@@ -26,6 +26,7 @@ import AdminCampaign from "./pages/AdminCampaign";
 import AdminCourse from './pages/AdminCourse';
 import AdminPayment from "./pages/AdminPayment";
 import AdminResource from './pages/AdminResource.jsx';
+import AdminPracticeQue from './pages/AdminPracticeQue.jsx';
 import AdminJobs from './pages/AdminJobs.jsx';
 
 import ChatbotWidget from "./components/ChatbotWidget";
@@ -53,6 +54,7 @@ export default function App() {
               <Route path="/admin/course-management" element={<AdminCourse />} />
               <Route path="/admin/payment-verification" element={<AdminPayment />} />
               <Route path="/admin/resource-management" element={<AdminResource />} />
+              <Route path="/admin/practice-questions" element={<AdminPracticeQue />} />
               <Route path="/admin/job-management" element={<AdminJobs />} />
 
               <Route path="*" element={<Navigate to="/admin/dashboard" />} />

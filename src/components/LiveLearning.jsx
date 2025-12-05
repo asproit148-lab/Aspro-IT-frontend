@@ -127,22 +127,23 @@ export default function LiveLearning() {
       >
         {displayedCourses.map((course, index) => (
           <div
-            key={index}
-            style={{
-              width: "100%",
-              maxWidth: isMobile ? "100%" : "407px", 
-              borderRadius: "24px",
-              background:
-                "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
-              boxShadow:
-                "-4px -4px 16px 0px #FFFFFF0D inset, 4px 4px 16px 0px #FFFFFF0D inset",
-              overflow: "hidden",
-              display: "flex",
-              flexDirection: "column",
-              cursor: "pointer",
-              transition: "all 0.4s ease-out",
-            }}
-          >
+  key={index}
+  onClick={() => navigate(`/courses/${course._id}`)}
+  style={{
+    width: "100%",
+    maxWidth: isMobile ? "100%" : "407px",
+    borderRadius: "24px",
+    background:
+      "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
+    boxShadow:
+      "-4px -4px 16px 0px #FFFFFF0D inset, 4px 4px 16px 0px #FFFFFF0D inset",
+    overflow: "hidden",
+    display: "flex",
+    flexDirection: "column",
+    cursor: "pointer",
+    transition: "all 0.4s ease-out",
+  }}
+>
             <img
               src={course.imageUrl}
               alt={course.title}

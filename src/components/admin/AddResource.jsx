@@ -128,7 +128,7 @@ export default function AddResource({ onClose, onSave, existingResource }) {
                   marginTop: "10px",
                 }}
               >
-                Upload document (PDF, DOCX, PPTX)
+                Upload document
               </p>
             </>
           )}

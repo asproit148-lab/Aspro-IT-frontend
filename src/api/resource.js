@@ -31,6 +31,7 @@ export const deleteResource = async (resourceId) => {
   return res.data;
 };
 
+//Download Resourse
 export const downloadResource = async (resourceId) => {
   const res = await axios.get(`${API}/download-resource/${resourceId}`, {
     ...config,

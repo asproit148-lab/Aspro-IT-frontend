@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import bg from "../assets/homeBg.jpg";
-import { getAllResources } from '../api/resource';
+import { getAllQuestions } from "../api/practiceque";
 
-const desktopBreakpoint = 992; 
+const desktopBreakpoint = 992;
 
 export default function PracticeQue() {
-  const [resources, setResources] = useState([]);
+  const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false); 
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -20,65 +20,77 @@ export default function PracticeQue() {
   }, []);
 
   useEffect(() => {
-    const fetchResources = async () => {
+    const fetchQuestions = async () => {
       try {
-        const data = await getAllResources();
-        setResources(data || []);
+        const data = await getAllQuestions();
+        setQuestions(data || []);
       } catch (error) {
-        console.error("Error fetching resources:", error);
+        console.error("Error fetching questions:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchResources();
+    fetchQuestions();
   }, []);
 
-  const handleDownload = async (resource) => {
-    try {
-      const downloadUrl = `${import.meta.env.VITE_API_URL}/api/resources/download-resource/${resource._id}`;
-      
-      const response = await fetch(downloadUrl, {
+  // PracticeQue.jsx - CORRECTED handleDownload function
+
+  const handleDownload = async (question) => {
+    try {
+      // Ensure VITE_API_URL is correctly defined (e.g., in .env file)
+      const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+      const downloadUrl = `${baseUrl}/api/questions/download-question/${question._id}`;
+      
+      const response = await fetch(downloadUrl, {
         method: 'GET',
         headers: {
           'Accept': 'application/pdf'
         }
       });
 
-      if (!response.ok) {
-        throw new Error('Download failed');
-      }
+      // 2. Robust error checking: Check if the response is OK (200-299)
+      if (!response.ok) {
+        // If the backend sent a JSON error (e.g., 401/403), we try to read it.
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          const errorData = await response.json();
+          throw new Error(`Download failed: ${response.status} - ${errorData.message || 'Authentication error'}`);
+        }
+        throw new Error(`Download failed with status: ${response.status}`);
+      }
 
-      const blob = await response.blob();
-      
-      // Create download link
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${resource.title}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      // Proceed only if response is successful
+      const blob = await response.blob();
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${question.title}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
 
-    } catch (error) {
-      console.error("Error downloading resource:", error);
-      alert("Failed to download resource. Please try again.");
-    }
-  };
+    } catch (error) {
+      console.error("Error downloading question:", error);
+      // Provide a helpful alert message
+      alert(`Failed to download question. Check console for details. Error: ${error.message}`);
+    }
+  };
 
-  
   const mainContentStyle = {
-    width: isMobile ? "90%" : "100%", 
+    width: isMobile ? "90%" : "100%",
     minHeight: "600px",
-    marginTop: isMobile ? "70px" : "105px", 
+    marginTop: isMobile ? "70px" : "105px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     padding: isMobile ? "20px 20px 40px 20px" : "20px 120px 60px 120px",
     gap: isMobile ? "20px" : "30px",
-    backgroundImage: `url(${bg})`,  
+    backgroundImage: `url(${bg})`,
     color: "#FFFFFF",
     fontFamily: "Poppins, sans-serif",
     backgroundSize: "cover",
@@ -95,15 +107,15 @@ export default function PracticeQue() {
     textAlign: isMobile ? "center" : "left",
   };
 
-  const resourcesListContainerStyle = { 
-    display: "flex", 
-    flexDirection: "column", 
-    gap: "20px", 
-    width: isMobile ? "100%" : "80%", 
-    margin: isMobile ? "0 auto" : "0", 
+  const questionsListContainerStyle = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+    width: isMobile ? "100%" : "80%",
+    margin: isMobile ? "0 auto" : "0",
   };
-  
-  const resourceItemStyle = {
+
+  const questionItemStyle = {
     display: "flex",
     flexDirection: isMobile ? "column" : "row",
     justifyContent: "space-between",
@@ -114,16 +126,16 @@ export default function PracticeQue() {
     backdropFilter: "blur(6px)",
     boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
     transition: "all 0.3s ease",
-    gap: isMobile ? "12px" : "0", 
+    gap: isMobile ? "12px" : "0",
   };
-  
-  const resourceTitleContainerStyle = {
-    display: "flex", 
-    flexDirection: "column", 
-    gap: "8px", 
+
+  const titleContainerStyle = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
     flex: isMobile ? "none" : 1,
   };
-  
+
   const downloadButtonStyle = {
     width: isMobile ? "100%" : "180px",
     height: "45px",
@@ -136,40 +148,33 @@ export default function PracticeQue() {
     cursor: "pointer",
     transition: "all 0.3s ease",
   };
-  
 
   return (
     <div style={{ backgroundColor: "black", color: "white", fontFamily: "Poppins, sans-serif" }}>
       <Header />
 
       <div style={mainContentStyle}>
-        
-        {/* Heading */}
         <h1 style={headingStyle}>
           Download Practice Questions
         </h1>
 
-        {/* Resources List */}
-        <div style={resourcesListContainerStyle}>
+        <div style={questionsListContainerStyle}>
           {loading ? (
             <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>Loading...</p>
-          ) : resources.length === 0 ? (
+          ) : questions.length === 0 ? (
             <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>No Practice Questions available</p>
           ) : (
-            resources.map((resource) => (
-              <div
-                key={resource._id}
-                style={resourceItemStyle}
-              >
-                <div style={resourceTitleContainerStyle}>
-                  <span style={{ fontSize: "18px", fontWeight: 500 }}>{resource.title}</span>
-                  {resource.description && (
-                    <span style={{ fontSize: "14px", color: "#B0B0B0" }}>{resource.description}</span>
+            questions.map((question) => (
+              <div key={question._id} style={questionItemStyle}>
+                <div style={titleContainerStyle}>
+                  <span style={{ fontSize: "18px", fontWeight: 500 }}>{question.title}</span>
+                  {question.description && (
+                    <span style={{ fontSize: "14px", color: "#B0B0B0" }}>{question.description}</span>
                   )}
                 </div>
 
                 <button
-                  onClick={() => handleDownload(resource)}
+                  onClick={() => handleDownload(question)}
                   style={downloadButtonStyle}
                   onMouseEnter={(e) => (e.currentTarget.style.background = "#0090DD")}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "#00A8FF")}

@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import logo from "../assets/logo.png";
 import facebook from "../assets/facebook.png";
-import whatsapp from "../assets/whatsapp.png";
 import instagram from "../assets/instagram.png";
-import x from "../assets/x.png";
 import linkedin from "../assets/linkedin.png";
+import Location from '../assets/location.png';
 
 const desktopBreakpoint = 768;
 
@@ -37,7 +36,7 @@ const StyledFooter = styled.footer`
   position: relative;
   color: #FFFFFF;
   font-family: 'Poppins', sans-serif;
-  gap: 50px;
+  gap: 80px;
   flex-wrap: wrap;
   overflow-x: hidden;
 
@@ -102,9 +101,8 @@ const RightSide = styled.div`
   /* DESKTOP DEFAULTS */
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 60px;
   flex-wrap: wrap;
-  flex-grow: 1; 
   justify-content: flex-start;
 
   /* MOBILE OVERRIDES */
@@ -241,6 +239,7 @@ export default function Footer() {
             color: "#FFFFFF",
             whiteSpace: 'normal',
             margin: '0',
+            paddingTop: "30px",
             textAlign: 'inherit'
           }}>
             “AsproIT is an IT training and internship company dedicated to
@@ -256,15 +255,34 @@ export default function Footer() {
       <RightSide>
         {/* Address */}
         <ColumnContent>
-          <ColumnHeading>Address</ColumnHeading>
-          <FooterText as="p" style={{ whiteSpace: "normal" }}>
-            1st Floor, Pratiksha,
-            <br />
-            Bhawan khajpura,
-            <br />
-            Patna, India-800014
-          </FooterText>
-        </ColumnContent>
+  <ColumnHeading>Address</ColumnHeading>
+  <FooterText as="p" style={{ whiteSpace: "normal" }}>
+    1st Floor Pratiksha <br />
+    Bhawan, khajpura, <br />
+    Patna, India-800014
+  </FooterText>
+
+  {/* Location Pin */}
+  <a
+    href="https://maps.app.goo.gl/bZDhhHhKaTwM2aSQ9"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{ textDecoration: "none" }}
+  >
+    <FooterText style={{ fontSize: isMobile ? "14px" : "20px", marginTop: "0" }}>
+      <img 
+    src={Location} 
+    alt="Location Pin" 
+    style={{
+      width: isMobile ? "16px" : "22px",
+      height: "auto",
+    }} 
+  />
+      View on Google Maps
+    </FooterText>
+  </a>
+</ColumnContent>
+
 
         {/* Company Links */}
         <ColumnContent>
@@ -285,14 +303,19 @@ export default function Footer() {
       
       {/* Social Media Icons Section */}
       <SocialIconsContainer>
-        {[facebook, instagram, x, whatsapp, linkedin].map((icon, i) => (
-          <SocialIcon
-            key={i}
-            src={icon}
-            alt="social-icon"
-          />
-        ))}
-      </SocialIconsContainer>
+  <a href="https://www.facebook.com/asproit/" target="_blank" rel="noopener noreferrer">
+    <SocialIcon src={facebook} alt="facebook" />
+  </a>
+
+  <a href="https://www.instagram.com/aspro_it/" target="_blank" rel="noopener noreferrer">
+    <SocialIcon src={instagram} alt="instagram" />
+  </a>
+
+  <a href="https://www.linkedin.com/company/aspro-it/?originalSubdomain=in" target="_blank" rel="noopener noreferrer">
+    <SocialIcon src={linkedin} alt="linkedin" />
+  </a>
+</SocialIconsContainer>
+
     </StyledFooter>
   );
 }

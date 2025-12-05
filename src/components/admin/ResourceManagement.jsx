@@ -125,7 +125,7 @@ export default function ResourceManagement() {
         </p>
       </div>
 
-      {/* Top Bar (Total Resources) */}
+      {/* Top Bar */}
       <div
         style={{
           width: isMobile ? "100%" : "100%",
@@ -255,7 +255,7 @@ export default function ResourceManagement() {
               <button
                 onClick={() => handleViewResource(res.url)}
                 style={{
-                  width: isMobile ? "50%" : "130px",
+                  width: isMobile ? "50%" : "50%",
                   height: isMobile ? "36px" : "36px",
                   borderRadius: "10px",
                   background: "#4254A5",
@@ -276,7 +276,7 @@ export default function ResourceManagement() {
               <button
                 onClick={() => handleDeleteResource(res._id)}
                 style={{
-                  width: isMobile ? "50%" : "100px",
+                  width: isMobile ? "50%" : "50%",
                   height: isMobile ? "36px" : "36px",
                   borderRadius: "10px",
                   background: "#373D48",

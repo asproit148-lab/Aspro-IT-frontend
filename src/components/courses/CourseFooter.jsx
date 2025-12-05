@@ -64,9 +64,10 @@ export default function CourseFooter() {
             <div
                 style={{
                     width: isMobile ? "90%" : "80%", 
+                    height: "350px",
                     marginLeft: isMobile ? "5%" : "80px", 
                     marginRight: isMobile ? "5%" : "auto", 
-                    marginBottom: isMobile ? "30px" : "20px",
+                    marginBottom: isMobile ? "30px" : "0",
                     boxSizing: "border-box", 
                 }}
             >
@@ -76,7 +77,7 @@ export default function CourseFooter() {
                         fontWeight: 600,
                         fontSize: isMobile ? "28px" : "36px", 
                         color: "#FFFFFF",
-                        marginBottom: "15px",
+                        marginBottom: "20px",
                         textAlign: "left",
                     }}
                 >
@@ -88,7 +89,7 @@ export default function CourseFooter() {
                         <div
                             key={index}
                             style={{
-                                marginBottom: "10px",
+                                marginBottom: "30px",
                                 cursor: "pointer",
                                 padding: isMobile ? "5px 0" : "0", 
                             }}

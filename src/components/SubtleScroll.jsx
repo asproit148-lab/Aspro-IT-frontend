@@ -84,16 +84,13 @@ export default function SubtleScroll() {
   };
   
   const headingText = "Summer Training and Internship Opportunity for College Students";
-  const paragraphText = `✨ Kickstart Your Career This Summer! Are you a college student eager to turn your summer break into a career-defining opportunity? Join our Summer Training & Internship Program, carefully crafted for ambitious learners who want more than just classroom knowledge. Over the course of the program, you’ll gain real-world skills, practical hands-on experience, and valuable industry exposure, while collaborating with professionals and peers on projects that truly make an impact. By the end, you won’t just complete a program — you’ll walk away with the confidence, portfolio, and expertise to stand out in your future career journey.`;
+  const paragraphText = `✨ Kickstart your career this summer with AsproIT’s Summer Internship & Training Program—designed for college students who want more than classroom learning. Gain real-world experience by working on live projects, collaborate with industry professionals and talented peers, and build practical technical and professional skills that employers value. By the end of the program, you’ll walk away with hands-on experience, a strong portfolio, and the confidence to stand out in your career journey. Make your summer count with AsproIT and take the first step toward a successful future.`;
   
 
   return (
     <motion.div
-      onMouseEnter={() => {
-        if (!isAwake) {
-          setTimeout(() => setIsAwake(true), 200);
-        }
-      }}
+      onMouseEnter={() => !isAwake && setTimeout(() => setIsAwake(true), 200)}
+      onTouchStart={() => !isAwake && setIsAwake(true)}
       animate={{
         boxShadow: isAwake
           ? "inset 0px 4px 8px #4EA34740, inset 0px -4px 8px #4EA34740"

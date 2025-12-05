@@ -57,6 +57,7 @@ export default function AdminHeader() {
         { label: "Blogs Management", icon: <NotebookPen size={25} />, path: "/admin/blog-management" },
         { label: "Payment Verification", icon: <BadgeIndianRupee size={25} />, path: "/admin/payment-verification"},
         { label: "Resources", icon: <FileText size={25} />, path: "/admin/resource-management"},
+        { label: "Practice Questions", icon: <FileText size={25} />, path: "/admin/practice-questions"},
         { label: "Jobs and Internships", icon: <Briefcase size={25} />, path: "/admin/job-management"},
     ];
 
