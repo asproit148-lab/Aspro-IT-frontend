@@ -274,7 +274,7 @@ export default function PracticeQueManagement() {
                   width: "100%",
                 }}
               >
-{/*                 <button
+                <button
                   onClick={() => handleView(link)}
                   style={{
                     width: isMobile ? "50%" : "50%",
@@ -292,7 +292,7 @@ export default function PracticeQueManagement() {
                   }}
                 >
                   <Eye size={18} /> View
-                </button> */}
+                </button>
 
                 <button
                   onClick={() => handleDelete(keyId)}
