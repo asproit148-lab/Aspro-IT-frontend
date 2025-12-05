@@ -604,6 +604,7 @@ export default function Header() {
                     {[
                       { name: "Resources", link: "/resources" },
                       { name: "Certificates", link: "/certificates" },
+                      { name: "Practice Ques", link: "/practice-questions" },
                     ].map((item, index, arr) => (
                       <DropdownItem
                         key={index}
