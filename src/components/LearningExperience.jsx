@@ -61,6 +61,7 @@ export default function LearningExperience() {
     position: "relative",
     width: isMobile ? "95%" : "100%", 
     display: "flex",
+    top: isMobile ? "70px" : "105px", 
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",

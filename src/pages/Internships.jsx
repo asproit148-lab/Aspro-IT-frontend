@@ -3,7 +3,6 @@ import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import { getInternships } from "../api/job"; 
 
-// Define a mobile breakpoint
 const mobileBreakpoint = 768;
 
 export default function Internships() {
@@ -14,7 +13,6 @@ export default function Internships() {
 
   const isMobile = screenWidth < mobileBreakpoint;
 
-  // 1. Screen size tracking for responsiveness
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
@@ -42,7 +40,6 @@ export default function Internships() {
             width: "100%", 
             minHeight: "100vh", 
             background: "black",
-            // ⬅️ Fix: Prevent horizontal scrollbar
             overflowX: "hidden", 
         }}
     >
@@ -51,9 +48,9 @@ export default function Internships() {
       <div
         style={{
           width: isMobile ? "80%" : "100%",
+          marginTop: isMobile ? "70px" : "105px", 
           color: "white",
           fontFamily: "Poppins, sans-serif",
-          // ⬅️ RESPONSIVE: Adjust main container padding
           padding: isMobile ? "40px 20px 20px" : "50px 40px 20px 40px",
         }}
       >
@@ -61,7 +58,6 @@ export default function Internships() {
         <h1
           style={{
             fontWeight: 600,
-            // ⬅️ RESPONSIVE: Font size
             fontSize: isMobile ? "28px" : "36px",
             lineHeight: "100%",
             marginBottom: "10px",
@@ -90,11 +86,8 @@ export default function Internships() {
             width: "100%", // Changed from 90%
             maxWidth: "1150px", // Set max width for desktop
             display: "grid",
-            // ⬅️ CRUCIAL RESPONSIVE CHANGE: 1 column on mobile, 3 on desktop
             gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-            // ⬅️ RESPONSIVE: Gap
             gap: isMobile ? "20px" : "30px",
-            // ⬅️ RESPONSIVE: Remove fixed margin to center on mobile
             margin: isMobile ? "20px auto 100px auto" : "50px 0 100px 50px", 
           }}
         >
@@ -102,7 +95,6 @@ export default function Internships() {
             <div
               key={index}
               style={{
-                // ⬅️ RESPONSIVE: Use 100% width on mobile, 90% on desktop (to match original intention)
                 width: isMobile ? "100%" : "90%",
                 height: "210px",
                 borderRadius: "12px",
@@ -119,7 +111,6 @@ export default function Internships() {
                 <h2
                   style={{
                     fontWeight: 700,
-                    // ⬅️ RESPONSIVE: Font size
                     fontSize: isMobile ? "18px" : "20px",
                     marginBottom: "10px",
                   }}
@@ -163,7 +154,7 @@ export default function Internships() {
                 <button
                   onClick={() => window.open(job.companyWebsite, "_blank")}
                   style={{
-                    width: isMobile ? "100%" : "97px", // ⬅️ RESPONSIVE: Full width button on mobile
+                    width: isMobile ? "100%" : "97px", 
                     height: "34px",
                     background: "#2B6EF0",
                     borderRadius: "10px",

@@ -44,7 +44,7 @@ const useIsMobile = (breakpoint) => {
 const StyledHeader = styled.header`
   width: 100%;
   background-color: black;
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 100;
   box-sizing: border-box;
@@ -431,6 +431,7 @@ export default function Header() {
                     {[
                       { name: "Resources", link: "/resources" },
                       { name: "Certificates", link: "/certificates" },
+                      { name: "Practice Ques", link: "/practice-questions" },
                     ].map((item, index, arr) => (
                       <DropdownItem
                         key={index}

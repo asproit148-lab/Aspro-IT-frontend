@@ -31,6 +31,7 @@ export default function Certificates() {
   const heroSectionStyle = {
     width: isMobile ? "95%" : "100%", 
     minHeight: isMobile ? "400px" : "550px", 
+    marginTop: isMobile ? "70px" : "105px", 
     backgroundImage: `url(${bg})`,
     backgroundSize: "cover",
     backgroundPosition: "center",

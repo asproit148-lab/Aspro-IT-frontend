@@ -20,6 +20,7 @@ export default function SubtleScroll() {
   const motionContainerStyle = {
     width: isMobile ? "90%" : "100%", 
     height: isMobile ? "900px" : "536px", 
+    top: isMobile ? "70px" : "105px", 
     padding: isMobile ? "40px 20px" : "0", 
     background: "#101010",
     position: "relative",

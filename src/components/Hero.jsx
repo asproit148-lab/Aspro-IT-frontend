@@ -34,13 +34,15 @@ const HeroContainer = styled.section`
 
   /* Desktop Styles */
   width: 100%;
+  top: 105px;
   height: 580px;
   padding: 0 20px;
 
   /* Mobile Styles */
   @media (max-width: ${desktopBreakpoint}px) {
     width: 95%;
-    height: 100vh;
+    top: 70px;
+    height: 90vh;
     padding: 0 15px;
   }
 `;

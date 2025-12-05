@@ -1,7 +1,6 @@
 import React, { useState, useEffect  } from "react";
 import qrImg from "../assets/qr.jpeg";
 import loadingImg from "../assets/loading.png";
-import { applyCoupon } from "../api/coupon";
 import { submitPayment } from "../api/payment"; 
 import { Upload } from "lucide-react"; 
 
@@ -51,27 +50,6 @@ export default function PaymentFlow({ open, onClose, price, courseId }) {
     setFinalPrice(price);
     setCouponError("");
     onClose && onClose();
-  };
-
-  const handleApply = async () => {
-    if (!coupon) return;
-
-    try {
-      const res = await applyCoupon({
-        Code: coupon,
-        amount: price,
-      });
-
-      if (res.success) {
-        setDiscountPercent(res.discountPercent);
-        setFinalPrice(res.finalAmount);
-        setCouponError("");
-      } else {
-        setCouponError(res.message || "Invalid coupon");
-      }
-    } catch (err) {
-      setCouponError("Invalid or expired coupon");
-    }
   };
 
   const closeBtn = (
@@ -174,60 +152,6 @@ export default function PaymentFlow({ open, onClose, price, courseId }) {
           >
             Scan this code to proceed with the payment
           </p>
-
-          {/* Coupon Input */}
-          <div
-            style={{
-              width: isMobile ? "90%" : "317px",
-              maxWidth: "317px",
-              height: "39px",
-              borderRadius: "10px",
-              border: "1px solid #BFBFBF",
-              margin: "0 auto 10px auto",
-              display: "flex",
-              alignItems: "center",
-              background: "#000",
-            }}
-          >
-            <input
-              value={coupon}
-              onChange={(e) => setCoupon(e.target.value)}
-              placeholder="Apply Coupon Code"
-              style={{
-                flex: 1,
-                height: "100%",
-                border: "none",
-                outline: "none",
-                background: "transparent",
-                paddingLeft: "10px",
-                fontFamily: "Inter",
-                fontSize: "16px",
-                fontWeight: 600,
-                color: "#fff",
-              }}
-            />
-            <button
-              onClick={handleApply}
-              style={{
-                width: "100px",
-                height: "100%",
-                borderRadius: "10px",
-                border: "1px solid #BFBFBF",
-                background: "#666",
-                color: "white",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              Apply
-            </button>
-          </div>
-
-          {couponError && (
-            <p style={{ color: "red", fontSize: "14px", marginBottom: "10px" }}>
-              {couponError}
-            </p>
-          )}
 
           <button
             onClick={() => setStage("proof")}

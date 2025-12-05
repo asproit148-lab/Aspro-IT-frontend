@@ -14,7 +14,6 @@ export default function Jobs() {
 
   const isMobile = screenWidth < mobileBreakpoint;
 
-  // 1. Screen size tracking for responsiveness
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
@@ -28,7 +27,6 @@ export default function Jobs() {
   useEffect(() => {
     const fetchJobs = async () => {
       const data = await getJobs();
-      // Assuming data is already the array of job objects
       setJobs(data || []); 
     };
     fetchJobs();
@@ -41,7 +39,6 @@ export default function Jobs() {
             width: "100%", 
             minHeight: "100vh", 
             background: "black",
-            // ⬅️ Fix: Prevent horizontal scrollbar
             overflowX: "hidden", 
         }}
     >
@@ -50,9 +47,9 @@ export default function Jobs() {
       <div
         style={{
           width: isMobile ? "80%" : "100%",
+          marginTop: isMobile ? "70px" : "105px", 
           color: "white",
           fontFamily: "Poppins, sans-serif",
-          // ⬅️ RESPONSIVE: Adjust main container padding
           padding: isMobile ? "40px 20px 20px" : "50px 40px 20px 40px",
         }}
       >
@@ -60,7 +57,6 @@ export default function Jobs() {
         <h1
           style={{
             fontWeight: 600,
-            // ⬅️ RESPONSIVE: Font size
             fontSize: isMobile ? "28px" : "36px",
             lineHeight: "100%",
             marginBottom: "10px",

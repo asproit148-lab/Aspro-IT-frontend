@@ -26,7 +26,7 @@ export default function OurServices() {
   };
   
   const contentSectionStyle = {
-    marginTop: isMobile ? "60px" : "100px",
+    marginTop: isMobile ? "70px" : "105px",
     marginBottom: isMobile ? "40px" : "100px",
     display: "grid",
     gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",

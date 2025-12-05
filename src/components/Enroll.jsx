@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ArrowLeft, Award, Clock, Video, Download } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PaymentFlow from "../components/PaymentFlow";
+import { applyCoupon } from "../api/coupon";
 import { sendEnrollment } from "../api/email";
 
 const mobileBreakpoint = 992;
@@ -9,22 +10,24 @@ const mobileBreakpoint = 992;
 export default function Enroll() {
     const location = useLocation();
     const navigate = useNavigate();
+    
+    // Course and Price Details from location state
     const courseName = location.state?.course || "";
     const courseId = location.state?.courseId || "";
-    const price = location.state?.price || 0;
+    const price = location.state?.price || 0; // Current base price
     const originalPrice = location.state?.originalPrice || 0;
-    const discount = location.state?.discount || 0;
+    const discount = location.state?.discount || 0; // Initial discount percentage
 
+    // Coupon State
+    const [coupon, setCoupon] = useState("");
+    const [couponError, setCouponError] = useState("");
+    
+    // State for dynamically calculated price and discount
+    const [finalPrice, setFinalPrice] = useState(price);
+    const [discountPercent, setDiscountPercent] = useState(0); 
+
+    // UI/Form State
     const [isMobile, setIsMobile] = useState(false);
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobile(window.innerWidth < mobileBreakpoint);
-        };
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -39,8 +42,51 @@ export default function Enroll() {
     const [showPaymentPopup, setShowPaymentPopup] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    // 1. Screen size tracking
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < mobileBreakpoint);
+        };
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    // 2. Initialize finalPrice when base price changes (and reset coupon info)
+    useEffect(() => {
+        setFinalPrice(price);
+        setDiscountPercent(0);
+        setCouponError("");
+    }, [price]);
+
     const handleChange = (e) => {
         setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    // 3. Coupon Application Logic
+    const handleApply = async () => {
+        if (!coupon) return;
+    
+        try {
+          const res = await applyCoupon({
+            Code: coupon,
+            amount: price, // Use the base price for the API calculation
+          });
+    
+          if (res.success) {
+            setDiscountPercent(res.discountPercent);
+            setFinalPrice(res.finalAmount);
+            setCouponError("");
+          } else {
+            setDiscountPercent(0); // Clear discount if previous one failed
+            setFinalPrice(price); // Revert to base price
+            setCouponError(res.message || "Invalid coupon");
+          }
+        } catch (err) {
+          setDiscountPercent(0);
+          setFinalPrice(price); // Revert to base price
+          setCouponError("Invalid or expired coupon");
+        }
     };
 
     const handleSubmit = async () => {
@@ -90,6 +136,8 @@ export default function Enroll() {
             Mode_of_training: mode,
             batch_type: batch,
             phone_no: formData.phone,
+            final_price: finalPrice, // Include the final price
+            coupon_applied: coupon,
         };
 
         try {
@@ -141,6 +189,7 @@ export default function Enroll() {
         <div
             style={{
                 backgroundColor: "black",
+                marginTop: isMobile ? "70px" : "105px",
                 color: "white",
                 fontFamily: "Poppins, sans-serif",
                 marginRight: isMobile ? "0" : "20px", 
@@ -176,7 +225,7 @@ export default function Enroll() {
                     padding: isMobile ? "0" : "0 30px 0 0",
                 }}
             >
-                {/* FORM CONTAINER */}
+                {/* FORM CONTAINER (No changes here) */}
                 <div
                     style={{
                         width: isMobile ? "95%" : "64%", 
@@ -226,7 +275,7 @@ export default function Enroll() {
                             value={formData.address}
                             onChange={handleChange}
                             placeholder="Residential address"
-                            style={inputStyle("745px")}
+                            style={inputStyle("720px")}
                         />
                     </div>
 
@@ -324,11 +373,11 @@ export default function Enroll() {
                     </div>
                 </div>
 
-                {/* PRICE DETAILS CONTAINER */}
+                {/* PRICE DETAILS CONTAINER (Reverted to original logic) */}
                 <div 
                     style={{ 
                         width: isMobile ? "95%" : "36%", 
-                        minHeight: "auto", 
+                        minHeight: "580px", 
                         borderRadius: "16px", 
                         background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)", 
                         boxShadow: "0px 4px 16px 0px #FFFFFF40", 
@@ -338,8 +387,8 @@ export default function Enroll() {
                         boxSizing: "border-box",
                     }}
                 >
-                    {/* Prices */}
-                    <div style={{ display: "flex", width: "100%", alignItems: "baseline", gap: "20px", marginBottom: "5px", marginTop: isMobile ? "10px" : "40px" }}> {/* ⬅️ ADJUSTED MARGIN */}
+                    {/* Prices - ORIGINAL LOGIC (no change from initial state) */}
+                    <div style={{ display: "flex", width: "100%", alignItems: "baseline", gap: "20px", marginBottom: "5px", marginTop: isMobile ? "10px" : "40px" }}>
                         <div style={{ fontSize: isMobile ? "36px" : "42px", width: "auto", fontWeight: 700, color: "#FFFFFF" }}>₹{price}</div>
                         <div style={{ fontSize: isMobile ? "20px" : "24px", width: "auto", fontWeight: 700, color: "rgba(255,255,255,0.5)", textDecoration: "line-through" }}>₹{originalPrice}</div>
                         
@@ -384,22 +433,89 @@ export default function Enroll() {
                         {loading ? "Submitting..." : "Proceed to Payment"}
                     </button>
 
-                    {/* Divider & Course Includes */}
-                    <div style={{ width: "100%", borderTop: "1px solid white", opacity: "0.4", marginTop: isMobile ? "20px" : "40px", marginBottom: "60px" }}></div> 
-                    <p style={{ fontSize: isMobile ? "12px" : "14px", fontWeight: 700, marginBottom: "16px" }}>This course includes:</p>
-                    <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? "12px" : "16px" }}> 
-                        {[{ icon: <Award size={isMobile ? 20 : 25} color="#0DA745" />, text: "Certification of completion" }, { icon: <Clock size={isMobile ? 20 : 25} color="#0DA745" />, text: "Full time access" }, { icon: <Video size={isMobile ? 20 : 25} color="#0DA745" />, text: "On-demand videos" }, { icon: <Download size={isMobile ? 20 : 25} color="#0DA745" />, text: "Downloadable resources" }].map((item, index) => (
-                            <div key={index} style={{ display: "flex", alignItems: "center", gap: "10px" }}>{item.icon}<span style={{ fontSize: isMobile ? "10px" : "12px" }}>{item.text}</span></div> 
-                        ))}
+                    <div style={{ width: "100%", borderTop: "1px solid white", opacity: "0.4", marginTop: isMobile ? "20px" : "40px", marginBottom: "20px" }}></div> 
+
+                    {/* START OF NEW/MODIFIED COUPON SECTION */}
+
+                    <h3 style={{ fontSize: isMobile ? "18px" : "20px", fontWeight: 600, marginTop: "20px", marginBottom: "40px" }}>Apply Coupon</h3>
+                    
+                    {/* Coupon Input/Button */}
+                    <div
+                        style={{
+                            width: "100%", 
+                            height: "44px",
+                            borderRadius: "10px",
+                            border: "1px solid #BFBFBF",
+                            margin: "0 auto 10px auto", 
+                            display: "flex",
+                            alignItems: "center",
+                            background: "#000",
+                        }}
+                    >
+                        <input
+                            value={coupon}
+                            onChange={(e) => setCoupon(e.target.value)}
+                            placeholder="Enter Coupon Code"
+                            style={{
+                                flex: 1,
+                                height: "100%",
+                                border: "none",
+                                outline: "none",
+                                background: "transparent",
+                                paddingLeft: "10px",
+                                fontFamily: "Inter",
+                                fontSize: "16px",
+                                fontWeight: 600,
+                                color: "#fff",
+                            }}
+                        />
+                        <button
+                            onClick={handleApply}
+                            style={{
+                                width: "100px",
+                                height: "100%",
+                                borderRadius: "0 10px 10px 0", 
+                                border: "1px solid #BFBFBF",
+                                background: "#2B6EF0",
+                                color: "white",
+                                fontWeight: 600,
+                                cursor: "pointer",
+                                borderLeft: "none",
+                            }}
+                        >
+                            Apply
+                        </button>
                     </div>
+
+                    {couponError && (
+                        <p style={{ color: "red", fontSize: "14px", marginBottom: "10px", textAlign: "center" }}>
+                            {couponError}
+                        </p>
+                    )}
+
+                    {/* Display Updated Price */}
+                    {discountPercent > 0 && (
+                        <div style={{ marginTop: "10px", padding: "10px", background: "#1F1F1F", borderRadius: "8px", borderLeft: "4px solid #4CAF50" }}>
+                            <p style={{ fontSize: "16px", fontWeight: 500, margin: 0 }}>
+                                Coupon Applied: <span style={{ color: "#4CAF50", fontWeight: 700 }}>{discountPercent}% OFF</span>
+                            </p>
+                            <p style={{ fontSize: "24px", fontWeight: 700, margin: "5px 0 0 0" }}>
+                                Final Price: ₹{finalPrice}
+                            </p>
+                        </div>
+                    )}
+
+                    {/* 👆 END OF NEW/MODIFIED COUPON SECTION */}
+
                 </div>
             </div>
 
+            {/* Payment Flow Modal - PASSING FINAL PRICE */}
             <PaymentFlow
                 open={showPaymentPopup}
                 onClose={() => setShowPaymentPopup(false)}
                 courseId={courseId}
-                price={price}
+                price={finalPrice} // <-- Passing the final, calculated price
             />
         </div>
     );

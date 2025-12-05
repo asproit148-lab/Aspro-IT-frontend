@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const API = "http://localhost:3000/api/course";
-const API = "https://aspro-it-backend.onrender.com/api/course";
+const API = "http://localhost:3000/api/course";
+// const API = "https://aspro-it-backend.onrender.com/api/course";
 
 const formConfig = {
   withCredentials: true,

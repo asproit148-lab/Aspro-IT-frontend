@@ -9,6 +9,7 @@ import Blogs from "./pages/Blogs";
 import BlogPage from './components/BlogPage.jsx';
 import Resources from "./pages/Resources.jsx";
 import Certificates from './pages/Certificates.jsx';
+import PracticeQue from './pages/PracticeQue.jsx';
 import Contact from './pages/Contact.jsx';
 import Jobs from './pages/Jobs.jsx';
 import Internships from './pages/Internships.jsx';
@@ -66,6 +67,7 @@ export default function App() {
               <Route path="/blogs/:slug" element={<BlogPage />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/certificates" element={<Certificates />} />
+              <Route path="/practice-questions" element={<PracticeQue />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/jobs" element={<Jobs />} />
               <Route path="/internships" element={<Internships />} />

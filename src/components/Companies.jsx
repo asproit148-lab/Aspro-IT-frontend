@@ -24,9 +24,10 @@ export default function Companies() {
   const allLogos = [walmart, infosys, samsung, tcs, wipro, hcl, amazon, atlassian];
 
   const sectionStyle = {
-    width: "100%",
+    width: isMobile ? "98%" : "100%",
     height: isMobile ? "auto" : "650px",
-    padding: isMobile ? "40px 15px 60px 15px" : "0", 
+    top: isMobile ? "70px" : "105px", 
+    padding: isMobile ? "30px 15px 40px 15px" : "0", 
     background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
     boxShadow:
       "-4px -4px 16px 0px #FFFFFF0D inset, 4px 4px 16px 0px #FFFFFF0D inset",

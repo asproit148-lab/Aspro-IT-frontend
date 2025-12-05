@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { askChatbot } from "../api/chatbot";
+import whatsappLogo from "../assets/whatsapp.png";
 
 export default function ChatbotWidget() {
   const [open, setOpen] = useState(false);
@@ -18,7 +19,6 @@ export default function ChatbotWidget() {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    // Add user message
     const userMsg = { sender: "user", text: input.trim() };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
@@ -43,6 +43,31 @@ export default function ChatbotWidget() {
 
   return (
     <>
+      {/* WhatsApp Floating Button */}
+      {!open && (
+        <button
+          onClick={() => window.open("https://wa.me/919128444000", "_blank")}
+          style={{
+            position: "fixed",
+            bottom: "100px",
+            right: "24px",
+            width: "60px",
+            height: "60px",
+            borderRadius: "50%",
+            background: "#25D366",
+            border: "none",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+            cursor: "pointer",
+            zIndex: 9999,
+          }}
+        >
+          <img src={whatsappLogo} alt="WhatsApp" style={{ width: "56px", height: "56px" }} />
+        </button>
+      )}
+
       {/* Chat Icon Button */}
       {!open && (
         <button

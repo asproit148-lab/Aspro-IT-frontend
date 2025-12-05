@@ -31,7 +31,12 @@ export default function LiveLearning() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const displayedCourses = showAll ? courseList : courseList.slice(0, 6);
+  const displayedCourses = showAll
+  ? courseList
+  : isMobile
+  ? courseList.slice(0, 3)   
+  : courseList.slice(0, 6);  
+
 
   return (
     <section
@@ -39,6 +44,7 @@ export default function LiveLearning() {
       style={{
         width: isMobile ? "90%" : "100%", 
         position: "relative",
+        top: isMobile ? "70px" : "105px", 
         background: "#1B1B1B",
         boxShadow:
           "0px 8px 12px 0px #52525280 inset, 0px -8px 12px 0px #52525240 inset",

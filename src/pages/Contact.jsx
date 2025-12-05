@@ -72,7 +72,7 @@ export default function Contact() {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    margin: "0 auto",
+    marginTop: isMobile ? "70px" : "105px", 
     flexDirection: isMobile ? "column" : "row",
     paddingLeft: isMobile ? "20px" : "40px",
     paddingRight: isMobile ? "20px" : "40px",

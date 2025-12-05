@@ -41,6 +41,7 @@ export default function BlogCard() {
   
   const mainContainerStyle = { 
     backgroundColor: "black", 
+    marginTop: isMobile ? "70px" : "105px", 
     color: "white", 
     paddingBottom: isMobile ? "40px" : "80px",
     paddingLeft: isMobile ? "20px" : "0", 

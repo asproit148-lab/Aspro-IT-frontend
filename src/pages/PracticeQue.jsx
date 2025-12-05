@@ -5,7 +5,7 @@ import { getAllResources } from '../api/resource';
 
 const desktopBreakpoint = 992; 
 
-export default function Resources() {
+export default function PracticeQue() {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false); 
@@ -71,8 +71,8 @@ export default function Resources() {
   
   const mainContentStyle = {
     width: isMobile ? "90%" : "100%", 
-    marginTop: isMobile ? "70px" : "105px", 
     minHeight: "600px",
+    marginTop: isMobile ? "70px" : "105px", 
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -146,15 +146,15 @@ export default function Resources() {
         
         {/* Heading */}
         <h1 style={headingStyle}>
-          Download Notes
+          Download Practice Questions
         </h1>
 
         {/* Resources List */}
         <div style={resourcesListContainerStyle}>
           {loading ? (
-            <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>Loading resources...</p>
+            <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>Loading...</p>
           ) : resources.length === 0 ? (
-            <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>No resources available</p>
+            <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>No Practice Questions available</p>
           ) : (
             resources.map((resource) => (
               <div
