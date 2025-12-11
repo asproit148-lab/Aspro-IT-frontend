@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API = "http://localhost:3000/api/questions";
-// const API = "https://aspro-it-backend.onrender.com/api/questions";
+// const API = "http://localhost:3000/api/questions";
+const API = "https://aspro-it-backend.onrender.com/api/questions";
 
 const config = {
   withCredentials: true,

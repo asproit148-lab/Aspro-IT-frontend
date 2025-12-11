@@ -1,4 +1,4 @@
-// vite.config.js (Around line 1)
+// vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { fileURLToPath } from 'url'; 
@@ -17,10 +17,23 @@ export default defineConfig({
     
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom', '@emotion/styled', 'lucide-react'],
-          framer: ['framer-motion'],
+        // --- FIX IS HERE ---
+        manualChunks(id) {
+          if (
+            id.includes('node_modules/react') || 
+            id.includes('node_modules/react-dom') || 
+            id.includes('node_modules/react-router-dom') ||
+            id.includes('node_modules/@emotion/styled') ||
+            id.includes('node_modules/lucide-react')
+          ) {
+            return 'vendor';
+          }
+          if (id.includes('node_modules/framer-motion')) {
+            return 'framer';
+          }
         },
+        // --- END FIX ---
+        
         // Naming convention for the output files
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
