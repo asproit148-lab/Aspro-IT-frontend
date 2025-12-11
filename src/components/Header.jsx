@@ -539,8 +539,14 @@ useEffect(() => {
           {!isMobile && (
             <div>
               {user ? (
-                <UserIconWrapper onClick={() => setShowUserDropdown(!showUserDropdown)} 
-                $isMobile={false} title="Profile" aria-label="Toggle user profile menu">
+                <UserIconWrapper 
+  onClick={() => setShowUserDropdown(!showUserDropdown)} 
+  $isMobile={false} 
+  title="Profile" 
+  aria-label="Toggle user profile menu"
+  role="button" 
+  aria-expanded={showUserDropdown} 
+>
                   <User size={24} color="white" />
                   {showUserDropdown && (
                     <UserDropdown $isMobile={false}>
@@ -570,8 +576,14 @@ useEffect(() => {
 
               {/* Mobile User Icon */}
               {user && (
-                <UserIconWrapper onClick={() => setShowUserDropdown(!showUserDropdown)} 
-                $isMobile={true} title="Profile" aria-label="Toggle user profile menu">
+                <UserIconWrapper 
+  onClick={() => setShowUserDropdown(!showUserDropdown)} 
+  $isMobile={true} 
+  title="Profile" 
+  aria-label="Toggle user profile menu"
+  role="button" 
+  aria-expanded={showUserDropdown} 
+>
                   <User size={20} color="white" />
                   {showUserDropdown && (
                     <UserDropdown $isMobile={true}>
@@ -629,15 +641,6 @@ useEffect(() => {
                   </DropdownContainer>
                 )}
               </div>
-
-              <NavItem 
-                to="/courses-all" 
-                $isMobile={true} 
-                $isActive={location.pathname === "/courses"} // Only active on the main courses path
-                onClick={handleLinkClick}
-              >
-                <BookOpen size={20} /> All Courses
-              </NavItem>
 
               {/* Courses Dropdown (Mobile) */}
               <div style={{ position: "relative" }}>

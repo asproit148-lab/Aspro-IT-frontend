@@ -26,9 +26,7 @@ export default function BlogCard() {
     (async () => {
       try {
         const data = await getBlogs(); // fetch blogs
-        // --- START OF FIX: Reverse the array to display LIFO (Newest First) on the cards ---
-        // Using [...array] to create a shallow copy before reversing, ensuring the original data object isn't mutated.
-        const rawBlogs = data.blogs || []; 
+        const rawBlogs = data.blogs || []; 
         const formatted = [...rawBlogs].reverse().map((b) => ({
           _id: b._id,
           title: b.Blog_title,
@@ -36,7 +34,6 @@ export default function BlogCard() {
           image: b.BlogImage || "/fallback.jpg",
           slug: slugify(b.Blog_title, { lower: true, strict: true }),
         }));
-        // --- END OF FIX ---
         setBlogs(formatted);
       } catch (err) {
         console.error("Failed to fetch blogs:", err);
@@ -46,11 +43,9 @@ export default function BlogCard() {
   
   const mainContainerStyle = { 
     backgroundColor: "black", 
-    marginTop: isMobile ? "70px" : "120px", 
+    marginTop: isMobile ? "70px" : "80px", 
     color: "white", 
-    paddingBottom: isMobile ? "40px" : "80px",
-    paddingLeft: isMobile ? "20px" : "0", 
-    paddingRight: isMobile ? "20px" : "0", 
+    padding: 0, 
   };
   
   const headingStyle = { 
@@ -58,31 +53,34 @@ export default function BlogCard() {
     fontWeight: 600, 
     fontSize: isMobile ? 36 : 48, 
     textAlign: "center", 
-    marginTop: isMobile ? 30 : 50, 
-    marginBottom: isMobile ? 30 : 20 
+    paddingTop: isMobile ? 30 : 50, 
+    marginBottom: isMobile ? 30 : 50 
   };
   
   const cardsWrapperStyle = { 
-    // Increased maxWidth to accommodate four cards
     display: "flex", 
-    justifyContent: "left", 
-    paddingLeft: "60px",
-    gap: isMobile ? "20px" : "30px", // Reduced gap slightly to fit four cards
+    justifyContent: isMobile ? "center" : "space-between", 
+    
+    gap: isMobile ? "20px" : "30px",
     flexWrap: "wrap", 
-    maxWidth: "1600px", // Increased max width
+    maxWidth: "1280px",
     margin: "0 auto", 
   };
+    
+  const desktopCardWidth = `calc(25% - 22.5px)`;
 
   const blogCardStyle = { 
     cursor: "pointer", 
-    width: isMobile ? "100%" : "300px", // New width to fit 4 in a row
-    maxWidth: isMobile ? "none" : "350px", // New max width
+    width: isMobile ? "90%" : desktopCardWidth, 
+    maxWidth: isMobile ? "none" : "none", 
     textAlign: "left", 
+    // Ensure card scales down if the screen is narrow but above the mobile breakpoint
+    minWidth: isMobile ? 'unset' : '280px',
   };
 
   const imageStyle = {
     width: "100%",
-    height: isMobile ? "200px" : "200px", // Adjusted desktop height to look better with smaller width
+    height: isMobile ? "200px" : "200px", 
     borderRadius: "16px", 
     objectFit: "cover",
   };
@@ -90,9 +88,21 @@ export default function BlogCard() {
   const titleStyle = { 
     fontFamily: "Poppins, sans-serif", 
     fontWeight: 500, 
-    fontSize: isMobile ? "28px" : "28px", // Reduced desktop font size for smaller card width
-    marginBottom: "10px" 
+    // Adjusted font size to fit dynamically sized card
+    fontSize: isMobile ? "28px" : "22px", 
+    marginBottom: "10px" ,
+    lineHeight: 1.3,
   };
+    
+  // Separate style for the desktop card wrapper to handle the remaining space if fewer than 4 items are in the last row
+  const desktopCardContainerStyle = {
+    ...cardsWrapperStyle,
+    // When using space-between, we need a gap/margin/padding on the items themselves or use a different layout strategy (like flex-grow)
+    // To ensure cards always start from the left on desktop and wrap cleanly, we'll revert to 'justifyContent: "flex-start"' and rely on the margin/gap between them.
+    justifyContent: isMobile ? "center" : "flex-start", 
+    // Add margin bottom to ensure footer is separated
+    marginBottom: "40px",
+  }
 
 
   return (
@@ -101,7 +111,7 @@ export default function BlogCard() {
         Blogs
       </h2>
 
-      <div style={cardsWrapperStyle}>
+      <div style={desktopCardContainerStyle}>
         {blogs.map((blog) => (
           <div
             key={blog._id}
@@ -109,26 +119,25 @@ export default function BlogCard() {
             style={blogCardStyle}
           >
             <img
-  src={blog.image || "/fallback.jpg"}
-  alt={blog.title || "Blog thumbnail"}
-  loading="lazy"
-  style={imageStyle}
-/>
+              src={blog.image || "/fallback.jpg"}
+              alt={blog.title || "Blog thumbnail"}
+              loading="lazy"
+              style={imageStyle}
+            />
             <div style={{ marginTop: "24px" }}>
               <h3 style={titleStyle}>
                 {blog.title}
               </h3>
               <p style={{ fontSize: "16px", color: "#ccc" }}>
-  {blog.description?.slice(0, 100)}...
-</p>
-<p style={{ fontSize: "14px", opacity: 0.8 }}>2 min read</p>
-
+                {blog.description?.slice(0, 100)}...
+              </p>
+              <p style={{ fontSize: "14px", opacity: 0.8 }}>2 min read</p>
             </div>
           </div>
         ))}
 
       </div>
-<Footer />
+      <Footer />
     </div>
   );
 }

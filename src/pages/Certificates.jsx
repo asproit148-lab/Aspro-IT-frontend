@@ -19,19 +19,18 @@ const PageContainer = styled.div`
 `;
 
 const HeroSection = styled.div`
-  width: ${props => props.$isMobile ? "95%" : "100%"}; 
-  min-height: ${props => props.$isMobile ? "400px" : "550px"}; 
-  margin-top: ${props => props.$isMobile ? "70px" : "105px"}; 
-  background-image: url(${bg});
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: ${props => props.$isMobile ? "20px" : "28px"};
-  padding: ${props => props.$isMobile ? "20px" : "0"};
+  width: ${props => props.$isMobile ? "90%" : "100%"};
+    margin-top: ${props => props.$isMobile ? "70px" : "105px"};
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: ${props => props.$isMobile ? "20px 20px 40px 20px" : "20px 120px 60px 120px"};
+    gap: ${props => props.$isMobile ? "20px" : "30px"};
+    background-image: url(${bg});
+    color: #FFFFFF;
+    background-size: cover;
+    background-position: center;
 `;
 
 const ContentHeader = styled.div`
@@ -39,11 +38,9 @@ const ContentHeader = styled.div`
   flex-direction: row; 
   align-items: center;
   position: relative;
-  
-  /* FIX: On mobile, justify to the start to make the button and heading left-aligned */
   justify-content: flex-start; 
-  /* Also remove the 15px gap on mobile to make the button and heading appear tighter */
   gap: ${props => props.$isMobile ? "5px" : "15px"};
+  width: 100%
 `;
 
 const BackButton = styled.button`
@@ -55,18 +52,12 @@ const BackButton = styled.button`
   display: flex;
   align-items: center;
   transition: opacity 0.2s;
-
-  /* Use static positioning on mobile to flow as a flex item */
-  position: ${props => props.$isMobile ? 'static' : 'absolute'}; 
-  
-  /* Desktop Positioning */
-  top: ${props => props.$isMobile ? 'auto' : '50%'};
-  left: ${props => props.$isMobile ? 'auto' : '-50px'};
-  transform: ${props => props.$isMobile ? 'none' : 'translateY(-50%)'};
-  
-  /* FIX: Adjust margin-left to pull it to the edge of the 20px padding (on mobile) */
-  margin-left: ${props => props.$isMobile ? '-10px' : '0'};
+  position: absolute; 
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); 
+  left: ${props => props.$isMobile ? '0' : '-50px'};
   margin-bottom: 0;
+  margin-top: 10px;
   z-index: 10;
 `;
 
@@ -75,13 +66,18 @@ const Heading = styled.h1`
   font-weight: 600;
   color: #FFFFFF;
   margin: 0;
-  line-height: 1.2;
+  margin-top: 20px;
+  margin-left: 20px;
+  text-align: ${props => props.$isMobile ? "center" : "left"};
+  width: ${props => props.$isMobile ? '100%' : 'auto'}; 
 `;
 
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column; 
   align-items: center;
+  margin-top: 60px;
+  margin-right: ${props => props.$isMobile ? "0" : "250px"};
   gap: ${props => props.$isMobile ? "15px" : "30px"}; 
   width: 100%;
 `;
@@ -112,11 +108,11 @@ const DownloadButton = styled.button`
   font-size: ${props => props.$isMobile ? "16px" : "20px"};
   font-weight: 600;
   cursor: pointer;
+  margin-right: ${props => props.$isMobile ? "0" : "250px"};
   margin-top: ${props => props.$isMobile ? "10px" : "20px"};
   transition: background 0.3s ease;
   box-sizing: border-box;
   
-  /* OPTIMIZATION: Abstracted hover logic */
   &:hover {
     background: #0090DD;
   }

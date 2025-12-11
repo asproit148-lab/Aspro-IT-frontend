@@ -267,6 +267,17 @@ export default function Footer() {
           </EmbeddedMapWrapper>
         </ColumnContent>
 
+        {/* Contacts */}
+        <ColumnContent>
+          <ColumnHeading>Contacts</ColumnHeading>
+          {["+91-9128444000", "admin@asproit.com"].map((item,i)=>(
+            <FooterText key={i} as="p" $smallLineHeight>
+              {/* OPTIMIZATION: Removed inline style={{ lineHeight: "2px" }} and used $smallLineHeight prop */}
+              {item}
+            </FooterText>
+          ))}
+        </ColumnContent>
+
         {/* Company Links */}
         <ColumnContent>
           <ColumnHeading>Company</ColumnHeading>
@@ -282,17 +293,7 @@ export default function Footer() {
             </FooterLink>
           ))}
         </ColumnContent>
-
-        {/* Contacts */}
-        <ColumnContent>
-          <ColumnHeading>Contacts</ColumnHeading>
-          {["+91-9128444000", "admin@asproit.com"].map((item,i)=>(
-            <FooterText key={i} as="p" $smallLineHeight>
-              {/* OPTIMIZATION: Removed inline style={{ lineHeight: "2px" }} and used $smallLineHeight prop */}
-              {item}
-            </FooterText>
-          ))}
-        </ColumnContent>
+        
       </RightSide>
 
       {/* Social Icons */}

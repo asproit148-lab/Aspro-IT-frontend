@@ -188,7 +188,6 @@ export default function SignupPopup({ onClose, onBack }) {
       const response = await signInWithGoogle(res.credential);
       if (!response.success) setError(response.message || "Google login failed"); // ⬅️ Changed from alert()
       else {
-        alert("Google Login Successful!");
         onClose();
       }
     } catch {

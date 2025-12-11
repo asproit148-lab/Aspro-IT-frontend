@@ -90,8 +90,8 @@ export default function Contact() {
   
   const contactImageStyle = {
     maxWidth: "90%",
-    height: "auto",
-    boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+    height: "480px",
+    padding: "50px",
   };
 
   const rightSideStyle = {

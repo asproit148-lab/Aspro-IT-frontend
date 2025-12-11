@@ -111,14 +111,16 @@ const CourseDescription = styled.span`
 `;
 
 const QuestionCount = styled.span`
-    font-size: 14px;
-    font-weight: 500;
-    color: #4CAF50; /* Green */
-    background: rgba(76, 175, 80, 0.2);
-    padding: 2px 8px;
-    border-radius: 4px;
-    display: inline-block;
-    margin-left: ${props => props.$isMobile ? '0' : '10px'};
+    font-size: 14px;
+    font-weight: 500;
+    color: #4CAF50; /* Green */
+    background: rgba(76, 175, 80, 0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block; /* Keep it inline-block for its own width */
+    margin-left: 0; /* Remove any previous margin */
+    align-self: flex-start; /* Ensures it is aligned to the left within the flex column */
+    /* Remove the dynamic margin-left from the props */
 `;
 
 const GetQuestionsButton = styled.button`
@@ -257,18 +259,17 @@ export default function PracticeQue() {
             courses.map((course) => (
               <CourseItem key={course._id} $isMobile={isMobile}>
                 <TitleContainer $isMobile={isMobile}>
-                    {/* Display Course Title and Question Count inline */}
-                  <CourseTitle>
-                        {course.Course_title}
-                        {/* Use the defined QuestionCount component */}
-                        <QuestionCount $isMobile={isMobile}>
-                            {course.questionCount} {course.questionCount === 1 ? 'question' : 'questions'} available
-                        </QuestionCount>
-                    </CourseTitle>
-                  {course.description && (
-                    <CourseDescription>{course.description}</CourseDescription>
-                  )}
-                </TitleContainer>
+    <CourseTitle>
+        {course.Course_title}
+    </CourseTitle>
+    {/* Move QuestionCount here, outside of CourseTitle */}
+    <QuestionCount $isMobile={isMobile}>
+        {course.questionCount} {course.questionCount === 1 ? 'question' : 'questions'} available
+    </QuestionCount>
+    {course.description && (
+        <CourseDescription>{course.description}</CourseDescription>
+    )}
+</TitleContainer> 
 
                 <GetQuestionsButton
                   onClick={() => handleGetQuestions(course)}

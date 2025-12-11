@@ -1,8 +1,7 @@
 import { BookOpen, Clock, MessageCircle, Briefcase, UserCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useMemo, useCallback } from "react"; // Added useMemo/useCallback
+import { useState, useEffect, useMemo, useCallback } from "react"; 
 
-// Debounce utility remains outside (Perfect)
 const debounce = (fn, delay) => {
   let timeoutId;
   return function(...args) {
@@ -11,8 +10,6 @@ const debounce = (fn, delay) => {
   };
 };
 
-// 🚩 OPTIMIZATION 1: Move static data OUTSIDE the component.
-// This prevents the array from being redefined on every render.
 const BASE_FEATURE_ITEMS = [
   {
     iconKey: BookOpen,
@@ -20,8 +17,9 @@ const BASE_FEATURE_ITEMS = [
     bg: "#8139E6",
     mobileWidth: "100px",
     desktopWidth: "112px",
-    scrollTarget: "live-learning", // Use a unique property for scrolling
-    path: null,
+    // FIX: Set scrollTarget to null and path to the desired route
+    scrollTarget: null, 
+    path: "/courses-all", 
   },
   {
     iconKey: Clock,
@@ -65,34 +63,24 @@ const BASE_FEATURE_ITEMS = [
 export default function LearningExperience() {
   const navigate = useNavigate();
   
-  // 🚩 OPTIMIZATION 2: Only store icon size in state/memo, not full mobile status.
-  // This avoids recalculating all style objects on resize.
   const [iconSize, setIconSize] = useState(36); 
-  const isMobileView = iconSize === 32; // Derive boolean from iconSize
+  const isMobileView = iconSize === 32; 
 
-  // 🚩 OPTIMIZATION 3: Memoize expensive style/logic calculations.
   const handleResize = useCallback(() => {
     const newSize = window.innerWidth < 768 ? 32 : 36;
-    // Only update state if the value actually changes (32 -> 36 or 36 -> 32)
     setIconSize(prevSize => (prevSize !== newSize ? newSize : prevSize));
   }, []);
 
 
   useEffect(() => {
-    // Initial check
     handleResize(); 
     
-    // Optimization: Debounce the resize handler by 150ms
     const debouncedHandleResize = debounce(handleResize, 150); 
     
     window.addEventListener("resize", debouncedHandleResize);
     
     return () => window.removeEventListener("resize", debouncedHandleResize);
   }, [handleResize]);
-  
-  // 🚩 OPTIMIZATION 4: Memoize all constant style objects.
-  // This ensures they are not recreated on every render, improving TBT/main thread work.
-  // The only time these are recreated is when 'iconSize' changes (on breakpoint hit).
 
   const SectionStyle = useMemo(() => ({
     position: "relative",
@@ -136,7 +124,6 @@ export default function LearningExperience() {
     color: "grey",
   }), [isMobileView]);
 
-  // The main container for the cards
   const CardsContainerStyle = useMemo(() => isMobileView
     ? {
         display: "flex",
@@ -165,12 +152,9 @@ export default function LearningExperience() {
     flexWrap: "wrap", 
   }), [isMobileView]);
 
-  // The two functions below cannot be memoized with useMemo/useCallback due to inline style calculation, 
-  // but they only run when rendering the few cards. We keep them as functions but simplify the item properties.
-
   const getCardStyle = (item) => ({
     minWidth: "90px", 
-    maxWidth: isMobileView ? item.mobileWidth : item.desktopWidth, // Use pre-calculated widths
+    maxWidth: isMobileView ? item.mobileWidth : item.desktopWidth, 
     height: isMobileView ? "110px" : "120px", 
     display: "flex",
     flexDirection: "column",
@@ -205,7 +189,6 @@ export default function LearningExperience() {
     lineHeight: isMobileView ? "1.3" : "1.2",
   }), [isMobileView]);
 
-  // Use useCallback to prevent these functions from being recreated on every render
   const handleHover = useCallback((e) => {
     e.currentTarget.style.transform = "translateY(-8px)";
     e.currentTarget.style.boxShadow = "0 12px 30px rgba(0,0,0,0.3)";
@@ -216,7 +199,6 @@ export default function LearningExperience() {
     e.currentTarget.style.boxShadow = "none";
   }, []);
   
-  // 🚩 OPTIMIZATION 5: Centralized click handler using item properties.
   const handleItemClick = useCallback((item) => {
     if (item.scrollTarget) {
       document.getElementById(item.scrollTarget)?.scrollIntoView({
