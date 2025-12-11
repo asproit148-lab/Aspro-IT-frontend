@@ -1,8 +1,87 @@
 import React, { useState, useEffect } from "react";
-import gemini from '../assets/gemini.png';
+import styled from "@emotion/styled";
 import { motion } from "framer-motion";
+import gemini from '../assets/gemini.png';
 
 const desktopBreakpoint = 768;
+
+// --- STYLED COMPONENTS ---
+
+const MotionContainer = styled(motion.div)`
+  width: ${props => props.$isMobile ? "90%" : "100%"}; 
+  height: ${props => props.$isMobile ? "900px" : "536px"}; 
+  top: ${props => props.$isMobile ? "70px" : "105px"}; 
+  padding: ${props => props.$isMobile ? "40px 20px" : "0"}; 
+  background: #101010;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+`;
+
+const ContentWrapper = styled(motion.div)`
+  display: flex;
+  flex-direction: ${props => props.$isMobile ? "column" : "row"}; 
+  align-items: center;
+  justify-content: ${props => props.$isMobile ? "center" : (props.$isAwake ? "flex-start" : "center")};
+  width: 100%;
+  padding-left: ${props => props.$isMobile ? "0px" : (props.$isAwake ? "86px" : "0px")};
+  gap: ${props => props.$isMobile ? "20px" : "40px"}; 
+  position: relative;
+  z-index: 2;
+  transition: all 0.4s ease;
+`;
+
+const GlowLayer = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: "none";
+  z-index: 1;
+  background:
+    "radial-gradient(circle at 95% 5%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 20px), " +
+    "radial-gradient(circle at 5% 95%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 320px)";
+  filter: blur(100px);
+`;
+
+const Image = styled.img`
+  width: ${props => props.$isMobile ? "90%" : "514px"};
+  max-width: ${props => props.$isMobile ? "400px" : "514px"}; 
+  height: ${props => props.$isMobile ? "auto" : "488px"};
+  border-radius: 36px;
+  object-fit: cover;
+  flex-shrink: 0;
+  margin-bottom: ${props => props.$isMobile ? "20px" : "0"}; 
+`;
+
+const TextContainer = styled.div`
+  width: ${props => props.$isMobile ? "100%" : "640px"};
+  max-width: ${props => props.$isMobile ? "100%" : "640px"};
+  color: #FFFFFF;
+  font-family: "Poppins, sans-serif";
+  display: flex;
+  flex-direction: column;
+  text-align: ${props => props.$isMobile ? "center" : "left"}; 
+  padding: ${props => props.$isMobile ? "0 10px" : "0"}; 
+`;
+
+const Heading = styled.h2`
+  font-weight: 600;
+  font-size: ${props => props.$isMobile ? "28px" : "36px"}; 
+  line-height: 130%;
+  margin-bottom: 16px;
+`;
+
+const Paragraph = styled.p`
+  font-weight: 400;
+  font-size: ${props => props.$isMobile ? "16px" : "20px"}; 
+  line-height: 150%;
+  color: #E0E0E0;
+  text-align: justify;
+`;
+
+// --- COMPONENT ---
 
 export default function SubtleScroll() {
   const [isAwake, setIsAwake] = useState(false);
@@ -16,79 +95,14 @@ export default function SubtleScroll() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const motionContainerStyle = {
-    width: isMobile ? "90%" : "100%", 
-    height: isMobile ? "900px" : "536px", 
-    top: isMobile ? "70px" : "105px", 
-    padding: isMobile ? "40px 20px" : "0", 
-    background: "#101010",
-    position: "relative",
-    overflow: "hidden",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    transition: "all 0.4s ease",
-  };
-
-  const contentWrapperStyle = {
-    display: "flex",
-    flexDirection: isMobile ? "column" : "row", 
-    alignItems: "center",
-    justifyContent: isMobile ? "center" : (isAwake ? "flex-start" : "center"),
-    width: "100%",
-    paddingLeft: isMobile ? "0px" : (isAwake ? "86px" : "0px"),
-    gap: isMobile ? "20px" : "40px", 
-    position: "relative",
-    zIndex: 2,
-    transition: "all 0.4s ease",
-  };
-
-  // Left Image 
-  const imageStyle = {
-    width: isMobile ? "90%" : "514px",
-    maxWidth: isMobile ? "400px" : "514px", 
-    height: isMobile ? "auto" : "488px",
-    borderRadius: "36px",
-    objectFit: "cover",
-    flexShrink: 0,
-    marginBottom: isMobile ? "20px" : "0", 
-  };
-
-  // Right Text container style
-  const textContainerStyle = {
-    width: isMobile ? "100%" : "640px",
-    maxWidth: isMobile ? "100%" : "640px",
-    color: "#FFFFFF",
-    fontFamily: "Poppins, sans-serif",
-    display: "flex",
-    flexDirection: "column",
-    textAlign: isMobile ? "center" : "left", 
-    padding: isMobile ? "0 10px" : "0", 
-  };
-
-  // Heading style
-  const headingStyle = {
-    fontWeight: 600,
-    fontSize: isMobile ? "28px" : "36px", 
-    lineHeight: "130%",
-    marginBottom: "16px",
-  };
-
-  // Paragraph style
-  const paragraphStyle = {
-    fontWeight: 400,
-    fontSize: isMobile ? "16px" : "20px", 
-    lineHeight: "150%",
-    color: "#E0E0E0",
-  };
   
   const headingText = "Summer Training and Internship Opportunity for College Students";
   const paragraphText = `✨ Kickstart your career this summer with AsproIT’s Summer Internship & Training Program—designed for college students who want more than classroom learning. Gain real-world experience by working on live projects, collaborate with industry professionals and talented peers, and build practical technical and professional skills that employers value. By the end of the program, you’ll walk away with hands-on experience, a strong portfolio, and the confidence to stand out in your career journey. Make your summer count with AsproIT and take the first step toward a successful future.`;
   
 
   return (
-    <motion.div
+    <MotionContainer
+      $isMobile={isMobile}
       onMouseEnter={() => !isAwake && setTimeout(() => setIsAwake(true), 200)}
       onTouchStart={() => !isAwake && setIsAwake(true)}
       animate={{
@@ -103,10 +117,11 @@ export default function SubtleScroll() {
         damping: 20,
         duration: 1.2,
       }}
-      style={motionContainerStyle}
     >
       {isAwake && (
-        <motion.div
+        <ContentWrapper
+          $isMobile={isMobile}
+          $isAwake={isAwake}
           initial={{ opacity: 0, y: 80 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -115,40 +130,28 @@ export default function SubtleScroll() {
             stiffness: 150,
             damping: 30,
           }}
-          style={contentWrapperStyle}
         >
           {/* Subtle Glow Layer */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              pointerEvents: "none",
-              zIndex: 1,
-              background:
-                "radial-gradient(circle at 95% 5%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 20px), " +
-                "radial-gradient(circle at 5% 95%, #4BDA43 50px, #A078D7 80px, #F29B9B 50px, transparent 320px)",
-              filter: "blur(100px)",
-            }}
-          />
+          <GlowLayer />
           
           {/* Left Image */}
-          <img
+          <Image
             src={gemini}
             alt="gemini"
-            style={imageStyle}
+            $isMobile={isMobile}
           />
 
           {/* Right Text */}
-          <div style={textContainerStyle}>
-            <h2 style={headingStyle}>
+          <TextContainer $isMobile={isMobile}>
+            <Heading $isMobile={isMobile}>
               {headingText}
-            </h2>
-            <p style={paragraphStyle}>
+            </Heading>
+            <Paragraph $isMobile={isMobile}>
               {paragraphText}
-            </p>
-          </div>
-        </motion.div>
+            </Paragraph>
+          </TextContainer>
+        </ContentWrapper>
       )}
-    </motion.div>
+    </MotionContainer>
   );
 }

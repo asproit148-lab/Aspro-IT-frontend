@@ -2,8 +2,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  // baseURL: "http://localhost:3000/api/user", 
-  baseURL: "https://aspro-it-backend.onrender.com/api/user", 
+  baseURL: "http://localhost:3000/api/user", 
+  // baseURL: "https://aspro-it-backend.onrender.com/api/user", 
 
   withCredentials: true,
   headers: {
@@ -42,6 +42,12 @@ export const logoutUser = async () => {
 export const refreshToken = async () => {
   const res = await api.post("/refresh-token");
   return res.data;
+};
+
+// Reset Password
+export const resetPassword = async (email, newPassword) => {
+  const res = await api.post("/change-password", { email, newPassword });
+  return res.data;
 };
 
 export default api;

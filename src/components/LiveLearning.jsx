@@ -1,15 +1,25 @@
 // src/components/LiveLearning.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { getAllCourses } from "../api/course";
+
+const debounce = (fn, delay) => {
+  let timeoutId;
+  return function(...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn.apply(this, args), delay);
+  };
+};
 
 export default function LiveLearning() {
   const navigate = useNavigate();
   const [showAll, setShowAll] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const slugify = (title) => title.trim().toLowerCase().replace(/\s+/g, "-");
+  const slugify = (title) =>
+    title.trim().toLowerCase().replace(/\s+/g, "-");
   const [courseList, setCourseList] = useState([]);
 
+  // API Fetch
   useEffect(() => {
     async function loadCourses() {
       try {
@@ -23,19 +33,45 @@ export default function LiveLearning() {
   }, []);
 
   useEffect(() => {
-    const handleResize = () => {
+    const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const debouncedHandleResize = debounce(checkIsMobile, 150);
 
-  const displayedCourses = showAll
-  ? courseList
-  : isMobile
-  ? courseList.slice(0, 3)   
-  : courseList.slice(0, 6);  
+    checkIsMobile();
+    window.addEventListener("resize", debouncedHandleResize);
+
+    return () => window.removeEventListener("resize", debouncedHandleResize);
+  }, []);
+  
+  const displayedCourses = useMemo(() => {
+    return showAll || isMobile 
+      ? courseList 
+      : courseList.slice(0, 6); 
+  }, [showAll, isMobile, courseList]);
+
+  const handleBuyNow = useCallback((e, course) => {
+    e.preventDefault(); 
+    e.stopPropagation(); 
+
+    navigate("/courses/enrollment", {
+      state: {
+        course: course.Course_title,
+        courseId: course._id,
+        price: course.Final_cost,
+        originalPrice: course.Course_cost,
+        discount: course.Discount,
+      },
+    });
+  }, [navigate]);
+
+
+  const handleViewDetails = useCallback((e, course) => {
+    e.preventDefault(); 
+    e.stopPropagation(); 
+
+    navigate(`/courses/${slugify(course.Course_title)}/${course._id}`);
+  }, [navigate]);
 
 
   return (
@@ -112,44 +148,66 @@ export default function LiveLearning() {
       {/* Course grid */}
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: isMobile
-            ? "1fr"
-            : "repeat(auto-fit, minmax(300px, 1fr))", 
-          gap: "40px",
+          display: isMobile ? "flex" : "grid", 
+          gridTemplateColumns: isMobile 
+            ? "unset" 
+            : "repeat(auto-fit, minmax(350px, 1fr))", 
+          overflowX: isMobile ? "auto" : "unset", 
+          scrollSnapType: isMobile ? "x mandatory" : "unset", 
+          paddingBottom: isMobile ? "10px" : "unset", 
+          
+          gap: "20px",
           width: "100%",
           maxWidth: "1280px",
           justifyItems: "center",
           position: "relative",
           zIndex: 2,
           transition: "all 0.4s ease",
+          
+          flexDirection: isMobile ? "row" : "unset", 
         }}
       >
-        {displayedCourses.map((course, index) => (
-          <div
-  key={index}
-  onClick={() => navigate(`/courses/${course._id}`)}
-  style={{
-    width: "100%",
-    maxWidth: isMobile ? "100%" : "407px",
-    borderRadius: "24px",
-    background:
-      "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
-    boxShadow:
-      "-4px -4px 16px 0px #FFFFFF0D inset, 4px 4px 16px 0px #FFFFFF0D inset",
-    overflow: "hidden",
-    display: "flex",
-    flexDirection: "column",
-    cursor: "pointer",
-    transition: "all 0.4s ease-out",
-  }}
->
+        {displayedCourses.map((course) => (
+          <Link 
+            key={course._id}
+            to={`/courses/${slugify(course.Course_title)}/${course._id}`}
+            style={{
+              flexShrink: isMobile ? 0 : 1, 
+              width: isMobile ? "300px" : "100%", 
+              height: "470px",
+              maxWidth: isMobile ? "300px" : "407px", 
+              borderRadius: "24px",
+              background:
+                "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
+              boxShadow:
+                "-4px -4px 16px 0px #FFFFFF0D inset, 4px 4px 16px 0px #FFFFFF0D inset",
+              overflow: "hidden",
+              display: "flex",
+              flexDirection: "column",
+              cursor: "pointer",
+              transition: "all 0.4s ease-out",
+              textDecoration: "none", 
+              scrollSnapAlign: isMobile ? "start" : "unset", 
+              transform: "scale(1)", 
+            }}
+            onMouseEnter={(e) => {
+      if (!isMobile) { 
+        e.currentTarget.style.transform = "scale(1.02)";
+      }
+    }}
+    onMouseLeave={(e) => {
+      if (!isMobile) {
+        e.currentTarget.style.transform = "scale(1)";
+      }
+    }}
+          >
             <img
               src={course.imageUrl}
-              alt={course.title}
+              alt={`Course thumbnail for: ${course.Course_title}`}
+              loading="lazy"
               style={{
                 width: "100%",
-                height: "285px",
+                height: "225px",
                 objectFit: "cover",
                 borderTopLeftRadius: "24px",
                 borderTopRightRadius: "24px",
@@ -170,7 +228,7 @@ export default function LiveLearning() {
                   fontWeight: 600,
                   fontSize: "24px",
                   color: "#FFFFFF",
-                  margin: "10px 0 8px",
+                  margin: "0 0 4px",
                   textAlign: "left",
                 }}
               >
@@ -182,7 +240,7 @@ export default function LiveLearning() {
                 style={{
                   display: "flex",
                   gap: "8px",
-                  marginBottom: "20px",
+                  marginBottom: "8px",
                   flexWrap: "wrap",
                 }}
               >
@@ -220,8 +278,8 @@ export default function LiveLearning() {
                   fontWeight: 600,
                   fontSize: "20px",
                   color: "#FFFFFF",
-                  marginBottom: "8px",
-                  marginTop: "15px",
+                  marginBottom: "4px",
+                  marginTop: "8px",
                 }}
               >
                 Grab your discount
@@ -233,7 +291,7 @@ export default function LiveLearning() {
                   display: "flex",
                   alignItems: "baseline",
                   justifyContent: "space-between",
-                  marginBottom: "12px",
+                  marginBottom: "8px",
                   flexWrap: isMobile ? "nowrap" : "wrap",
                 }}
               >
@@ -287,8 +345,9 @@ export default function LiveLearning() {
                 }}
               >
                 <button
+                  onClick={(e) => handleViewDetails(e, course)}
                   style={{
-                    minWidth: isMobile ? "48%" : "160px",
+                    minWidth: isMobile ? "48%" : "44%",
                     height: "44px",
                     borderRadius: "8px",
                     background: "rgba(255,255,255,0.25)",
@@ -308,56 +367,46 @@ export default function LiveLearning() {
                     e.target.style.background = "#FFFFFF40";
                     e.target.style.color = "#FFFFFF";
                   }}
-                  onClick={() => navigate(`/courses/${course._id}`)}
                 >
                   View Details
                 </button>
 
-                <Link
-                  to="/courses/enrollment"
-                  state={{
-                    course: course.Course_title,
-                    courseId: course._id,
-                    price: course.Final_cost,
-                    originalPrice: course.Course_cost,
-                    discount: course.Discount,
+                <button
+                  onClick={(e) => handleBuyNow(e, course)}
+                  style={{
+                    width: isMobile ? "48%" : "48%",
+                    minWidth: isMobile ? "48%" : "48%",
+                    height: "44px",
+                    borderRadius: "8px",
+                    background: "#FFFFFFBF",
+                    color: "#000000",
+                    fontFamily: "Poppins, sans-serif",
+                    fontWeight: 700,
+                    fontSize: "14px",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
                   }}
-                  style={{ width: isMobile ? "48%" : "auto" }}
+                  onMouseEnter={(e) => (e.target.style.background = "#FFFFFF")}
+                  onMouseLeave={(e) =>
+                    (e.target.style.background = "#FFFFFFBF")
+                  }
                 >
-                  <button
-                    style={{
-                      width: "100%",
-                      minWidth: isMobile ? "100%" : "160px",
-                      height: "44px",
-                      borderRadius: "8px",
-                      background: "#FFFFFFBF",
-                      color: "#000000",
-                      fontFamily: "Poppins, sans-serif",
-                      fontWeight: 700,
-                      fontSize: "14px",
-                      border: "none",
-                      cursor: "pointer",
-                      transition: "all 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => (e.target.style.background = "#FFFFFF")}
-                    onMouseLeave={(e) =>
-                      (e.target.style.background = "#FFFFFFBF")
-                    }
-                  >
-                    Buy Now
-                  </button>
-                </Link>
+                  Buy Now
+                </button>
+                
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
-      {/* Toggle Button */}
+      {/* Toggle */}
+      {(!isMobile || showAll) && (
       <button
         onClick={() => setShowAll(!showAll)}
         style={{
-          marginTop: "30px",
+          marginTop: "0",
           width: "260px",
           height: "60px",
           borderRadius: "20px",
@@ -375,6 +424,7 @@ export default function LiveLearning() {
       >
         {showAll ? "Show Less" : "Explore All Courses"}
       </button>
+      )}
     </section>
   );
 }

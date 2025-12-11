@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const API = "http://localhost:3000/api/email";
-const API = "https://aspro-it-backend.onrender.com/api/email";
+const API = "http://localhost:3000/api/email";
+// const API = "https://aspro-it-backend.onrender.com/api/email";
 
 const config = {
   withCredentials: true,
@@ -23,4 +23,16 @@ export const sendContact = async (data) => {
 export const sendEnrollment = async (data) => {
   const res = await axios.post(`${API}/enrollment`, data, config);
   return res.data;
+};
+
+// Request OTP
+export const requestPasswordOtp = async (email) => {
+  const res = await axios.post(`${API}/request-email-otp`, { email }, config);
+  return res.data;
+};
+
+// Verify OTP
+export const verifyPasswordOtp = async (email, otp) => {
+  const res = await axios.post(`${API}/verify-email-otp`, { email, otp }, config);
+  return res.data;
 };

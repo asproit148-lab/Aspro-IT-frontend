@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ArrowLeft, Award, Clock, Video, Download } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PaymentFlow from "../components/PaymentFlow";
 import { applyCoupon } from "../api/coupon";
@@ -75,7 +75,7 @@ export default function Enroll() {
     
           if (res.success) {
             setDiscountPercent(res.discountPercent);
-            setFinalPrice(res.finalAmount);
+            setFinalPrice(Number(res.finalAmount).toFixed(2));
             setCouponError("");
           } else {
             setDiscountPercent(0); // Clear discount if previous one failed
@@ -136,7 +136,7 @@ export default function Enroll() {
             Mode_of_training: mode,
             batch_type: batch,
             phone_no: formData.phone,
-            final_price: finalPrice, // Include the final price
+            final_price: Number(finalPrice).toFixed(2),
             coupon_applied: coupon,
         };
 
@@ -209,7 +209,7 @@ export default function Enroll() {
                 }}
                 onClick={() => navigate(-1)}
             >
-                <ArrowLeft size={isMobile ? 24 : 36} color="white" />
+                <ChevronLeft size={isMobile ? 24 : 36} color="white" />
                 <h1 style={{ fontWeight: 600, fontSize: isMobile ? "24px" : "32px", lineHeight: "100%", margin: 0, color: "white" }}>
                     Enrollment Details
                 </h1>
@@ -409,41 +409,18 @@ export default function Enroll() {
                         </div>
                     </div>
 
-                    <p style={{ fontSize: "16px", fontWeight: 500, color: "#FF6969", marginBottom: "30px" }}>Sale ends in 24 hours!</p>
+                    <p style={{ fontSize: "16px", fontWeight: 500, color: "#FF6969", marginBottom: "10px" }}>Sale ends in 24 hours!</p>
 
-                    {/* Button */}
-                    <button
-                        style={{ 
-                            width: "100%", 
-                            height: isMobile ? "48px" : "54px", 
-                            borderRadius: "8px", 
-                            border: "1px solid #FFFFFF", 
-                            background: "transparent", 
-                            color: "#FFFFFF", 
-                            fontSize: isMobile ? "22px" : "28px", 
-                            fontWeight: 600, 
-                            cursor: "pointer", 
-                            transition: "all 0.3s ease" 
-                        }}
-                        onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0px 4px 16px 0px #FFFFFF40"; e.currentTarget.style.background = "rgba(255,255,255,0.25)"; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.background = "transparent"; }}
-                        onClick={handleSubmit}
-                        disabled={loading}
-                    >
-                        {loading ? "Submitting..." : "Proceed to Payment"}
-                    </button>
-
-                    <div style={{ width: "100%", borderTop: "1px solid white", opacity: "0.4", marginTop: isMobile ? "20px" : "40px", marginBottom: "20px" }}></div> 
-
+                    
                     {/* START OF NEW/MODIFIED COUPON SECTION */}
 
-                    <h3 style={{ fontSize: isMobile ? "18px" : "20px", fontWeight: 600, marginTop: "20px", marginBottom: "40px" }}>Apply Coupon</h3>
+                    <h3 style={{ fontSize: isMobile ? "18px" : "20px", fontWeight: 600, marginTop: "10px", marginBottom: "40px" }}>Apply Coupon</h3>
                     
                     {/* Coupon Input/Button */}
                     <div
                         style={{
                             width: "100%", 
-                            height: "44px",
+                            height: "48px",
                             borderRadius: "10px",
                             border: "1px solid #BFBFBF",
                             margin: "0 auto 10px auto", 
@@ -500,22 +477,47 @@ export default function Enroll() {
                                 Coupon Applied: <span style={{ color: "#4CAF50", fontWeight: 700 }}>{discountPercent}% OFF</span>
                             </p>
                             <p style={{ fontSize: "24px", fontWeight: 700, margin: "5px 0 0 0" }}>
-                                Final Price: ₹{finalPrice}
+                                Final Price: ₹{Number(finalPrice).toFixed(2)}
                             </p>
                         </div>
                     )}
 
-                    {/* 👆 END OF NEW/MODIFIED COUPON SECTION */}
+                    <div style={{ width: "100%", borderTop: "1px solid white", opacity: "0.4", marginTop: isMobile ? "20px" : "40px", marginBottom: "40px" }}></div> 
+
+
+                    {/* Button */}
+                    <button
+                        style={{ 
+                            width: "100%", 
+                            height: isMobile ? "48px" : "54px", 
+                            borderRadius: "8px", 
+                            border: "1px solid #FFFFFF", 
+                            background: "transparent", 
+                            color: "#FFFFFF", 
+                            fontSize: isMobile ? "22px" : "28px", 
+                            fontWeight: 600, 
+                            cursor: "pointer", 
+                            transition: "all 0.3s ease" 
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0px 4px 16px 0px #FFFFFF40"; e.currentTarget.style.background = "rgba(255,255,255,0.25)"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.background = "transparent"; }}
+                        onClick={handleSubmit}
+                        disabled={loading}
+                    >
+                        {loading ? "Submitting..." : "Proceed to Payment"}
+                    </button>
+
+
 
                 </div>
             </div>
 
-            {/* Payment Flow Modal - PASSING FINAL PRICE */}
+            {/* Payment Flow Modal*/}
             <PaymentFlow
                 open={showPaymentPopup}
                 onClose={() => setShowPaymentPopup(false)}
                 courseId={courseId}
-                price={finalPrice} // <-- Passing the final, calculated price
+                price={Number(finalPrice).toFixed(2)}
             />
         </div>
     );

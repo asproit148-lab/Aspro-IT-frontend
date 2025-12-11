@@ -23,12 +23,12 @@ export default function AdminRoute({ children }) {
         setLoading(false);
       }
     };
-
     checkAdmin();
   }, []);
 
+if (loading) return <div>Loading...</div>;
 
-  if (!isAdmin) return <Navigate to="/" replace />;
+if (!isAdmin) return <Navigate to="/" replace />;
 
   return children;
 }

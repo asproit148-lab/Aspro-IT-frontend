@@ -42,7 +42,7 @@ const HeroContainer = styled.section`
   @media (max-width: ${desktopBreakpoint}px) {
     width: 95%;
     top: 70px;
-    height: 90vh;
+    height: 80vh;
     padding: 0 15px;
   }
 `;

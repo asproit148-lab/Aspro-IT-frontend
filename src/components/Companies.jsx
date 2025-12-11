@@ -25,7 +25,9 @@ export default function Companies() {
 
   const sectionStyle = {
     width: isMobile ? "98%" : "100%",
-    height: isMobile ? "auto" : "650px",
+    height: "auto",
+    paddingBottom: "80px",
+    paddingTop: "80px",
     top: isMobile ? "70px" : "105px", 
     padding: isMobile ? "30px 15px 40px 15px" : "0", 
     background: "radial-gradient(149.8% 402.76% at 29.09% 23.7%, #101010 11.88%, #595959 100%)",
@@ -76,11 +78,13 @@ export default function Companies() {
   };
 
   const logoImageStyle = {
-    width: isMobile ? "100px" : "150px",
-    height: isMobile ? "100px" : "150px",
-    objectFit: "contain",
-    filter: "brightness(0.9)",
-  };
+  width: isMobile ? "100px" : "150px",
+  height: isMobile ? "100px" : "150px",
+  objectFit: "contain",
+  filter: "brightness(0.9)",
+  transition: "transform .25s ease, filter .25s",
+  cursor: "pointer",
+};
 
   return (
     <section style={sectionStyle}>
@@ -110,24 +114,28 @@ export default function Companies() {
       <div style={logosContainerStyle}>
         {/* Row 1: Walmart, Infosys, Samsung */}
         <div style={rowStyle}>
-          {allLogos.slice(0, 3).map((logo, i) => (
+          {allLogos.slice(0, 4).map((logo, i) => (
             <img
               key={i}
               src={logo}
               alt="company logo"
               style={logoImageStyle}
+              onMouseEnter={(e)=> e.currentTarget.style.transform="scale(1.15)"}
+              onMouseLeave={(e)=> e.currentTarget.style.transform="scale(1)"}
             />
           ))}
         </div>
 
         {/* Row 2: TCS, Wipro, HCL, Amazon, Atlassian */}
         <div style={rowStyle}>
-          {allLogos.slice(3).map((logo, i) => (
+          {allLogos.slice(4, 8).map((logo, i) => (
             <img
               key={i + 3} 
               src={logo}
               alt="company logo"
               style={logoImageStyle}
+              onMouseEnter={(e)=> e.currentTarget.style.transform="scale(1.15)"}
+              onMouseLeave={(e)=> e.currentTarget.style.transform="scale(1)"}
             />
           ))}
         </div>

@@ -10,6 +10,7 @@ import BlogPage from './components/BlogPage.jsx';
 import Resources from "./pages/Resources.jsx";
 import Certificates from './pages/Certificates.jsx';
 import PracticeQue from './pages/PracticeQue.jsx';
+import IndividualQue from './components/IndividualQue.jsx';
 import Contact from './pages/Contact.jsx';
 import Jobs from './pages/Jobs.jsx';
 import Internships from './pages/Internships.jsx';
@@ -19,6 +20,7 @@ import Enrollment from "./pages/Enrollment";
 import ConfirmedEnroll from './pages/ConfirmedEnroll';
 import PaymentFail from "./components/PaymentFail.jsx";
 
+import ChangePassword from './components/admin/ChangePassword.jsx';
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminCoupon from "./pages/AdminCoupon";
 import AdminBlog from "./pages/AdminBlog";
@@ -30,6 +32,7 @@ import AdminPracticeQue from './pages/AdminPracticeQue.jsx';
 import AdminJobs from './pages/AdminJobs.jsx';
 
 import ChatbotWidget from "./components/ChatbotWidget";
+import Courses from "./pages/Courses.jsx";
 
 export default function App() {
   const { user, loading } = useAuth();
@@ -47,6 +50,7 @@ export default function App() {
           {/* Admin Routes */}
           {user?.role === "admin" ? (
             <>
+              <Route path="/admin/change-password" element={<ChangePassword />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/coupon-management" element={<AdminCoupon />} />
               <Route path="/admin/blog-management" element={<AdminBlog />} />
@@ -66,14 +70,16 @@ export default function App() {
               <Route path="/about-us" element={<AboutUs />} />
               <Route path="/our-services" element={<Services />} />
               <Route path="/blogs" element={<Blogs />} />
-              <Route path="/blogs/:slug" element={<BlogPage />} />
+              <Route path="/blogs/:slug/:id" element={<BlogPage />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/certificates" element={<Certificates />} />
               <Route path="/practice-questions" element={<PracticeQue />} />
+              <Route path="/practice-questions/:courseSlug/:courseId" element={<IndividualQue />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/jobs" element={<Jobs />} />
               <Route path="/internships" element={<Internships />} />
-              <Route path="/courses/:courseSlug" element={<CourseDetails />} />
+              <Route path="/courses-all" element={<Courses />} />
+              <Route path="/courses/:slug/:id" element={<CourseDetails />} />
               <Route path="/courses/enrollment" element={<Enrollment />} />
               <Route path="/courses/enrollment-successful" element={<ConfirmedEnroll />} />
               <Route path="/courses/payment-failed" element={<PaymentFail />} />

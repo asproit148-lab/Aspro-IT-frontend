@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { useAuth } from "../context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
+import ForgotPasswordPopup from '../components/ForgotPasswordPopup';
 
 const PopupOverlay = styled.div`
   position: fixed;
@@ -96,6 +97,22 @@ const Input = styled.input`
   }
 `;
 
+const ForgotPasswordLink = styled.span`
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3f7ec8; 
+  cursor: pointer;
+  margin-top: -8px; 
+  margin-bottom: 8px; 
+  align-self: flex-start;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #5aa1e3;
+  }
+`;
+
 const Button = styled.button`
   width: 100%;
   height: 48px;
@@ -134,6 +151,17 @@ const SignupText = styled.p`
   }
 `;
 
+const ErrorMessage = styled.p`
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ff5555; /* Red color for errors */
+  margin-top: -8px; 
+  margin-bottom: 12px;
+  width: 100%;
+  text-align: center;
+`;
+
 export default function LoginPopup({ onClose, onSignup }) {
   const { signIn, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
@@ -141,92 +169,137 @@ export default function LoginPopup({ onClose, onSignup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(""); 
+  const [isForgotFlowOpen, setIsForgotFlowOpen] = useState(false);
 
   const handleLogin = async () => {
-    if (!email || !password) return alert("Please fill all fields");
+    setError(""); // Clear previous errors
+
+    if (!email || !password) {
+      return setError("Please fill all fields"); //  CHANGED from alert()
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) return alert("Invalid email format");
+    if (!emailRegex.test(email)) {
+      return setError("Invalid email format"); // CHANGED from alert()
+    }
 
-    if (password.length < 6) return alert("Password must be at least 6 characters");
+    if (password.length < 6) {
+      return setError("Password must be at least 6 characters"); // CHANGED from alert()
+    }
 
     try {
       setLoading(true);
       const res = await signIn({ email, password });
 
       if (!res.success) {
-        alert(res.message || "Login failed");
+        setError(res.message || "Login failed"); // ⬅️ CHANGED from alert()
         return;
       }
 
       if (res.user?.role === "admin") navigate("/admin/dashboard");
       else navigate("/");
 
-      alert("Login Successful!");
       onClose();
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.message || "Login failed"); // ⬅️ CHANGED from alert()
     } finally {
       setLoading(false);
     }
   };
+
+  const handleForgotPasswordClick = () => {
+    setIsForgotFlowOpen(true);
+    setError(""); // Clear any login error when starting the flow
+  };
+
+  const handlePasswordResetSuccess = () => {
+    setIsForgotFlowOpen(false); // Close the Forgot Password flow
+    // Optionally: Keep the LoginPopup open if you want the user to log in immediately
+    // If you want to close the whole stack and rely on the alert/toast: 
+    onClose(); 
+    alert("Password reset successful! You can now log in with your new password.");
+  };
 
   const handleGoogleSuccess = async (res) => {
     setLoading(true);
+    setError(""); // Clear error for Google login
     try {
       const response = await signInWithGoogle(res.credential);
-      if (!response.success) alert(response.message || "Google login failed");
+      if (!response.success) setError(response.message || "Google login failed"); // ⬅️ CHANGED from alert()
       else {
-        alert("Login Successful!");
+        alert("Login Successful!"); // Keeping success alert
         onClose();
       }
     } catch (e) {
-      alert("Google login failed");
+      setError("Google login failed"); // ⬅️ CHANGED from alert()
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <PopupOverlay>
-      <PopupContainer>
+  // Inside export default function LoginPopup({ onClose, onSignup }) { ...
 
-        <CloseButton onClick={onClose}>×</CloseButton>
+// ... (all functions) ...
 
-        <Title>Welcome Back</Title>
-        <SubTitle>Login to your account to continue</SubTitle>
+  // 1. Check if the Forgot Password flow should be open
+  if (isForgotFlowOpen) {
+    return (
+      <ForgotPasswordPopup 
+        onClose={() => setIsForgotFlowOpen(false)} // Closes the ForgotPasswordPopup
+        onResetSuccess={handlePasswordResetSuccess} // Calls the success handler defined above
+      />
+    );
+  }
 
-        <Label>Email Address</Label>
-        <Input
-          type="email"
-          placeholder="You@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+  // 2. Render the original Login form if the forgot flow is NOT open
+  return (
+    <PopupOverlay>
+      <PopupContainer>
 
-        <Label>Password</Label>
-        <Input
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <CloseButton onClick={onClose}>×</CloseButton>
 
-        <Button disabled={loading} onClick={handleLogin}>
-          {loading ? "Logging in..." : "Login"}
-        </Button>
+        <Title>Welcome Back</Title>
+        <SubTitle>Login to your account to continue</SubTitle>
 
-        <div style={{ marginTop: "12px" }}>
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={() => alert("Google login failed")}
-          />
-        </div>
+        <Label>Email Address</Label>
+        <Input
+          type="email"
+          placeholder="You@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-        <SignupText>
-          New user? <span onClick={onSignup}>Signup</span>
-        </SignupText>
-      </PopupContainer>
-    </PopupOverlay>
-  );
+        <Label>Password</Label>
+        <Input
+          type="password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+
+        {/* ⭐ NEW: Forgot Password Link */}
+        <ForgotPasswordLink onClick={handleForgotPasswordClick}>
+          Forgot password?
+        </ForgotPasswordLink>
+
+        <Button disabled={loading} onClick={handleLogin}>
+          {loading ? "Logging in..." : "Login"}
+        </Button>
+
+        <div style={{ marginTop: "12px" }}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setError("Google sign-in failed")}
+          />
+        </div>
+
+        <SignupText>
+          New user? <span onClick={onSignup}>Signup</span>
+        </SignupText>
+      </PopupContainer>
+    </PopupOverlay>
+  );
 }

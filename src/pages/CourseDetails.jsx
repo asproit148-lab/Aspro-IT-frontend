@@ -7,7 +7,7 @@ import CourseFooter from "../components/courses/CourseFooter";
 import { getCourseById } from "../api/course";
 
 export default function CourseDetails() {
-  const { courseSlug } = useParams();
+  const { slug, id } = useParams(); 
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -16,7 +16,7 @@ export default function CourseDetails() {
     const fetchCourse = async () => {
       try {
         setLoading(true);
-        const res = await getCourseById(courseSlug);
+        const res = await getCourseById(id);
         if (res.success) {
           const courseData = {
             _id: res.course._id,
@@ -25,6 +25,7 @@ export default function CourseDetails() {
             price: res.course.Final_cost,
             originalPrice: res.course.Course_cost,
             discount: res.course.Discount,
+            learnings: res.course.What_you_will_learn || [],
             skills: res.course.Skills || [],
             modules: res.course.Modules || [],
             faqs: res.course.FAQs || [],
@@ -42,7 +43,7 @@ export default function CourseDetails() {
     };
 
     fetchCourse();
-  }, [courseSlug]);
+  }, [id]);
 
   if (loading) {
     return (
@@ -74,7 +75,7 @@ export default function CourseDetails() {
           fontFamily: "Poppins, sans-serif",
         }}
       >
-        <h2>{error || `Course not found for "${courseSlug}" 😢`}</h2>
+        <h2>{error || `Course not found for "${slug}" 😢`}</h2>
       </div>
     );
   }
@@ -84,6 +85,7 @@ export default function CourseDetails() {
       <CourseHeader />
       <CourseInfo course={course} />
       <CourseModule
+        learnings={course.learnings}
         skills={course.skills}
         modules={course.modules}
         faqs={course.faqs}

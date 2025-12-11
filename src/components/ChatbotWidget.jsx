@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { askChatbot } from "../api/chatbot";
 import whatsappLogo from "../assets/whatsapp.png";
+import chatBot from '../assets/chatBot.png';
 
 export default function ChatbotWidget() {
   const [open, setOpen] = useState(false);
@@ -11,7 +12,6 @@ export default function ChatbotWidget() {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
 
-  // Scroll to bottom whenever messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -43,38 +43,14 @@ export default function ChatbotWidget() {
 
   return (
     <>
-      {/* WhatsApp Floating Button */}
-      {!open && (
-        <button
-          onClick={() => window.open("https://wa.me/919128444000", "_blank")}
-          style={{
-            position: "fixed",
-            bottom: "100px",
-            right: "24px",
-            width: "60px",
-            height: "60px",
-            borderRadius: "50%",
-            background: "#25D366",
-            border: "none",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-            cursor: "pointer",
-            zIndex: 9999,
-          }}
-        >
-          <img src={whatsappLogo} alt="WhatsApp" style={{ width: "56px", height: "56px" }} />
-        </button>
-      )}
 
-      {/* Chat Icon Button */}
+      {/* Chat Open Button */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
           style={{
             position: "fixed",
-            bottom: "24px",
+            bottom: "100px",
             right: "24px",
             width: "60px",
             height: "60px",
@@ -88,24 +64,52 @@ export default function ChatbotWidget() {
             boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
             cursor: "pointer",
             zIndex: 9999,
+            overflow: "hidden",
           }}
         >
-          <MessageCircle size={30} />
+          <img src={chatBot} alt="WhatsApp" style={{ width: "64px", height: "64px" }} />
         </button>
       )}
 
-      {/* Chatbox */}
+      {/* WhatsApp Button */}
+      {!open && (
+        <button
+          onClick={() => window.open("https://wa.me/919128444000", "_blank")}
+          style={{
+            position: "fixed",
+            bottom: "24px",
+            right: "24px",
+            width: "60px",
+            height: "60px",
+            borderRadius: "50%",
+            background: "#25D366",
+            border: "none",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+            cursor: "pointer",
+            zIndex: 9999,
+            overflow: "hidden",
+          }}
+        >
+          <img src={whatsappLogo} alt="WhatsApp" style={{ width: "64px", height: "64px" }} />
+        </button>
+      )}
+
+      {/* Chat Window */}
       {open && (
         <div
           style={{
             position: "fixed",
             bottom: "24px",
             right: "24px",
-            width: "340px",
-            height: "420px",
+            width: "350px",
+            maxWidth: "92vw",
+            height: "450px",
             background: "#fff",
-            borderRadius: "16px",
-            boxShadow: "0 6px 20px rgba(0,0,0,0.2)",
+            borderRadius: "18px",
+            boxShadow: "0 6px 22px rgba(0,0,0,0.25)",
             display: "flex",
             flexDirection: "column",
             zIndex: 9999,
@@ -117,47 +121,43 @@ export default function ChatbotWidget() {
               padding: "14px",
               background: "#3D96E0",
               color: "#fff",
-              borderTopLeftRadius: "16px",
-              borderTopRightRadius: "16px",
+              borderTopLeftRadius: "18px",
+              borderTopRightRadius: "18px",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               fontWeight: "600",
             }}
           >
-            Chat with us
-            <X
-              size={20}
-              style={{ cursor: "pointer" }}
-              onClick={() => setOpen(false)}
-            />
+            Customer Support 💬
+            <X size={20} style={{ cursor: "pointer" }} onClick={() => setOpen(false)} />
           </div>
 
-          {/* Messages Area */}
+          {/* Chat Messages */}
           <div
             style={{
               flex: 1,
               padding: "12px",
               overflowY: "auto",
-              background: "#f8f8f8",
+              background: "#f7f9fc",
             }}
           >
-            {messages.map((msg, idx) => (
+            {messages.map((msg, i) => (
               <div
-                key={idx}
+                key={i}
                 style={{
                   display: "flex",
                   justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
-                  marginBottom: "8px",
+                  marginBottom: "10px",
                 }}
               >
                 <div
                   style={{
                     maxWidth: "70%",
-                    padding: "8px 12px",
+                    padding: "9px 13px",
                     borderRadius: "12px",
-                    background: msg.sender === "user" ? "#3D96E0" : "#e0e0e0",
-                    color: msg.sender === "user" ? "#fff" : "#000",
+                    background: msg.sender === "user" ? "#3D96E0" : "#E6E6E6",
+                    color: msg.sender === "user" ? "white" : "black",
                     fontSize: "14px",
                   }}
                 >
@@ -168,7 +168,7 @@ export default function ChatbotWidget() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Box */}
+          {/* Input */}
           <div
             style={{
               padding: "10px",
@@ -179,7 +179,7 @@ export default function ChatbotWidget() {
           >
             <input
               type="text"
-              placeholder="Type a message..."
+              placeholder="Type your message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -201,6 +201,7 @@ export default function ChatbotWidget() {
                 border: "none",
                 borderRadius: "8px",
                 cursor: "pointer",
+                fontWeight: "600",
               }}
             >
               Send

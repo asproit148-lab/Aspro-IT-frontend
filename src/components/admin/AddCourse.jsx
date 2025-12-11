@@ -14,10 +14,14 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
 
   // Image
   const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState(existingCourse?.imageUrl || ""); // FIXED
+  const [imageUrl, setImageUrl] = useState(existingCourse?.imageUrl || "");   
 
   // Course Type 
-  const [mode, setMode] = useState(existingCourse?.Course_type || "Offline"); // FIXED
+  const [mode, setMode] = useState(existingCourse?.Course_type || "Offline"); 
+
+  // WHAT YOU WILL LEARN
+  const [learnings, setLearnings] = useState(existingCourse?.What_you_will_learn || []); 
+  const [learningInput, setLearningInput] = useState("");
 
   // Skills
   const [skills, setSkills] = useState(existingCourse?.Skills || []);
@@ -138,6 +142,16 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
     setSkills((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const addLearning = () => {
+    if (learningInput.trim() === "") return;
+    setLearnings((prev) => [...prev, learningInput.trim()]);
+    setLearningInput("");
+};
+
+const removeLearning = (index) => {
+    setLearnings((prev) => prev.filter((_, i) => i !== index));
+};
+
   const handleSave = async () => {
   setError("");
 
@@ -148,7 +162,7 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
   formData.append("Course_type", mode);
   formData.append("Course_cost", cost);
   formData.append("Discount", discount);
-
+  formData.append("What_you_will_learn", JSON.stringify(learnings));
   formData.append("Skills", JSON.stringify(skills));
   formData.append("Modules", JSON.stringify(modules));
   formData.append("FAQs", JSON.stringify(faqs));
@@ -163,17 +177,15 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
     let res;
 
     if (existingCourse) {
-      // 🚀 UPDATE COURSE
       res = await updateCourse(existingCourse._id, formData);
       alert("Course updated successfully!");
     } else {
-      // ➕ ADD NEW COURSE
       res = await addCourse(formData);
       alert("Course added successfully!");
     }
 
     if (onSave && res.course) {
-      onSave(res.course); // updated or added
+      onSave(res.course); 
     }
 
     onClose();
@@ -184,11 +196,12 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
   }
 };
 
-  const steps = ["Basic Info", "Curriculum", "Pricing", "FAQs & Skills", "Preview"];
+  const steps = ["Basic Info", "Curriculum", "Pricing", "FAQs", "Preview"];
 
   const boxStyle = {
     width: "820px",
-    maxHeight: "80vh",
+    height: "fit-content", 
+    maxHeight: "90vh",
     overflowY: "auto",
     background: "#1B1B1B",
     borderRadius: "20px",
@@ -435,25 +448,6 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
                     </div>
                   ))}
                 </div>
-
-                {/* Small cancel button */}
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "auto" }}>
-                  <button
-                    onClick={() => onClose && onClose()}
-                    style={{
-                      width: "120px",
-          height: "44px",
-          borderRadius: "12px",
-          background: "#414141",
-          color: "#FFFFFF",
-          border: "none",
-          cursor: "pointer",
-          fontFamily: "Poppins, sans-serif",
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
               </div>
             </div>
           )}
@@ -536,105 +530,190 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
               </div>
 
               {/* Modules list */}
-              <div style={{ marginTop: "12px" }}>
-                <h4 style={{ color: "#FFFFFF", fontFamily: "Poppins, sans-serif" }}>Added Modules</h4>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "8px" }}>
-                  {modules.length === 0 && <div style={{ color: "#C9C9C9" }}>No modules added yet.</div>}
-                  {modules.map((m) => (
-                    <div key={m.id} style={{ padding: "10px", background: "#222222", borderRadius: "10px", display: "flex", justifyContent: "space-between", gap: "12px" }}>
-                      <div>
-                        <div style={{ color: "#FFFFFF", fontWeight: 600 }}>{m.title}</div>
-                        <div style={{ color: "#C9C9C9", marginTop: "6px", fontSize: "13px" }}>
-  {m.module_description}
+              <div style={{ marginTop: "12px" }}>
+                <h4 style={{ color: "#FFFFFF", fontFamily: "Poppins, sans-serif" }}>Added Modules</h4>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "8px" }}>
+                  {modules.length === 0 && <div style={{ color: "#C9C9C9" }}>No modules added yet.</div>}
+                  {modules.map((m) => (
+                    <div key={m.id} style={{ padding: "10px", background: "#222222", borderRadius: "10px", display: "flex", justifyContent: "space-between", gap: "12px" }}>
+                      <div>
+                        <div style={{ color: "#FFFFFF", fontWeight: 600 }}>{m.module_name}</div> {/* ⬅️ FIXED: Used m.module_name instead of m.title */}
+                        <div style={{ color: "#C9C9C9", marginTop: "6px", fontSize: "13px" }}>
+  {m.module_description}
 </div>
 
-                      </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <button
-                          onClick={() => removeModule(m.id)}
-                          title="Remove module"
-                          style={{
-                            height: "36px",
-                            width: "40px",
-                            borderRadius: "8px",
-                            background: "#414141",
-                            color: "#fff",
-                            border: "none",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: 0,
-                          }}
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <button
+                          onClick={() => removeModule(m.id)}
+                          title="Remove module"
+                          style={{
+                            height: "36px",
+                            width: "40px",
+                            borderRadius: "8px",
+                            background: "#414141",
+                            color: "#fff",
+                            border: "none",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: 0,
+                          }}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 
           {/* STEP 3 - PRICING */}
-          {step === 3 && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              <div style={{ display: "flex", gap: "12px" }}>
-                <input
-                  type="text"
-                  placeholder="Course Cost *"
-                  value={cost}
-                  onChange={(e) => setCost(e.target.value)}
-                  style={{
-                    flex: 1,
-                    height: "46px",
-                    borderRadius: "10px",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    background: "#2E2E2E",
-                    color: "#FFFFFF",
-                    paddingLeft: "12px",
-                    fontFamily: "Poppins, sans-serif",
-                    outline: "none",
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Offer / Discount (%)"
-                  value={discount}
-                  onChange={(e) => setDiscount(e.target.value)}
-                  style={{
-                    width: "220px",
-                    height: "46px",
-                    borderRadius: "10px",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    background: "#2E2E2E",
-                    color: "#FFFFFF",
-                    paddingLeft: "12px",
-                    fontFamily: "Poppins, sans-serif",
-                    outline: "none",
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Final Cost"
-                  value={finalCost}
-                  readOnly
-                  style={{
-                    width: "180px",
-                    height: "46px",
-                    borderRadius: "10px",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    background: "#141414",
-                    color: "#FFFFFF",
-                    paddingLeft: "12px",
-                    fontFamily: "Poppins, sans-serif",
-                    outline: "none",
-                  }}
-                />
-              </div>
-            </div>
-          )}
+          {step === 3 && (
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div style={{ display: "flex", gap: "12px" }}>
+                <input
+                  type="text"
+                  placeholder="Course Cost *"
+                  value={cost}
+                  onChange={(e) => setCost(e.target.value)}
+                  style={{
+                    flex: 1,
+                    height: "46px",
+                    borderRadius: "10px",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                    background: "#2E2E2E",
+                    color: "#FFFFFF",
+                    paddingLeft: "12px",
+                    fontFamily: "Poppins, sans-serif",
+                    outline: "none",
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Offer / Discount (%)"
+                  value={discount}
+                  onChange={(e) => setDiscount(e.target.value)}
+                  style={{
+                    width: "220px",
+                    height: "46px",
+                    borderRadius: "10px",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                    background: "#2E2E2E",
+                    color: "#FFFFFF",
+                    paddingLeft: "12px",
+                    fontFamily: "Poppins, sans-serif",
+                    outline: "none",
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Final Cost"
+                  value={finalCost}
+                  readOnly
+                  style={{
+                    width: "180px",
+                    height: "46px",
+                    borderRadius: "10px",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                    background: "#141414",
+                    color: "#FFFFFF",
+                    paddingLeft: "12px",
+                    fontFamily: "Poppins, sans-serif",
+                    outline: "none",
+                  }}
+                />
+              </div>
+              
+              {/* 🟢 START: What You Will Learn Section (Moved to Step 3) */}
+              <div style={{ width: "100%", marginTop: "8px" }}>
+                <h4 style={{ color: "#FFFFFF", fontFamily: "Poppins, sans-serif", margin: "0 0 12px 0" }}>
+                  What You Will Learn
+                </h4>
+
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <input
+                    type="text"
+                    placeholder="Learning Objective"
+                    value={learningInput}
+                    onChange={(e) => setLearningInput(e.target.value)}
+                    style={{
+                      flex: 1,
+                      height: "46px",
+                      borderRadius: "10px",
+                      border: "1px solid rgba(255,255,255,0.06)",
+                      background: "#2E2E2E",
+                      color: "#FFFFFF",
+                      paddingLeft: "12px",
+                      fontFamily: "Poppins, sans-serif",
+                      outline: "none",
+                    }}
+                  />
+                  <button
+                    onClick={addLearning}
+                    style={{
+                      width: "110px",
+                      height: "46px",
+                      borderRadius: "10px",
+                      background: "#2B6EF0",
+                      color: "#FFFFFF",
+                      border: "none",
+                      cursor: "pointer",
+                      fontFamily: "Poppins, sans-serif",
+                      fontWeight: 600,
+                    }}
+                  >
+                    + Add
+                  </button>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "12px" }}>
+                  {learnings.length === 0 && (
+                    <div style={{ color: "#C9C9C9", fontFamily: "Poppins, sans-serif" }}>
+                      No learning objectives added yet.
+                    </div>
+                  )}
+                  {learnings.map((l, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        padding: "10px",
+                        background: "#222222",
+                        borderRadius: "10px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span style={{ color: "#FFFFFF", fontFamily: "Poppins, sans-serif" }}>{l}</span>
+                      <button
+                        onClick={() => removeLearning(i)}
+                        title="Remove objective"
+                        style={{
+                          height: "30px",
+                          width: "36px",
+                          borderRadius: "8px",
+                          background: "#414141",
+                          color: "#fff",
+                          border: "none",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: 0,
+                        }}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* STEP 4 - FAQS */}
           {step === 4 && (
@@ -780,6 +859,18 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
                 </div>
 
                 <div>
+                    <h4 style={{ color: "#FFFFFF" }}>Learning Objectives</h4>
+                    <div style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "8px" }}>
+                        {learnings.length === 0 && <div style={{ color: "#C9C9C9" }}>No learning objectives added.</div>}
+                        {learnings.map((l, i) => (
+                            <div key={i} style={{ background: "#222222", padding: "10px", borderRadius: "8px" }}>
+                                <div style={{ color: "#C9C9C9" }}>• {l}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div>
                   <h4 style={{ color: "#FFFFFF" }}>FAQs</h4>
                   <div style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "8px" }}>
                     {faqs.length === 0 && <div style={{ color: "#C9C9C9" }}>No FAQs added.</div>}
@@ -849,50 +940,91 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
         </div>
 
         {/* Bottom navigation (consistent placement) */}
-        {step !== 5 && (
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      marginTop: "6px",
-    }}
-  >
-    {/* Hide Back button on Step 1 */}
-    {step !== 1 && (
-      <button
-        onClick={back}
+{step !== 5 && (
+    <div
         style={{
-          width: "120px",
-          height: "44px",
-          borderRadius: "12px",
-          background: "#414141",
-          color: "#FFFFFF",
-          border: "none",
-          cursor: "pointer",
-          fontFamily: "Poppins, sans-serif",
+            display: "flex",
+            justifyContent: step === 1 ? "space-between" : "flex-end", // Align right if no Back/Cancel
+            marginTop: "6px",
+            // Use this div for the main actions in Step 1
+            // In steps 2-4, the buttons below handle alignment.
         }}
-      >
-        Back
-      </button>
-    )}
-
-    <button
-      onClick={next}
-      style={{
-        width: "120px",
-        height: "44px",
-        borderRadius: "12px",
-        background: "#2B6EF0",
-        color: "#FFFFFF",
-        border: "none",
-        cursor: "pointer",
-        fontFamily: "Poppins, sans-serif",
-        fontWeight: 600,
-      }}
     >
-      Next
-    </button>
-  </div>
+        {/* 🆕 START: Step 1 buttons (Cancel/Next) */}
+        {step === 1 && (
+            <>
+                <button
+                    onClick={() => onClose && onClose()}
+                    style={{
+                        width: "120px",
+                        height: "44px",
+                        borderRadius: "12px",
+                        background: "#414141",
+                        color: "#FFFFFF",
+                        border: "none",
+                        cursor: "pointer",
+                        fontFamily: "Poppins, sans-serif",
+                    }}
+                >
+                    Cancel
+                </button>
+                <button
+                    onClick={next}
+                    style={{
+                        width: "120px",
+                        height: "44px",
+                        borderRadius: "12px",
+                        background: "#2B6EF0",
+                        color: "#FFFFFF",
+                        border: "none",
+                        cursor: "pointer",
+                        fontFamily: "Poppins, sans-serif",
+                        fontWeight: 600,
+                    }}
+                >
+                    Next
+                </button>
+            </>
+        )}
+        {/* 🆕 END: Step 1 buttons */}
+
+        {/* Default navigation for Steps 2-4 */}
+        {step > 1 && step < 5 && (
+            <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+                <button
+                    onClick={back}
+                    style={{
+                        width: "120px",
+                        height: "44px",
+                        borderRadius: "12px",
+                        background: "#414141",
+                        color: "#FFFFFF",
+                        border: "none",
+                        cursor: "pointer",
+                        fontFamily: "Poppins, sans-serif",
+                    }}
+                >
+                    Back
+                </button>
+                <button
+                    onClick={next}
+                    style={{
+                        width: "120px",
+                        height: "44px",
+                        borderRadius: "12px",
+                        background: "#2B6EF0",
+                        color: "#FFFFFF",
+                        border: "none",
+                        cursor: "pointer",
+                        fontFamily: "Poppins, sans-serif",
+                        fontWeight: 600,
+                    }}
+                >
+                    Next
+                </button>
+            </div>
+        )}
+    </div>
 )}
       </div>
     </div>

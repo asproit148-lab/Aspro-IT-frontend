@@ -1,9 +1,135 @@
 import React, { useState, useEffect } from "react";
+import styled from "@emotion/styled";
+import { ChevronLeft } from "lucide-react";
 import Header from "../components/Header";
 import bg from "../assets/homeBg.jpg";
 import { getAllResources } from '../api/resource';
+import Footer from '../components/Footer';
 
-const desktopBreakpoint = 992; 
+const desktopBreakpoint = 992;
+
+/* STYLED COMPONENTS */
+
+const PageContainer = styled.div`
+  background-color: black;
+  color: white;
+  font-family: Poppins, sans-serif;
+`;
+
+const MainContent = styled.div`
+  width: ${props => props.$isMobile ? "90%" : "100%"};
+  /* OPTIMIZATION: Use props for dynamic margin and padding */
+  margin-top: ${props => props.$isMobile ? "70px" : "105px"};
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  padding: ${props => props.$isMobile ? "20px 20px 40px 20px" : "20px 120px 60px 120px"};
+  gap: ${props => props.$isMobile ? "20px" : "30px"};
+  background-image: url(${bg});
+  color: #FFFFFF;
+  background-size: cover;
+  background-position: center;
+`;
+
+const ContentHeader = styled.div`
+  display: flex;
+  flex-direction: row; 
+  align-items: center;
+  position: relative;
+  padding-left: ${props => props.$isMobile ? "0" : "0"}; 
+  justify-content: ${props => props.$isMobile ? "center" : "flex-start"};
+`;
+
+const BackButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s;
+  position: absolute; 
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); 
+  left: ${props => props.$isMobile ? '0' : '-50px'};
+  margin-bottom: 0;
+  z-index: 10;
+`;
+
+
+const Heading = styled.h1`
+  font-size: ${props => props.$isMobile ? "36px" : "48px"};
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0;
+  text-align: ${props => props.$isMobile ? "center" : "left"};
+  /* Ensure alignment for desktop layout */
+  width: ${props => props.$isMobile ? '100%' : 'auto'}; 
+`;
+
+const ResourcesListContainer = styled.div` 
+  display: flex; 
+  flex-direction: column; 
+  gap: 20px; 
+  width: ${props => props.$isMobile ? "100%" : "80%"}; 
+  margin: ${props => props.$isMobile ? "0 auto" : "0"}; 
+`;
+
+const ResourceItem = styled.div`
+  display: flex;
+  flex-direction: ${props => props.$isMobile ? "column" : "row"};
+  justify-content: space-between;
+  align-items: ${props => props.$isMobile ? "flex-start" : "center"};
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: ${props => props.$isMobile ? "16px" : "16px 24px"};
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+  gap: ${props => props.$isMobile ? "12px" : "0"};
+`;
+
+const ResourceTitleContainer = styled.div`
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px; 
+  flex: ${props => props.$isMobile ? "none" : 1};
+`;
+
+const ResourceTitle = styled.span`
+  font-size: 18px; 
+  font-weight: 500;
+`;
+
+const ResourceDescription = styled.span`
+  font-size: 14px; 
+  color: #B0B0B0;
+`;
+
+const DownloadButton = styled.button`
+  width: ${props => props.$isMobile ? "100%" : "180px"};
+  height: 45px;
+  border-radius: 25px;
+  border: none;
+  background: #00A8FF;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  
+  /* OPTIMIZATION: Abstracted hover logic */
+  &:hover {
+    background: #0090DD;
+  }
+`;
+
+const FallbackText = styled.p`
+  font-size: 18px;
+  text-align: ${props => props.$isMobile ? "center" : "left"};
+`;
 
 export default function Resources() {
   const [resources, setResources] = useState([]);
@@ -64,123 +190,65 @@ export default function Resources() {
 
     } catch (error) {
       console.error("Error downloading resource:", error);
+      // Retain alert for failure as per original logic
       alert("Failed to download resource. Please try again.");
     }
   };
-
   
-  const mainContentStyle = {
-    width: isMobile ? "90%" : "100%", 
-    marginTop: isMobile ? "70px" : "105px", 
-    minHeight: "600px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    padding: isMobile ? "20px 20px 40px 20px" : "20px 120px 60px 120px",
-    gap: isMobile ? "20px" : "30px",
-    backgroundImage: `url(${bg})`,  
-    color: "#FFFFFF",
-    fontFamily: "Poppins, sans-serif",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+  // Back button handler (simple history back)
+  const goBack = () => {
+    window.history.back();
   };
-
-  const headingStyle = {
-    position: "relative",
-    fontSize: isMobile ? "36px" : "48px",
-    fontWeight: 600,
-    color: "#FFFFFF",
-    marginTop: "0",
-    marginBottom: 0,
-    textAlign: isMobile ? "center" : "left",
-  };
-
-  const resourcesListContainerStyle = { 
-    display: "flex", 
-    flexDirection: "column", 
-    gap: "20px", 
-    width: isMobile ? "100%" : "80%", 
-    margin: isMobile ? "0 auto" : "0", 
-  };
-  
-  const resourceItemStyle = {
-    display: "flex",
-    flexDirection: isMobile ? "column" : "row",
-    justifyContent: "space-between",
-    alignItems: isMobile ? "flex-start" : "center",
-    background: "rgba(255, 255, 255, 0.1)",
-    borderRadius: "12px",
-    padding: isMobile ? "16px" : "16px 24px",
-    backdropFilter: "blur(6px)",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-    transition: "all 0.3s ease",
-    gap: isMobile ? "12px" : "0", 
-  };
-  
-  const resourceTitleContainerStyle = {
-    display: "flex", 
-    flexDirection: "column", 
-    gap: "8px", 
-    flex: isMobile ? "none" : 1,
-  };
-  
-  const downloadButtonStyle = {
-    width: isMobile ? "100%" : "180px",
-    height: "45px",
-    borderRadius: "25px",
-    border: "none",
-    background: "#00A8FF",
-    color: "#FFFFFF",
-    fontSize: "16px",
-    fontWeight: 600,
-    cursor: "pointer",
-    transition: "all 0.3s ease",
-  };
-  
 
   return (
-    <div style={{ backgroundColor: "black", color: "white", fontFamily: "Poppins, sans-serif" }}>
+    <PageContainer>
       <Header />
 
-      <div style={mainContentStyle}>
+      <MainContent $isMobile={isMobile}>
         
-        {/* Heading */}
-        <h1 style={headingStyle}>
-          Download Notes
-        </h1>
+        {/* Heading with Back Button */}
+        <ContentHeader $isMobile={isMobile}>
+          <BackButton onClick={goBack} $isMobile={isMobile}>
+            {/* Back Arrow Icon */}
+            <ChevronLeft size={isMobile ? 24 : 32} /> 
+          </BackButton>
+          <Heading $isMobile={isMobile}>
+            Download Notes
+          </Heading>
+        </ContentHeader>
 
         {/* Resources List */}
-        <div style={resourcesListContainerStyle}>
+        <ResourcesListContainer $isMobile={isMobile}>
           {loading ? (
-            <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>Loading resources...</p>
+            <FallbackText $isMobile={isMobile}>Loading resources...</FallbackText>
           ) : resources.length === 0 ? (
-            <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>No resources available</p>
+            <FallbackText $isMobile={isMobile}>No resources available</FallbackText>
           ) : (
             resources.map((resource) => (
-              <div
+              <ResourceItem
                 key={resource._id}
-                style={resourceItemStyle}
+                $isMobile={isMobile}
               >
-                <div style={resourceTitleContainerStyle}>
-                  <span style={{ fontSize: "18px", fontWeight: 500 }}>{resource.title}</span>
+                <ResourceTitleContainer $isMobile={isMobile}>
+                  <ResourceTitle>{resource.title}</ResourceTitle>
                   {resource.description && (
-                    <span style={{ fontSize: "14px", color: "#B0B0B0" }}>{resource.description}</span>
+                    <ResourceDescription>{resource.description}</ResourceDescription>
                   )}
-                </div>
+                </ResourceTitleContainer>
 
-                <button
+                <DownloadButton
                   onClick={() => handleDownload(resource)}
-                  style={downloadButtonStyle}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "#0090DD")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "#00A8FF")}
+                  $isMobile={isMobile}
+                  // OPTIMIZATION: Removed onMouseEnter/onMouseLeave inline styles
                 >
                   Download
-                </button>
-              </div>
+                </DownloadButton>
+              </ResourceItem>
             ))
           )}
-        </div>
-      </div>
-    </div>
+        </ResourcesListContainer>
+      </MainContent>
+      <Footer />
+    </PageContainer>
   );
 }

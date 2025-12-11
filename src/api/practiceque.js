@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const API = "http://localhost:3000/api/questions";
-const API = "https://aspro-it-backend.onrender.com/api/questions";
+const API = "http://localhost:3000/api/questions";
+// const API = "https://aspro-it-backend.onrender.com/api/questions";
 
 const config = {
   withCredentials: true,
@@ -19,6 +19,12 @@ export const getAllQuestions = async () => {
   const res = await axios.get(`${API}/all-questions`, config);
   // Returns the array of questions directly
   return res.data.questions;
+};
+
+// Get by category
+export const getQuestionsByCourseId = async (courseId) => {
+  const res = await axios.get(`${API}/questions-by-course/${courseId}`, config);
+  return res.data.questions;
 };
 
 //Get Single

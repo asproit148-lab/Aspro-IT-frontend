@@ -1,191 +1,289 @@
 import React, { useState, useEffect } from "react";
+import styled from "@emotion/styled";
+import { ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom"; 
 import Header from "../components/Header";
 import bg from "../assets/homeBg.jpg";
-import { getAllQuestions } from "../api/practiceque";
+import { getAllCourses } from "../api/course"; 
+import {getAllQuestions} from '../api/practiceque';
+import Footer from '../components/Footer';
 
 const desktopBreakpoint = 992;
+const slugify = (title) => title.trim().toLowerCase().replace(/\s+/g, "-");
+
+/* STYLED COMPONENTS */
+
+const PageContainer = styled.div`
+  background-color: black;
+  color: white;
+  font-family: Poppins, sans-serif;
+`;
+
+const MainContent = styled.div`
+  width: ${props => props.$isMobile ? "90%" : "100%"};
+  /* OPTIMIZATION: Use props for dynamic margin and padding */
+  margin-top: ${props => props.$isMobile ? "70px" : "105px"};
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  padding: ${props => props.$isMobile ? "20px 20px 40px 20px" : "20px 120px 60px 120px"};
+  gap: ${props => props.$isMobile ? "20px" : "30px"};
+  background-image: url(${bg});
+  color: #FFFFFF;
+  background-size: cover;
+  background-position: center;
+`;
+
+const ContentHeader = styled.div`
+  display: flex;
+  flex-direction: row; 
+  align-items: center;
+  position: relative;
+  padding-left: ${props => props.$isMobile ? "0" : "0"}; 
+  justify-content: ${props => props.$isMobile ? "center" : "flex-start"};
+`;
+
+const BackButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s;
+  position: absolute; 
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); 
+  left: ${props => props.$isMobile ? '0' : '-50px'};
+  margin-bottom: 0;
+  z-index: 10;
+`;
+
+const Heading = styled.h1`
+  font-size: ${props => props.$isMobile ? "30px" : "48px"};
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0;
+  text-align: ${props => props.$isMobile ? "center" : "left"};
+  /* Ensure alignment for desktop layout */
+  width: ${props => props.$isMobile ? '100%' : 'auto'}; 
+`;
+
+const QuestionsListContainer = styled.div` 
+  display: flex; 
+  flex-direction: column; 
+  gap: 20px; 
+  width: ${props => props.$isMobile ? "100%" : "80%"}; 
+  margin: ${props => props.$isMobile ? "0 auto" : "0"}; 
+`;
+
+const CourseItem = styled.div`
+  display: flex;
+  flex-direction: ${props => props.$isMobile ? "column" : "row"};
+  justify-content: space-between;
+  align-items: ${props => props.$isMobile ? "flex-start" : "center"};
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: ${props => props.$isMobile ? "16px" : "16px 24px"};
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+  gap: ${props => props.$isMobile ? "12px" : "0"};
+`;
+
+const TitleContainer = styled.div`
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px; 
+  flex: ${props => props.$isMobile ? "none" : 1};
+`;
+
+const CourseTitle = styled.span`
+  font-size: 18px; 
+  font-weight: 500;
+`;
+
+const CourseDescription = styled.span`
+  font-size: 14px; 
+  color: #B0B0B0;
+`;
+
+const QuestionCount = styled.span`
+    font-size: 14px;
+    font-weight: 500;
+    color: #4CAF50; /* Green */
+    background: rgba(76, 175, 80, 0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-left: ${props => props.$isMobile ? '0' : '10px'};
+`;
+
+const GetQuestionsButton = styled.button`
+  width: ${props => props.$isMobile ? "100%" : "180px"};
+  height: 45px;
+  border-radius: 25px;
+  border: none;
+  background: #00A8FF;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  
+  /* OPTIMIZATION: Abstracted hover logic */
+  &:hover {
+    background: #0090DD;
+  }
+`;
+
+const FallbackText = styled.p`
+  font-size: 18px;
+  text-align: ${props => props.$isMobile ? "center" : "left"};
+`;
 
 export default function PracticeQue() {
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < desktopBreakpoint);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < desktopBreakpoint);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const data = await getAllQuestions();
-        setQuestions(data || []);
-      } catch (error) {
-        console.error("Error fetching questions:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  useEffect(() => {
+    const fetchCoursesAndCounts = async () => {
+      try {
+        // 1. Fetch all courses
+        const coursesRes = await getAllCourses();
+        let courseData = Array.isArray(coursesRes.courses) ? coursesRes.courses : (Array.isArray(coursesRes) ? coursesRes : []);
+        courseData = courseData.filter(c => c.Course_title);
+        
+        // 2. Fetch ALL questions
+        const questionsRes = await getAllQuestions();
+        const allQuestions = Array.isArray(questionsRes) ? questionsRes : (Array.isArray(questionsRes.questions) ? questionsRes.questions : []);
 
-    fetchQuestions();
-  }, []);
+        // =============== START DEBUG LOGGING ===============
+        console.log("--- DEBUG START ---");
 
-  // PracticeQue.jsx - CORRECTED handleDownload function
-
-  const handleDownload = async (question) => {
-    try {
-      // Ensure VITE_API_URL is correctly defined (e.g., in .env file)
-      const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
-      const downloadUrl = `${baseUrl}/api/questions/download-question/${question._id}`;
-      
-      const response = await fetch(downloadUrl, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/pdf'
+        // Log the ID format of the first course
+        if (courseData.length > 0) {
+            console.log("Course ID (courseData[0]._id):", courseData[0]._id);
+            if (courseData[0]._id) {
+                console.log("Course ID (toString()):", courseData[0]._id.toString());
+            }
+        } else {
+            console.log("No course data fetched.");
         }
-      });
 
-      // 2. Robust error checking: Check if the response is OK (200-299)
-      if (!response.ok) {
-        // If the backend sent a JSON error (e.g., 401/403), we try to read it.
-        const contentType = response.headers.get("content-type");
-        if (contentType && contentType.indexOf("application/json") !== -1) {
-          const errorData = await response.json();
-          throw new Error(`Download failed: ${response.status} - ${errorData.message || 'Authentication error'}`);
-        }
-        throw new Error(`Download failed with status: ${response.status}`);
+        // Log the category ID format of the first question
+        if (allQuestions.length > 0) {
+            console.log("Question Category ID (allQuestions[0].category):", allQuestions[0].category);
+        } else {
+            console.log("No question data fetched.");
+        }
+        
+        console.log("--- DEBUG END ---");
+        // =============== END DEBUG LOGGING ===============
+
+
+        // 3. Calculate counts on the frontend
+        const countMap = allQuestions.reduce((acc, question) => {
+            const categoryId = question.category; 
+            acc[categoryId] = (acc[categoryId] || 0) + 1;
+            return acc;
+        }, {});
+        
+        // 4. Merge counts into course data - FIX IS HERE
+        const coursesWithCount = courseData.map(course => ({
+            ...course,
+            // This line is the focus of the mismatch
+            questionCount: countMap[course._id.toString()] || 0 
+        }));
+
+        setCourses(coursesWithCount);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setCourses([]); 
+      } finally {
+        setLoading(false);
       }
+    };
 
-      // Proceed only if response is successful
-      const blob = await response.blob();
-      
-      // Create download link
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${question.title}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+    fetchCoursesAndCounts();
+  }, []);
 
-    } catch (error) {
-      console.error("Error downloading question:", error);
-      // Provide a helpful alert message
-      alert(`Failed to download question. Check console for details. Error: ${error.message}`);
-    }
+  const handleGetQuestions = (course) => {
+    // Navigate only if there are questions available
+    if (course.questionCount > 0) {
+        navigate(`/practice-questions/${slugify(course.Course_title)}/${course._id}`);
+    }
   };
 
-  const mainContentStyle = {
-    width: isMobile ? "90%" : "100%",
-    minHeight: "600px",
-    marginTop: isMobile ? "70px" : "105px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    padding: isMobile ? "20px 20px 40px 20px" : "20px 120px 60px 120px",
-    gap: isMobile ? "20px" : "30px",
-    backgroundImage: `url(${bg})`,
-    color: "#FFFFFF",
-    fontFamily: "Poppins, sans-serif",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  };
+  const goBack = () => {
+    window.history.back();
+  };
 
-  const headingStyle = {
-    position: "relative",
-    fontSize: isMobile ? "36px" : "48px",
-    fontWeight: 600,
-    color: "#FFFFFF",
-    marginTop: "0",
-    marginBottom: 0,
-    textAlign: isMobile ? "center" : "left",
-  };
+  return (
+    <PageContainer>
+      <Header />
 
-  const questionsListContainerStyle = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-    width: isMobile ? "100%" : "80%",
-    margin: isMobile ? "0 auto" : "0",
-  };
+      <MainContent $isMobile={isMobile}>
 
-  const questionItemStyle = {
-    display: "flex",
-    flexDirection: isMobile ? "column" : "row",
-    justifyContent: "space-between",
-    alignItems: isMobile ? "flex-start" : "center",
-    background: "rgba(255, 255, 255, 0.1)",
-    borderRadius: "12px",
-    padding: isMobile ? "16px" : "16px 24px",
-    backdropFilter: "blur(6px)",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-    transition: "all 0.3s ease",
-    gap: isMobile ? "12px" : "0",
-  };
+        <ContentHeader $isMobile={isMobile}>
+          <BackButton onClick={goBack} $isMobile={isMobile}>
+            <ChevronLeft size={isMobile ? 24 : 32} />
+          </BackButton>
+          <Heading $isMobile={isMobile}>
+            Practice Questions
+          </Heading>
+        </ContentHeader>
 
-  const titleContainerStyle = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
-    flex: isMobile ? "none" : 1,
-  };
 
-  const downloadButtonStyle = {
-    width: isMobile ? "100%" : "180px",
-    height: "45px",
-    borderRadius: "25px",
-    border: "none",
-    background: "#00A8FF",
-    color: "#FFFFFF",
-    fontSize: "16px",
-    fontWeight: 600,
-    cursor: "pointer",
-    transition: "all 0.3s ease",
-  };
+        <QuestionsListContainer $isMobile={isMobile}>
+          {loading ? (
+            <FallbackText $isMobile={isMobile}>Loading available courses...</FallbackText>
+          ) : courses.length === 0 ? (
+            <FallbackText $isMobile={isMobile}>No Courses available for practice questions.</FallbackText>
+          ) : (
+            courses.map((course) => (
+              <CourseItem key={course._id} $isMobile={isMobile}>
+                <TitleContainer $isMobile={isMobile}>
+                    {/* Display Course Title and Question Count inline */}
+                  <CourseTitle>
+                        {course.Course_title}
+                        {/* Use the defined QuestionCount component */}
+                        <QuestionCount $isMobile={isMobile}>
+                            {course.questionCount} {course.questionCount === 1 ? 'question' : 'questions'} available
+                        </QuestionCount>
+                    </CourseTitle>
+                  {course.description && (
+                    <CourseDescription>{course.description}</CourseDescription>
+                  )}
+                </TitleContainer>
 
-  return (
-    <div style={{ backgroundColor: "black", color: "white", fontFamily: "Poppins, sans-serif" }}>
-      <Header />
-
-      <div style={mainContentStyle}>
-        <h1 style={headingStyle}>
-          Download Practice Questions
-        </h1>
-
-        <div style={questionsListContainerStyle}>
-          {loading ? (
-            <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>Loading...</p>
-          ) : questions.length === 0 ? (
-            <p style={{ fontSize: "18px", textAlign: isMobile ? "center" : "left" }}>No Practice Questions available</p>
-          ) : (
-            questions.map((question) => (
-              <div key={question._id} style={questionItemStyle}>
-                <div style={titleContainerStyle}>
-                  <span style={{ fontSize: "18px", fontWeight: 500 }}>{question.title}</span>
-                  {question.description && (
-                    <span style={{ fontSize: "14px", color: "#B0B0B0" }}>{question.description}</span>
-                  )}
-                </div>
-
-                <button
-                  onClick={() => handleDownload(question)}
-                  style={downloadButtonStyle}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "#0090DD")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "#00A8FF")}
-                >
-                  Download
-                </button>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-    </div>
-  );
+                <GetQuestionsButton
+                  onClick={() => handleGetQuestions(course)}
+                  $isMobile={isMobile}
+                    disabled={course.questionCount === 0}
+                    style={{ opacity: course.questionCount === 0 ? 0.5 : 1, cursor: course.questionCount === 0 ? 'not-allowed' : 'pointer' }}
+                >
+                  {course.questionCount === 0 ? 'No Questions' : 'Get Questions'}
+                </GetQuestionsButton>
+              </CourseItem>
+            ))
+          )}
+        </QuestionsListContainer>
+      </MainContent>
+      <Footer/>
+    </PageContainer>
+  );
 }

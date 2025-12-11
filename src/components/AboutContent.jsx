@@ -77,10 +77,10 @@ const ContentSection = styled.div`
 
 export default function AboutContent() {
   return (
-    <StyledContentWrapper>
+    <StyledContentWrapper as="section">
       {/* About Us */}
-      <ContentSection>
-        <Heading>About Us</Heading>
+      <ContentSection as="section">
+        <Heading aria-label="About Aspro IT">About Us</Heading>
         <Text>
           Welcome to Aspro IT, a premier provider of cutting-edge software
           development and training services on a global scale. We are your
@@ -90,8 +90,8 @@ export default function AboutContent() {
       </ContentSection>
 
       {/* Mission */}
-      <ContentSection>
-        <Heading>Our Mission</Heading>
+      <ContentSection as="section">
+        <Heading aria-label="Our Mission">Our Mission</Heading>
         <Text>
           Our mission is to democratize top-tier education and empower
           businesses and individuals worldwide. We believe in making
@@ -103,8 +103,8 @@ export default function AboutContent() {
       </ContentSection>
 
       {/* Who We Are */}
-      <ContentSection>
-        <Heading>Who We Are</Heading>
+      <ContentSection as="section">
+        <Heading aria-label="Who We Are">Who We Are</Heading>
         <Text>
           Aspro IT is a dedicated team of passionate educators, seasoned
           industry experts, and innovative technologists. We work tirelessly to
@@ -116,8 +116,8 @@ export default function AboutContent() {
       </ContentSection>
 
       {/* What We Offer */}
-      <ContentSection>
-        <Heading>What We Offer</Heading>
+      <ContentSection as="section">
+        <Heading aria-label="What We Offer">What We Offer</Heading>
         <Text>
           We offer a diverse range of services designed to meet the evolving
           needs of individuals and organizations:
@@ -136,8 +136,8 @@ export default function AboutContent() {
       </ContentSection>
 
       {/* Values */}
-      <ContentSection>
-        <Heading>Our Values</Heading>
+      <ContentSection as="section">
+        <Heading aria-label="Our Values">Our Values</Heading>
         <Text>
           Our values are at the core of everything we do. They guide our
           decisions and shape our culture:
@@ -154,8 +154,8 @@ export default function AboutContent() {
       </ContentSection>
 
       {/* Contact */}
-      <ContentSection>
-        <Heading>Contact Us</Heading>
+      <ContentSection as="section">
+        <Heading aria-label="Contact Us">Contact Us</Heading>
         <Text>
           Embark on your journey into the forefront of technology with us. If
           you have any questions or need support, we are here to help.

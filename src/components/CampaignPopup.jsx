@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import styled from "@emotion/styled";
 import { getBanners } from "../api/campaign";
@@ -142,9 +143,19 @@ const ActionButton = styled.button`
 export default function CampaignPopup() {
   const [show, setShow] = useState(true);
   const [banner, setBanner] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < desktopBreakpoint);
+
+useEffect(() => {
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < desktopBreakpoint);
+  };
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
 
   useEffect(() => {
-    const timer = setTimeout(() => setShow(false), 5000); 
+    const timer = setTimeout(() => setShow(false), 15000); 
     return () => clearTimeout(timer);
   }, []);
 
@@ -162,7 +173,10 @@ export default function CampaignPopup() {
 
   if (!show) return null;
 
-  const image = banner?.image;
+  const image = banner?.image?.startsWith("http")
+  ? banner.image
+  : `${import.meta.env.VITE_API_URL}/uploads/${banner?.image}`;
+
   const title = banner?.title || "Limited Time Christmas Deal!";
 
   const handleButtonClick = () => {
@@ -173,39 +187,45 @@ export default function CampaignPopup() {
   };
 
   return (
-    <>
-      <BodyScrollLock isLocked={show} /> 
-      
-      <PopupOverlay>
-        <PopupContent>
-          
-          {/* Close Button */}
-          <CloseButton onClick={handleClose}>
+  <>
+    <BodyScrollLock isLocked={show} />
+
+    {show && (
+      <PopupOverlay as={motion.div}
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }}
+        transition={{ duration: .25 }}
+      >
+        <PopupContent
+          as={motion.div}
+          initial={{ scale: .85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 120 }}
+        >
+
+          <CloseButton onClick={handleClose} aria-label="Close popup">
             <X size={18} color="white" />
           </CloseButton>
 
-          {/* Banner Image */}
           <BannerImageContainer>
-            <BannerImage
-              src={image}
-              alt={title}
-            />
+            <BannerImage src={image} alt={title} />
           </BannerImageContainer>
 
-          {/* Bottom Section */}
           <BottomSection>
-            {/* Heading */}
-            <TitleHeading>
-              {title}
-            </TitleHeading>
+            <TitleHeading>{title}</TitleHeading>
 
-            {/* Button */}
-            <ActionButton onClick={handleButtonClick}>
+            <ActionButton 
+              onClick={handleButtonClick}
+              style={{ width: "150px" }}
+            >
               Click Here
             </ActionButton>
           </BottomSection>
+
         </PopupContent>
       </PopupOverlay>
-    </>
-  );
+    )}
+  </>
+);
+
 }

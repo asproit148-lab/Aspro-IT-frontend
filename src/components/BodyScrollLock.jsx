@@ -1,19 +1,19 @@
-// BodyScrollLock.jsx
-
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 export default function BodyScrollLock({ isLocked }) {
   useEffect(() => {
+    const target = document.documentElement; 
+    
     if (isLocked) {
-      document.body.style.overflow = 'hidden';
+      target.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      target.style.overflow = "auto";
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      target.style.overflow = "auto"; 
     };
-  }, [isLocked]); 
+  }, [isLocked]);
 
-  return null; 
+  return null;
 }

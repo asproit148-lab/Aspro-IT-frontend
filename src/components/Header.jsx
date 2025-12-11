@@ -24,7 +24,7 @@ const desktopBreakpoint = 1024;
 const textColor = "#3D96E0";
 
 const customShouldForwardProp = (propName) => {
-    return !propName.startsWith('$');
+  return !propName.startsWith('$');
 };
 
 const useIsMobile = (breakpoint) => {
@@ -70,8 +70,8 @@ const LogoWrapper = styled('div', { shouldForwardProp: customShouldForwardProp }
 `;
 
 const LogoImage = styled('img', { shouldForwardProp: customShouldForwardProp })`
-  width: ${props => props.$isMobile ? "120px" : "221px"};
-  height: ${props => props.$isMobile ? "auto" : "63px"};
+  width: ${props => props.$isMobile ? "120px" : "210px"};
+  height: ${props => props.$isMobile ? "auto" : "60px"};
   object-fit: contain;
 `;
 
@@ -100,10 +100,9 @@ const NavItem = styled(Link, { shouldForwardProp: customShouldForwardProp })`
   transition: 0.3s;
   box-sizing: border-box;
 
-  // FIX 2: Add hover effect for mobile menu links
   ${props => props.$isMobile && `
     &:hover, &:focus, &:active {
-      background-color: rgba(61, 150, 224, 0.1); // Light blue overlay on hover/touch
+      background-color: rgba(61, 150, 224, 0.1); 
     }
   `}
 `;
@@ -125,11 +124,11 @@ const DropdownTrigger = styled('div', { shouldForwardProp: customShouldForwardPr
   border-radius: 0;
   transition: 0.3s;
   box-sizing: border-box;
+  white-space: nowrap; // Added for stability
 
-  // FIX 2: Add hover effect for mobile menu dropdown triggers
   ${props => props.$isMobile && `
     &:hover, &:focus, &:active {
-      background-color: rgba(61, 150, 224, 0.1); // Light blue overlay on hover/touch
+      background-color: rgba(61, 150, 224, 0.1); 
     }
   `}
 `;
@@ -142,7 +141,7 @@ const NavLinkWithDropdown = styled(Link, { shouldForwardProp: customShouldForwar
   font-family: 'Poppins', sans-serif;
   font-size: 20px;
   font-weight: 400;
-  color: ${textColor};
+  color: ${props => props.$isMobile ? (props.$isActive ? textColor : "white") : textColor};
   cursor: pointer;
   padding: 6px 0;
   width: auto;
@@ -151,6 +150,7 @@ const NavLinkWithDropdown = styled(Link, { shouldForwardProp: customShouldForwar
   border-radius: 0;
   transition: 0.3s;
   box-sizing: border-box;
+  white-space: nowrap; // Added for stability
 `;
 
 const DropdownContainer = styled('div', { shouldForwardProp: customShouldForwardProp })`
@@ -182,7 +182,7 @@ const DropdownItem = styled(Link, { shouldForwardProp: customShouldForwardProp }
     return `border-radius: ${borderRadius};`;
   }}
 
-  width: ${props => props.$isMobile ? "calc(100% - 30px)" : "100%"}; 
+  width: ${props => props.$isMobile ? "100%" : "100%"}; 
   
   height: auto;
   padding: ${props => props.$isMobile ? "8px 15px 8px 30px" : "10px 15px"}; 
@@ -319,6 +319,8 @@ const MobileMenuContent = styled.div`
 const BodyScrollLock = ({ isLocked }) => {
   useEffect(() => {
     if (isLocked) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
       document.body.style.overflow = 'hidden';
       document.body.style.paddingRight = 'var(--scrollbar-width, 0)'; 
     } else {
@@ -336,6 +338,8 @@ const BodyScrollLock = ({ isLocked }) => {
 export default function Header() {
   const { user, signOut } = useAuth();
   const location = useLocation();
+  const slugify = (title) =>
+    title.trim().toLowerCase().replace(/\s+/g, "-");
 
   const isMobile = useIsMobile(desktopBreakpoint);
 
@@ -355,8 +359,8 @@ export default function Header() {
   const [courses, setCourses] = useState([]);
 
   // Fetch courses
-  useEffect(() => {
-    const fetchCourses = async () => {
+useEffect(() => {
+    async function loadCourses() {
       try {
         const res = await getAllCourses();
         if (res.success) {
@@ -365,11 +369,11 @@ export default function Header() {
       } catch (err) {
         console.error("Failed to fetch courses:", err);
       }
-    };
-    fetchCourses();
-  }, []);
+    }
+    loadCourses();
+}, []);
 
-  // Close mobile menu and dropdowns when navigating or performing an action
+  // Universal handler to close all mobile menus/popups/dropdowns on link click
   const handleLinkClick = useCallback(() => {
     setIsMobileMenuOpen(false);
     setIsDownloadOpen(false);
@@ -390,9 +394,20 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   };
   
-  const handleAboutClick = (e) => {
-    handleLinkClick(); 
-  }
+  // Helper for checking if path is active for the 'About' dropdown
+  const isAboutActive = location.pathname.startsWith("/about-us") || location.pathname.startsWith("/blogs") || location.pathname.startsWith("/our-services");
+  
+  const aboutMenuItems = [
+    { name: "About Us", link: "/about-us" }, 
+    { name: "Blogs", link: "/blogs" },
+    { name: "Services", link: "/our-services" },
+  ];
+
+  const downloadMenuItems = [
+    { name: "Resources", link: "/resources" },
+    { name: "Certificates", link: "/certificates" },
+    { name: "Practice Questions", link: "/practice-questions" },
+  ];
 
   return (
     <>
@@ -421,18 +436,14 @@ export default function Header() {
                 onMouseEnter={() => setIsDownloadOpen(true)}
                 onMouseLeave={() => setIsDownloadOpen(false)}
               >
-                <DropdownTrigger $isMobile={false}>
+                <DropdownTrigger $isMobile={false} $isActive={location.pathname.startsWith("/resources") || location.pathname.startsWith("/certificates")}>
                   Download{" "}
                   {isDownloadOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                 </DropdownTrigger>
 
                 {isDownloadOpen && (
                   <DropdownContainer $isMobile={false}>
-                    {[
-                      { name: "Resources", link: "/resources" },
-                      { name: "Certificates", link: "/certificates" },
-                      { name: "Practice Questions", link: "/practice-questions" },
-                    ].map((item, index, arr) => (
+                    {downloadMenuItems.map((item, index, arr) => (
                       <DropdownItem
                         key={index}
                         to={item.link}
@@ -440,7 +451,6 @@ export default function Header() {
                         $isMobile={false}
                         $index={index}
                         $arrLength={arr.length}
-                        $desktopWidth="138px"
                       >
                         {item.name}
                       </DropdownItem>
@@ -455,10 +465,15 @@ export default function Header() {
                 onMouseEnter={() => setIsCoursesOpen(true)}
                 onMouseLeave={() => setIsCoursesOpen(false)}
               >
-                <DropdownTrigger $isMobile={false}>
-                  <BookOpen size={20} /> Courses{" "}
-                  {isCoursesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                </DropdownTrigger>
+                <NavLinkWithDropdown 
+                  to="/courses-all" // <-- ADDED: The main courses link
+                  onClick={handleLinkClick} // Click the main link, which closes dropdowns
+                  $isMobile={false}
+                  $isActive={location.pathname.startsWith("/courses")} // Check for all /courses/* paths
+                >
+                  <BookOpen size={20} /> Courses{" "}
+                  {isCoursesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </NavLinkWithDropdown>
 
                 {isCoursesOpen && (
                   <DropdownContainer $isMobile={false}>
@@ -467,12 +482,11 @@ export default function Header() {
                       .map((course, index, arr) => (
                         <DropdownItem
                           key={course._id}
-                          to={`/courses/${course._id}`}
+                          to={`/courses/${slugify(course.Course_title)}/${course._id}`}
                           onClick={handleLinkClick}
                           $isMobile={false}
                           $index={index}
                           $arrLength={arr.length}
-                          $desktopWidth="227px"
                         >
                           {course.Course_title}
                         </DropdownItem>
@@ -489,9 +503,9 @@ export default function Header() {
               >
                 <NavLinkWithDropdown 
                   to="/about-us" 
-                  onClick={handleAboutClick}
+                  onClick={handleLinkClick} // Click the main link, which closes dropdowns
                   $isMobile={false}
-                  $isActive={location.pathname.startsWith("/about-us") || location.pathname.startsWith("/blogs") || location.pathname.startsWith("/our-services")}
+                  $isActive={isAboutActive}
                 >
                   <Info size={20} /> About{" "}
                   {isAboutOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -499,10 +513,7 @@ export default function Header() {
 
                 {isAboutOpen && (
                   <DropdownContainer $isMobile={false}>
-                    {[
-                      { name: "Blogs", link: "/blogs" },
-                      { name: "Services", link: "/our-services" },
-                    ].map((item, index, arr) => (
+                    {aboutMenuItems.slice(1).map((item, index, arr) => (
                       <DropdownItem
                         key={index}
                         to={item.link}
@@ -510,7 +521,6 @@ export default function Header() {
                         $isMobile={false}
                         $index={index}
                         $arrLength={arr.length}
-                        $desktopWidth="138px"
                       >
                         {item.name}
                       </DropdownItem>
@@ -526,11 +536,11 @@ export default function Header() {
             </DesktopNav>
           )}
 
-          {/* Desktop Login / User Icon (Hidden on Mobile) */}
           {!isMobile && (
             <div>
               {user ? (
-                <UserIconWrapper onClick={() => setShowUserDropdown(!showUserDropdown)} $isMobile={false} title="Profile">
+                <UserIconWrapper onClick={() => setShowUserDropdown(!showUserDropdown)} 
+                $isMobile={false} title="Profile" aria-label="Toggle user profile menu">
                   <User size={24} color="white" />
                   {showUserDropdown && (
                     <UserDropdown $isMobile={false}>
@@ -560,7 +570,8 @@ export default function Header() {
 
               {/* Mobile User Icon */}
               {user && (
-                <UserIconWrapper onClick={() => setShowUserDropdown(!showUserDropdown)} $isMobile={true} title="Profile">
+                <UserIconWrapper onClick={() => setShowUserDropdown(!showUserDropdown)} 
+                $isMobile={true} title="Profile" aria-label="Toggle user profile menu">
                   <User size={20} color="white" />
                   {showUserDropdown && (
                     <UserDropdown $isMobile={true}>
@@ -574,7 +585,9 @@ export default function Header() {
               )}
               
               {/* Mobile Menu Button */}
-              <MobileMenuButton onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              <MobileMenuButton 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}>
                 {isMobileMenuOpen ? <X size={30} /> : <Menu size={30} />}
               </MobileMenuButton>
             </MobileRightSide>
@@ -601,11 +614,7 @@ export default function Header() {
 
                 {isDownloadOpen && (
                   <DropdownContainer $isMobile={true}>
-                    {[
-                      { name: "Resources", link: "/resources" },
-                      { name: "Certificates", link: "/certificates" },
-                      { name: "Practice Questions", link: "/practice-questions" },
-                    ].map((item, index, arr) => (
+                    {downloadMenuItems.map((item, index, arr) => (
                       <DropdownItem
                         key={index}
                         to={item.link}
@@ -620,6 +629,15 @@ export default function Header() {
                   </DropdownContainer>
                 )}
               </div>
+
+              <NavItem 
+                to="/courses-all" 
+                $isMobile={true} 
+                $isActive={location.pathname === "/courses"} // Only active on the main courses path
+                onClick={handleLinkClick}
+              >
+                <BookOpen size={20} /> All Courses
+              </NavItem>
 
               {/* Courses Dropdown (Mobile) */}
               <div style={{ position: "relative" }}>
@@ -639,7 +657,7 @@ export default function Header() {
                       .map((course, index, arr) => (
                         <DropdownItem
                           key={course._id}
-                          to={`/courses/${course._id}`}
+                          to={`/courses/${slugify(course.Course_title)}/${course._id}`}
                           onClick={handleLinkClick}
                           $isMobile={true}
                           $index={index}
@@ -657,7 +675,7 @@ export default function Header() {
                 <DropdownTrigger 
                   onClick={() => setIsAboutOpen(!isAboutOpen)}
                   $isMobile={true}
-                  $isActive={location.pathname.startsWith("/about-us") || location.pathname.startsWith("/blogs") || location.pathname.startsWith("/our-services")}
+                  $isActive={isAboutActive}
                 >
                   <Info size={20} /> About{" "}
                   {isAboutOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -665,11 +683,7 @@ export default function Header() {
 
                 {isAboutOpen && (
                   <DropdownContainer $isMobile={true}>
-                    {[
-                      { name: "About Us", link: "/about-us" }, 
-                      { name: "Blogs", link: "/blogs" },
-                      { name: "Services", link: "/our-services" },
-                    ].map((item, index, arr) => (
+                    {aboutMenuItems.map((item, index, arr) => (
                       <DropdownItem
                         key={index}
                         to={item.link}
@@ -707,10 +721,10 @@ export default function Header() {
         {isSignupOpen && <SignupPopup 
         onClose={() => setIsSignupOpen(false)} 
         onBack={() => {
-      setIsSignupOpen(false);
-      setShowLoginPopup(true);
-    }}/>}
+          setIsSignupOpen(false);
+          setShowLoginPopup(true);
+        }}/>}
       </StyledHeader>
     </>
   );
-} 
+}

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import logo from "../assets/logo.png";
 import facebook from "../assets/facebook.png";
 import instagram from "../assets/instagram.png";
 import linkedin from "../assets/linkedin.png";
-import Location from '../assets/location.png';
 
 const desktopBreakpoint = 768;
 
@@ -12,10 +12,7 @@ const useIsMobile = (breakpoint) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < breakpoint);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < breakpoint);
-    };
-    handleResize();
+    const handleResize = () => setIsMobile(window.innerWidth < breakpoint);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [breakpoint]);
@@ -23,8 +20,8 @@ const useIsMobile = (breakpoint) => {
   return isMobile;
 };
 
+/* STYLED COMPONENTS */
 const StyledFooter = styled.footer`
-  /* DESKTOP DEFAULTS */
   width: 100%;
   min-height: 450px;
   background: #101010;
@@ -38,22 +35,17 @@ const StyledFooter = styled.footer`
   font-family: 'Poppins', sans-serif;
   gap: 80px;
   flex-wrap: wrap;
-  overflow-x: hidden;
 
-  /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
     width: 90%;
-    min-height: auto;
     flex-direction: column;
-    align-items: center; /* Center content block */
+    align-items: center;
     padding: 40px 20px;
     gap: 40px;
-    flex-wrap: nowrap;
   }
 `;
 
 const LeftSide = styled.div`
-  /* DESKTOP DEFAULTS */
   display: flex;
   flex-direction: column;
   gap: 48px;
@@ -62,7 +54,6 @@ const LeftSide = styled.div`
   text-align: left;
   align-items: flex-start;
 
-  /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
     gap: 20px;
     min-width: 100%;
@@ -73,67 +64,61 @@ const LeftSide = styled.div`
 `;
 
 const LogoImage = styled.img`
-  /* DESKTOP DEFAULTS */
   width: 221px;
   height: 63px;
   mix-blend-mode: lighten;
   display: block;
   margin: 0;
 
-  /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
     width: 180px;
     height: 50px;
-    margin: 0 auto 10px auto; /* Center logo on mobile */
+    margin: 0 auto 10px auto;
   }
 `;
 
 const CompanyDescriptionWrapper = styled.div`
-  /* DESKTOP DEFAULTS */
   font-weight: 400;
   font-size: 16px;
   line-height: 160%;
   color: #FFFFFF;
-  text-align: inherit; 
+  text-align: justify;
+
+  /* Redundant styles removed from JSX and consolidated here */
+  padding-top: 30px;
+  margin: 0; 
 `;
 
 const RightSide = styled.div`
-  /* DESKTOP DEFAULTS */
   display: flex;
   flex-direction: row;
-  gap: 60px;
+  gap: 60px; 
   flex-wrap: wrap;
   justify-content: flex-start;
 
-  /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
     width: 100%;
-    gap: 40px 20px; 
-    justify-content: space-around; 
-    flex-grow: 0;
+    gap: 30px 20px; 
+    justify-content: flex-start;
   }
 `;
 
 const ColumnContent = styled.div`
-  /* DESKTOP DEFAULTS */
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
   min-width: 150px;
-  flex: 1 1 0; 
+  flex: 1;
   text-align: left;
 
-  /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
-    min-width: 45%; 
-    max-width: 50%;
-    text-align: center;
-    flex: none;
+    min-width: 100%;
+    max-width: 100%;
+    text-align: left;
   }
 `;
 
 const ColumnHeading = styled.h3`
-  /* DESKTOP DEFAULTS */
   font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: 36px;
@@ -142,34 +127,42 @@ const ColumnHeading = styled.h3`
   text-align: left;
   width: 100%;
 
-  /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
     font-size: 28px;
-    text-align: center;
   }
 `;
 
 const FooterText = styled.p`
-  /* DESKTOP DEFAULTS  */
   text-decoration: none;
   color: #FFFFFF99;
   font-size: 24px;
   font-weight: 500;
   line-height: 32px;
   transition: all 0.3s ease;
-  white-space: nowrap; 
-  text-align: inherit;
-  /* MOBILE OVERRIDES */
+  white-space: nowrap;
+
+  /* OPTIMIZATION: Adjust line height for contact/link items, controlled by a prop */
+  line-height: ${props => props.$smallLineHeight ? '2px' : '32px'};
+
+  @media (min-width: ${desktopBreakpoint}px) {
+    text-align: justify;
+    line-height: ${props => props.$smallLineHeight ? '2px' : '32px'};
+  }
+
   @media (max-width: ${desktopBreakpoint}px) {
     font-size: 16px;
     line-height: 24px;
     white-space: normal;
-    text-align: center;
+    text-align: left;
+    line-height: ${props => props.$smallLineHeight ? '18px' : '24px'};
   }
 `;
 
+const FooterLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const SocialIconsContainer = styled.div`
-  /* DESKTOP DEFAULTS */
   position: absolute;
   right: 200px;
   bottom: 80px;
@@ -180,7 +173,6 @@ const SocialIconsContainer = styled.div`
   gap: 24px;
   width: auto;
 
-  /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
     position: relative; 
     right: auto;
@@ -194,7 +186,6 @@ const SocialIconsContainer = styled.div`
 `;
 
 const SocialIcon = styled.img`
-  /* DESKTOP DEFAULTS */
   width: 50px;
   height: 50px;
   object-fit: contain;
@@ -205,42 +196,40 @@ const SocialIcon = styled.img`
     transform: scale(1.1);
   }
 
-  /* MOBILE OVERRIDES */
   @media (max-width: ${desktopBreakpoint}px) {
     width: 32px;
     height: 32px;
   }
 `;
 
+const EmbeddedMapWrapper = styled.div`
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+`;
+
 export default function Footer() {
   const isMobile = useIsMobile(desktopBreakpoint);
-
-  const LinkItem = ({ item, href = "#", enableWrap = false }) => (
-    <FooterText 
-      as="a" 
-      href={href} 
-      style={enableWrap ? { whiteSpace: 'normal' } : {}}
-    >
-      {item}
-    </FooterText>
-  );
+  
+  // Static Map Embed URL for the given address (Patna, India)
+  const mapEmbedUrl = 
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3106.041403323105!2d85.07795399999999!3d25.606630400000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed575b37041b3d%3A0x52e04703ab113cfd!2sAspro%20IT%20Training%20%E2%80%93%20Python%20%26%20Programming%20Classes%20Online%20%7C%20Offline%20Free%20%26%20Paid%20in%20Patna%20(India)!5e1!3m2!1sen!2sin!4v1765138051676!5m2!1sen!2sin";
 
   return (
     <StyledFooter>
-      
-      {/* LEFT SIDE (Company, Description) */}
+      {/* LEFT SIDE */}
       <LeftSide>
         <CompanyDescriptionWrapper>
           <LogoImage src={logo} alt="AsproIT Logo" />
-          <FooterText as="p" style={{ 
+          {/* OPTIMIZATION: FooterText used as base paragraph, inline styles removed/consolidated */}
+          <FooterText as="p" $isMobile={isMobile} style={{ 
             fontWeight: 400, 
             fontSize: isMobile ? "14px" : "16px",
-            lineHeight: "160%", 
+            lineHeight: "160%",
             color: "#FFFFFF",
             whiteSpace: 'normal',
-            margin: '0',
-            paddingTop: "30px",
-            textAlign: 'inherit'
+            textAlign: isMobile ? "center" : "left",
           }}>
             “AsproIT is an IT training and internship company dedicated to
             empowering students and professionals with practical skills in
@@ -251,71 +240,73 @@ export default function Footer() {
         </CompanyDescriptionWrapper>
       </LeftSide>
 
-      {/* RIGHT SIDE (Address, Company, Contacts) */}
+      {/* RIGHT SIDE */}
       <RightSide>
         {/* Address */}
         <ColumnContent>
-  <ColumnHeading>Address</ColumnHeading>
-  <FooterText as="p" style={{ whiteSpace: "normal" }}>
-    1st Floor Pratiksha <br />
-    Bhawan, khajpura, <br />
-    Patna, India-800014
-  </FooterText>
-
-  {/* Location Pin */}
-  <a
-    href="https://maps.app.goo.gl/bZDhhHhKaTwM2aSQ9"
-    target="_blank"
-    rel="noopener noreferrer"
-    style={{ textDecoration: "none" }}
-  >
-    <FooterText style={{ fontSize: isMobile ? "14px" : "20px", marginTop: "0" }}>
-      <img 
-    src={Location} 
-    alt="Location Pin" 
-    style={{
-      width: isMobile ? "16px" : "22px",
-      height: "auto",
-    }} 
-  />
-      View on Google Maps
-    </FooterText>
-  </a>
-</ColumnContent>
-
+          <ColumnHeading>Address</ColumnHeading>
+          <FooterText as="p">
+            1st Floor Pratiksha <br />
+            Bhawan, Khajpura, <br />
+            Patna, India - 800014
+          </FooterText>
+          
+          {/* Embedded Map */}
+          <EmbeddedMapWrapper>
+            {/* OPTIMIZATION: Fixed map source URL */}
+            <iframe
+              title="AsproIT Location"
+              src={mapEmbedUrl}
+              width="100%"
+              height="200"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </EmbeddedMapWrapper>
+        </ColumnContent>
 
         {/* Company Links */}
         <ColumnContent>
           <ColumnHeading>Company</ColumnHeading>
-          {["Home", "Courses", "About", "Contact"].map((item, i) => (
-            <LinkItem key={i} item={item} />
+          {[
+            {name:"Home", link:"/"},
+            {name:"Courses", link:"/courses"},
+            {name:"About", link:"/about"},
+            {name:"Contact", link:"/contact"},
+          ].map((item,i)=>(
+            <FooterLink to={item.link} key={i}> 
+              {/* OPTIMIZATION: Removed redundant style={{textDecoration:"none"}} and used $smallLineHeight prop */}
+              <FooterText $smallLineHeight>{item.name}</FooterText> 
+            </FooterLink>
           ))}
         </ColumnContent>
 
         {/* Contacts */}
         <ColumnContent>
           <ColumnHeading>Contacts</ColumnHeading>
-          {["+91-9128444000", "admin@asproit.com"].map((item, i) => (
-            <LinkItem key={i} item={item} enableWrap={true} />
+          {["+91-9128444000", "admin@asproit.com"].map((item,i)=>(
+            <FooterText key={i} as="p" $smallLineHeight>
+              {/* OPTIMIZATION: Removed inline style={{ lineHeight: "2px" }} and used $smallLineHeight prop */}
+              {item}
+            </FooterText>
           ))}
         </ColumnContent>
       </RightSide>
-      
-      {/* Social Media Icons Section */}
+
+      {/* Social Icons */}
       <SocialIconsContainer>
-  <a href="https://www.facebook.com/asproit/" target="_blank" rel="noopener noreferrer">
-    <SocialIcon src={facebook} alt="facebook" />
-  </a>
-
-  <a href="https://www.instagram.com/aspro_it/" target="_blank" rel="noopener noreferrer">
-    <SocialIcon src={instagram} alt="instagram" />
-  </a>
-
-  <a href="https://www.linkedin.com/company/aspro-it/?originalSubdomain=in" target="_blank" rel="noopener noreferrer">
-    <SocialIcon src={linkedin} alt="linkedin" />
-  </a>
-</SocialIconsContainer>
-
+        <a href="https://www.facebook.com/asproit/" target="_blank" rel="noopener noreferrer">
+          <SocialIcon src={facebook} alt="AsproIT Facebook" />
+        </a>
+        <a href="https://www.instagram.com/aspro_it/" target="_blank" rel="noopener noreferrer">
+          <SocialIcon src={instagram} alt="AsproIT Instagram" />
+        </a>
+        <a href="https://www.linkedin.com/company/aspro-it/?originalSubdomain=in" target="_blank" rel="noopener noreferrer">
+          <SocialIcon src={linkedin} alt="AsproIT LinkedIn" />
+        </a>
+      </SocialIconsContainer>
     </StyledFooter>
   );
 }

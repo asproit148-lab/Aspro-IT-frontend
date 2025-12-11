@@ -1,20 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Upload } from "lucide-react";
+import { getAllCourses } from "../../api/course"; 
 
 export default function AddPracticeQue({ onClose, onSave, existingQue }) {
-  // Use existing file URL or empty string
   const [file, setFile] = useState(existingQue?.link || existingQue?.file || "");
-  // Use existing raw file object (if passed) or null. On edit, this is usually null.
   const [fileRaw, setFileRaw] = useState(existingQue?.fileRaw || null);
   const [fileName, setFileName] = useState(existingQue?.fileName || "");
   const [title, setTitle] = useState(existingQue?.title || "");
   const [description, setDescription] = useState(existingQue?.description || "");
+  const [category, setCategory] = useState(existingQue?.category || ""); 
+  
+  const [courses, setCourses] = useState([]);
+  const [loadingCourses, setLoadingCourses] = useState(true);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const coursesRes = await getAllCourses();
+        const courseData = Array.isArray(coursesRes.courses) ? coursesRes.courses : (Array.isArray(coursesRes) ? coursesRes : []);
+        setCourses(courseData.filter(c => c.Course_title));
+      } catch (error) {
+        console.error("Error fetching courses for dropdown:", error);
+      } finally {
+        setLoadingCourses(false);
+      }
+    };
+    fetchCourses();
+  }, []);
 
   const handleFileChange = (e) => {
     const uploadedFile = e.target.files[0];
     if (uploadedFile) {
-      setFile(URL.createObjectURL(uploadedFile)); // Set temporary browser URL for display
-      setFileRaw(uploadedFile); // Set the actual file object for submission
+      setFile(URL.createObjectURL(uploadedFile)); 
+      setFileRaw(uploadedFile); 
       setFileName(uploadedFile.name);
     }
   };
@@ -22,19 +40,17 @@ export default function AddPracticeQue({ onClose, onSave, existingQue }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Check if either a new file is uploaded (fileRaw) OR 
-    // if it's an existing question (existingQue) with an existing file link (file).
     const isFilePresent = fileRaw || (existingQue && file);
 
-    if (!title || !description || !isFilePresent) {
-      alert("Please fill all fields & upload file.");
+    if (!title || !description || !category || !isFilePresent) {
+      alert("Please fill all fields & upload file, and select a valid Category.");
       return;
     }
 
     const newQue = {
       title,
       description,
-      // Send the raw file object to the parent component for FormData processing
+      category, 
       link: file,
       fileRaw,
       fileName,
@@ -59,14 +75,14 @@ export default function AddPracticeQue({ onClose, onSave, existingQue }) {
       <div
         style={{
           width: "600px",
-          height: "520px",
+          height: "550px", 
           background: "#1B1B1B",
           borderRadius: "20px",
           padding: "30px 40px",
           boxShadow: "0px 8px 24px rgba(0,0,0,0.5)",
           display: "flex",
           flexDirection: "column",
-          gap: "24px",
+          gap: "18px",
         }}
       >
         {/* Heading */}
@@ -85,8 +101,8 @@ export default function AddPracticeQue({ onClose, onSave, existingQue }) {
         <label
           htmlFor="question-file"
           style={{
-            width: "100%",
-            height: "150px",
+            width: "98%",
+            height: "100px",
             borderRadius: "16px",
             background: "#2E2E2E",
             border: "1px dashed rgba(255,255,255,0.2)",
@@ -150,22 +166,54 @@ export default function AddPracticeQue({ onClose, onSave, existingQue }) {
         {/* Title */}
         <input
           type="text"
-          placeholder="Question Title"
+          placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           style={{
-            width: "96%",
-            height: "50px",
+            width: "95%",
+            height: "45px", 
             borderRadius: "30px",
             border: "1px solid rgba(255,255,255,0.1)",
             background: "#2E2E2E",
             color: "#FFFFFF",
-            fontSize: "18px",
+            fontSize: "16px",
             padding: "0 20px",
             fontFamily: "Poppins, sans-serif",
             outline: "none",
           }}
         />
+
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          style={{
+            width: "100%",
+            height: "45px", 
+            borderRadius: "30px",
+            border: "1px solid rgba(255,255,255,0.1)",
+            background: "#2E2E2E",
+            color: category ? "#FFFFFF" : "#888888", 
+            fontSize: "16px",
+            padding: "0 20px",
+            fontFamily: "Poppins, sans-serif",
+            outline: "none",
+            cursor: "pointer"
+          }}
+          disabled={loadingCourses}
+        >
+          <option value="" disabled>
+            {loadingCourses ? "Loading Categories..." : "Select Category"}
+          </option>
+          {courses.map(course => (
+            <option 
+              key={course._id} 
+              value={course._id}
+              style={{ color: '#FFFFFF', background: '#2E2E2E' }}
+            >
+              {course.Course_title}
+            </option>
+          ))}
+        </select>
 
         {/* Description */}
         <textarea
@@ -174,7 +222,7 @@ export default function AddPracticeQue({ onClose, onSave, existingQue }) {
           onChange={(e) => setDescription(e.target.value)}
           style={{
             width: "94%",
-            height: "100px",
+            height: "60px", 
             borderRadius: "16px",
             border: "1px solid rgba(255,255,255,0.1)",
             background: "#2E2E2E",
@@ -199,7 +247,7 @@ export default function AddPracticeQue({ onClose, onSave, existingQue }) {
             onClick={onClose}
             style={{
               width: "120px",
-              height: "50px",
+              height: "45px", 
               borderRadius: "15px",
               background: "#414141",
               color: "#FFFFFF",
@@ -217,7 +265,7 @@ export default function AddPracticeQue({ onClose, onSave, existingQue }) {
             onClick={handleSubmit}
             style={{
               width: "120px",
-              height: "50px",
+              height: "45px", 
               borderRadius: "15px",
               background: "#2B6EF0",
               color: "#FFFFFF",

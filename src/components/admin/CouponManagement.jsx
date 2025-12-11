@@ -1,67 +1,96 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Edit3, Trash2, Plus } from "lucide-react";
 import AddCoupon from "../../components/admin/AddCoupon";
 import { getAllCoupons, deleteCoupon } from "../../api/coupon";
 
-// Define the mobile breakpoint
-const mobileBreakpoint = 768;
+// Define the mobile breakpoint (as a constant outside the component)
+const MOBILE_BREAKPOINT = 768;
+
+// Helper function for consistent date formatting
+const formatDate = (dateString) => {
+    // Only return the date part (YYYY-MM-DD) or 'N/A'
+    return dateString ? String(dateString).split("T")[0] : 'N/A';
+};
 
 export default function CouponManagement() {
     const [coupons, setCoupons] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [editingData, setEditingData] = useState(null);
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    
+    // OPTIMIZATION: Use state only for the derived boolean value
+    const [isMobile, setIsMobile] = useState(
+        typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+    );
 
-    const isMobile = screenWidth < mobileBreakpoint;
+    // --- FUNCTIONAL HANDLERS (using useCallback for stability) ---
 
-    // Effect to track screen size for responsiveness
+    // 1. Data Fetcher (Stable function for useEffect dependency)
+    const loadCoupons = useCallback(async () => {
+        try {
+            const res = await getAllCoupons();
+            setCoupons(res.coupons || []);
+        } catch (err) {
+            console.error("Failed to load coupons:", err);
+            // Consider more user-friendly error handling here
+            alert("Failed to load coupons");
+        }
+    }, []); // Empty dependency array means this function is created once
+
+    // 2. Delete Handler (Stable function)
+    const handleDelete = useCallback(async (id) => {
+        if (!window.confirm("Are you sure you want to delete this coupon?")) return;
+
+        try {
+            await deleteCoupon(id);
+            // OPTIMIZATION: Instead of refetching ALL, use functional update to remove the item
+            setCoupons(prev => prev.filter(coupon => coupon._id !== id));
+            // If refetching is required for complex sync logic, use the original `loadCoupons()` call instead.
+        } catch (err) {
+            console.error("Failed to delete coupon:", err);
+            alert("Failed to delete coupon");
+        }
+    }, []);
+
+    // 3. Edit Handler (Stable function)
+    const handleEdit = useCallback((coupon) => {
+        setEditingData(coupon);
+        setShowModal(true);
+    }, []);
+
+    // 4. Modal Closer (Stable function)
+    const handleCloseModal = useCallback(() => {
+        setShowModal(false);
+        setEditingData(null);
+    }, []);
+
+    // --- EFFECTS ---
+
+    // 1. Initial Data Fetch
+    useEffect(() => {
+        loadCoupons();
+    }, [loadCoupons]); // Dependency on stable loadCoupons
+
+    // 2. Screen size tracking for responsiveness
     useEffect(() => {
         const handleResize = () => {
-            setScreenWidth(window.innerWidth);
+            const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT;
+            // Only update state if the derived value changes (crossing breakpoint)
+            setIsMobile(prev => (prev !== newIsMobile ? newIsMobile : prev));
         };
+        
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    const loadCoupons = async () => {
-        try {
-            const res = await getAllCoupons();
-            setCoupons(res.coupons || []);
-        } catch (err) {
-            console.error(err);
-            alert("Failed to load coupons");
-        }
-    };
 
-    useEffect(() => {
-        loadCoupons();
-    }, []);
-
-    const handleDelete = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this coupon?")) return;
-
-        try {
-            await deleteCoupon(id);
-            await loadCoupons();
-        } catch (err) {
-            console.error(err);
-            alert("Failed to delete coupon");
-        }
-    };
-
-    const handleEdit = (coupon) => {
-        setEditingData(coupon);
-        setShowModal(true);
-    };
-
-    const formatDate = (dateString) => {
-        return dateString ? dateString.split("T")[0] : 'N/A';
-    };
+    // --- RENDER START (Preserving original inline styles) ---
 
     return (
         <div
             style={{
+                // Adjusted width to be based on the screen size, considering the sidebar area
+                width: isMobile ? '100%' : 'calc(100% - 140px)', 
                 marginLeft: isMobile ? "0" : "30px",
                 background: "black",
                 color: "white",
@@ -72,7 +101,7 @@ export default function CouponManagement() {
                 minHeight: "100vh",
                 marginBottom: "50px",
                 boxSizing: 'border-box',
-                width: isMobile ? '95%' : 'calc(100% - 100px)',
+                // Removed the fixed width from original for better centering/flexibility
             }}
         >
             {/* Heading */}
@@ -82,7 +111,6 @@ export default function CouponManagement() {
                         fontWeight: 600,
                         fontSize: isMobile ? "28px" : "36px",
                         color: "#FFFFFF",
-                        marginLeft: isMobile ? "0" : "0",
                         marginBottom: 0,
                         marginTop: 0,
                     }}
@@ -96,17 +124,17 @@ export default function CouponManagement() {
                         color: "#FFFFFF",
                         opacity: 0.9,
                         marginTop: isMobile ? "8px" : "4px",
-                        marginLeft: isMobile ? "0" : "0",
                     }}
                 >
                     Create and manage discount coupons for your courses
                 </p>
             </div>
 
-            {/* Top Bar */}
+            {/* Top Bar (Total Coupons & Add Button) */}
             <div
                 style={{
-                    width: isMobile ? "100%" : "100%",
+                    width: "100%", // Use 100% of parent container
+                    maxWidth: isMobile ? '100%' : '1300px', // Set a max-width for cleaner look on desktop
                     height: isMobile ? "60px" : "72px",
                     marginTop: isMobile ? "30px" : "40px",
                     marginLeft: isMobile ? "0" : "20px",
@@ -115,7 +143,7 @@ export default function CouponManagement() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    padding: isMobile ? "0 15px" : "0 30px 4px 30px", // Adjusted padding for mobile
+                    padding: isMobile ? "0 15px" : "0 30px 4px 30px",
                     boxSizing: 'border-box',
                 }}
             >
@@ -124,7 +152,7 @@ export default function CouponManagement() {
                         fontSize: isMobile ? "16px" : "20px",
                         fontWeight: 400,
                         marginBottom: "2px",
-                        lineHeight: isMobile ? '1' : 'auto'
+                        lineHeight: '1.2' // Improved line height
                     }}>
                         Total Coupons
                     </p>
@@ -155,7 +183,7 @@ export default function CouponManagement() {
                         transition: "all 0.3s ease",
                     }}
                     onClick={() => {
-                        setEditingData(null);
+                        setEditingData(null); // Ensure no coupon is selected for Add mode
                         setShowModal(true);
                     }}
                 >
@@ -164,15 +192,17 @@ export default function CouponManagement() {
                 </button>
             </div>
 
-            {/* Table / Mobile Cards */}
+            {/* Table / Mobile Cards Container */}
             <div
                 style={{
                     marginTop: isMobile ? "30px" : "50px",
-                    marginLeft: isMobile ? "0" : "50px",
-                    width: isMobile ? "100%" : "80%",
+                    marginLeft: isMobile ? "0" : "20px",
+                    width: "100%", // Use 100% of parent container
+                    maxWidth: isMobile ? '100%' : '1200px', // Match max width of the top bar
                     background: "#282727",
                     borderRadius: "10px",
                     padding: isMobile ? "10px 15px" : "10px 50px",
+                    boxSizing: 'border-box',
                 }}
             >
                 {/* Header (Hidden on Mobile) */}
@@ -180,7 +210,8 @@ export default function CouponManagement() {
                     <div
                         style={{
                             display: "grid",
-                            gridTemplateColumns: "1fr 1.5fr 1.5fr 1.5fr",
+                            // Adjusted grid layout for better spacing and center alignment on desktop
+                            gridTemplateColumns: "1fr 1fr 1fr 100px", 
                             padding: "20px 0px",
                             borderBottom: "1px solid rgba(255,255,255,0.1)",
                             color: "#FFFFFF",
@@ -198,7 +229,7 @@ export default function CouponManagement() {
 
                 {/* Rows / Mobile Cards */}
                 {coupons.length > 0 ? (
-                    coupons.map((coupon) => (
+                    coupons.map((coupon, index) => (
                         // Mobile Card Layout
                         isMobile ? (
                             <div
@@ -211,7 +242,9 @@ export default function CouponManagement() {
                                     display: "flex",
                                     flexDirection: "column",
                                     gap: "8px",
-                                    borderLeft: '4px solid #3D7EFF'
+                                    borderLeft: '4px solid #3D7EFF',
+                                    // Remove bottom border on the last item for cleaner list ending
+                                    borderBottom: (index === coupons.length - 1 && !isMobile) ? 'none' : undefined, 
                                 }}
                             >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -269,13 +302,13 @@ export default function CouponManagement() {
                                 key={coupon._id}
                                 style={{
                                     display: "grid",
-                                    gridTemplateColumns: "1fr 1.5fr 1.5fr 1.5fr",
+                                    gridTemplateColumns: "1fr 1fr 1fr 100px",
                                     alignItems: "center",
                                     justifyItems: "center",
                                     padding: "20px 0px",
                                     color: "#FFFFFF",
                                     fontSize: "16px",
-                                    borderBottom: "1px solid rgba(255,255,255,0.05)",
+                                    borderBottom: (index === coupons.length - 1) ? 'none' : "1px solid rgba(255,255,255,0.05)",
                                 }}
                             >
                                 <span style={{ color: "#3D7EFF", fontWeight: 500 }}>
@@ -332,12 +365,9 @@ export default function CouponManagement() {
             {/* Add/Edit Coupon Modal */}
             {showModal && (
                 <AddCoupon
-                    onClose={() => {
-                        setShowModal(false);
-                        setEditingData(null);
-                    }}
+                    onClose={handleCloseModal} // Use the stable handler
                     existingData={editingData}
-                    onSaved={loadCoupons}
+                    onSaved={loadCoupons} // Recovers all coupons after successful save/update
                 />
             )}
         </div>

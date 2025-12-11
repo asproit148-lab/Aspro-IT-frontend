@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { GoogleLogin } from "@react-oauth/google";
 import { registerUser } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
-import { IoArrowBack } from "react-icons/io5";
+import { ChevronLeft } from "lucide-react";
 
 const PopupOverlay = styled.div`
   position: fixed;
@@ -129,6 +129,18 @@ const Button = styled.button`
   }
 `;
 
+const ErrorMessage = styled.p`
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ff5555; /* Red color for errors */
+  margin-top: -8px; 
+  margin-bottom: 12px;
+  width: 100%;
+  text-align: center;
+`;
+
+
 export default function SignupPopup({ onClose, onBack }) {
   const { signInWithGoogle } = useAuth();
 
@@ -136,36 +148,34 @@ export default function SignupPopup({ onClose, onBack }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(""); // ⬅️ Added state for error handling
 
   const handleSignup = async () => {
+    setError(""); // Clear previous errors
+
     if (!fullName || !email || !password) {
-      alert("Please fill all fields");
-      return;
+      return setError("Please fill all fields"); // ⬅️ Changed from alert()
     }
 
     if (fullName.trim().length < 3) {
-      alert("Full name must be at least 3 characters");
-      return;
+      return setError("Full name must be at least 3 characters"); // ⬅️ Changed from alert()
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      alert("Please enter a valid email address");
-      return;
+      return setError("Please enter a valid email address"); // ⬅️ Changed from alert()
     }
 
     if (password.length < 6) {
-      alert("Password must be at least 6 characters long");
-      return;
+      return setError("Password must be at least 6 characters long"); // ⬅️ Changed from alert()
     }
 
     try {
       setLoading(true);
       await registerUser({ name: fullName, email, password });
-      alert("Signup Successful! Please login.");
       onClose();
     } catch (err) {
-      alert(err?.response?.data?.message || err?.message || "Signup failed");
+      setError(err?.response?.data?.message || err?.message || "Signup failed"); // ⬅️ Changed from alert()
     } finally {
       setLoading(false);
     }
@@ -173,15 +183,16 @@ export default function SignupPopup({ onClose, onBack }) {
 
   const handleGoogleSuccess = async (res) => {
     setLoading(true);
+    setError("");
     try {
       const response = await signInWithGoogle(res.credential);
-      if (!response.success) alert(response.message || "Google login failed");
+      if (!response.success) setError(response.message || "Google login failed"); // ⬅️ Changed from alert()
       else {
         alert("Google Login Successful!");
         onClose();
       }
     } catch {
-      alert("Google login failed");
+      setError("Google login failed"); // ⬅️ Changed from alert()
     } finally {
       setLoading(false);
     }
@@ -193,7 +204,7 @@ export default function SignupPopup({ onClose, onBack }) {
 
         {/* Back arrow */}
         <BackButton onClick={onBack}>
-          <IoArrowBack />
+          <ChevronLeft />
         </BackButton>
 
         {/* Close button */}
@@ -225,6 +236,9 @@ export default function SignupPopup({ onClose, onBack }) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        
+        {/* 🎯 Display error message */}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
 
         <Button disabled={loading} onClick={handleSignup}>
           {loading ? "Signing up..." : "Signup"}
@@ -233,7 +247,7 @@ export default function SignupPopup({ onClose, onBack }) {
         <div style={{ marginTop: "12px" }}>
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
-            onError={() => alert("Google login failed")}
+            onError={() => setError("Google sign-up failed")} // ⬅️ Changed from alert()
           />
         </div>
       </PopupContainer>

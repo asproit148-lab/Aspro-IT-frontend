@@ -1,68 +1,86 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { CircleCheckBig, CircleX } from "lucide-react";
 import { getPendingPayments, approvePayment, rejectPayment } from "../../api/payment";
 
-// Define breakpoints
-const largeBreakpoint = 1200; 
-const tabletBreakpoint = 768; 
+// Define breakpoints (Constant, moved outside component)
+const LARGE_BREAKPOINT = 1200; 
+const TABLET_BREAKPOINT = 768; 
+
+// Helper function for responsive columns
+const getColumnCount = (width) => {
+    if (width < TABLET_BREAKPOINT) return 1;
+    if (width < LARGE_BREAKPOINT) return 2;
+    return 3;
+};
 
 export default function PaymentVerification() {
     const [pending, setPending] = useState([]);
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    
+    // OPTIMIZATION: Use calculated states instead of raw screenWidth state
+    const [isMobile, setIsMobile] = useState(
+        typeof window !== "undefined" ? window.innerWidth < TABLET_BREAKPOINT : false
+    );
+    const [columns, setColumns] = useState(
+        typeof window !== "undefined" ? getColumnCount(window.innerWidth) : 3
+    );
 
-    const isMobile = screenWidth < tabletBreakpoint;
-    const isTablet = screenWidth < largeBreakpoint;
-
-    useEffect(() => {
-        const handleResize = () => {
-            setScreenWidth(window.innerWidth);
-        };
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    useEffect(() => {
-        loadPending();
-    }, []);
-
-    const loadPending = async () => {
+    // 1. Data Fetching (useCallback): Stable function for fetching data
+    const loadPending = useCallback(async () => {
         try {
             const res = await getPendingPayments();
+            // OPTIMIZATION: Assuming LCFS (Latest Confirmed First) is desired, otherwise keep original order
             setPending(res.payments || []);
         } catch (err) {
             console.log("Error fetching pending payments:", err);
+            // Consider showing a user-friendly error message here
         }
-    };
+    }, []); // Empty dependency array means this function is stable
 
-    const handleApprove = async (paymentId) => {
+    // 2. Approve Handler (useCallback): Updates state directly on success
+    const handleApprove = useCallback(async (paymentId) => {
         if (!window.confirm("Confirm to approve payment?")) return;
 
         try {
+            // Wait for API call to succeed
             await approvePayment(paymentId);
-            loadPending();
+            
+            // OPTIMIZATION: Remove the approved payment from the local state instead of re-fetching all data
+            setPending(prevPending => prevPending.filter(item => item._id !== paymentId));
         } catch (err) {
             alert(err.response?.data?.message || "Failed to approve");
+            console.log("Approve failed:", err);
         }
-    };
+    }, []); // Empty dependency array means this function is stable
 
-    const handleReject = async (paymentId) => {
+    const handleReject = useCallback(async (paymentId) => {
         if (!window.confirm("Reject this student's payment?")) return;
 
         try {
             await rejectPayment(paymentId);
-            loadPending();
+            setPending(prevPending => prevPending.filter(item => item._id !== paymentId));
         } catch (err) {
             alert(err.response?.data?.message || "Failed to reject");
+            console.log("Reject failed:", err);
         }
-    };
+    }, []);
 
-    let columns = 3;
-    if (screenWidth < largeBreakpoint && screenWidth >= tabletBreakpoint) {
-        columns = 2;
-    } else if (screenWidth < tabletBreakpoint) {
-        columns = 1;
-    }
+    useEffect(() => {
+        loadPending();
+
+        const handleResize = () => {
+            const width = window.innerWidth;
+            const newIsMobile = width < TABLET_BREAKPOINT;
+            const newColumns = getColumnCount(width);
+
+            setIsMobile(prev => (prev !== newIsMobile ? newIsMobile : prev));
+            setColumns(prev => (prev !== newColumns ? newColumns : prev));
+        };
+
+        // Initial setup and listener
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [loadPending]); // Dependency on loadPending ensures it is stable
 
     return (
         <div
@@ -157,6 +175,7 @@ export default function PaymentVerification() {
                 style={{
                     width: isMobile ? "100%" : "90%",
                     display: "grid",
+                    // Use responsive columns state
                     gridTemplateColumns: `repeat(${columns}, 1fr)`,
                     gap: isMobile ? "20px" : "30px",
                     marginLeft: isMobile ? "0" : "50px",
@@ -165,116 +184,131 @@ export default function PaymentVerification() {
                     boxSizing: 'border-box',
                 }}
             >
-                {pending.map((item) => (
-                    <div
-                        key={item._id}
-                        style={{
-                            width: "100%", 
-                            minHeight: isMobile ? "300px" : "350px", 
-                            background: "#343434",
-                            borderRadius: "20px",
-                            padding: isMobile ? "15px" : "20px", 
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
-                            boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",
-                            boxSizing: 'border-box',
-                        }}
-                    >
-                        <img
-                            src={item.paymentScreenshot}
-                            alt="proof"
-                            style={{
-                                width: "100%",
-                                height: isMobile ? "150px" : "179px", 
-                                borderRadius: "16px",
-                                objectFit: "cover",
-                            }}
-                        />
-
-                        <div>
-                            <h3
-                                style={{
-                                    fontSize: isMobile ? "16px" : "18px", 
-                                    fontWeight: 500,
-                                    marginTop: isMobile ? "8px" : "12px",
-                                    marginBottom: isMobile ? "4px" : "8px",
-                                }}
-                            >
-                                {item.courseId?.Course_title}
-                            </h3>
-                            <p
-                                style={{
-                                    fontSize: isMobile ? "14px" : "16px", 
-                                    color: "#C9C9C9",
-                                    fontWeight: 500,
-                                    margin: 0,
-                                }}
-                            >
-                                Student: {item.userId?.name}
-                            </p>
-                        </div>
-
+                {/* Fallback for no pending payments */}
+                {pending.length === 0 ? (
+                    <div style={{ 
+                        gridColumn: '1 / -1', 
+                        textAlign: 'center', 
+                        padding: '40px', 
+                        fontSize: '18px', 
+                        color: '#aaa' 
+                    }}>
+                        No pending payments found.
+                    </div>
+                ) : (
+                    pending.map((item) => (
                         <div
+                            key={item._id}
                             style={{
-                                width: "100%",
-                                height: "1px",
-                                background: "rgba(255,255,255,0.1)",
-                                margin: isMobile ? "8px 0" : "10px 0",
-                            }}
-                        ></div>
-
-                        <div
-                            style={{
+                                width: "100%", 
+                                minHeight: isMobile ? "300px" : "350px", 
+                                background: "#343434",
+                                borderRadius: "20px",
+                                padding: isMobile ? "15px" : "20px", 
                                 display: "flex",
+                                flexDirection: "column",
                                 justifyContent: "space-between",
-                                gap: isMobile ? "8px" : "10px", 
+                                boxShadow: "0px 4px 12px rgba(0,0,0,0.25)",
+                                boxSizing: 'border-box',
                             }}
                         >
-                            <button
-                                onClick={() => handleApprove(item._id)}
+                            <img
+                                src={item.paymentScreenshot}
+                                alt="proof"
                                 style={{
-                                    width: isMobile ? "48%" : "100px", 
-                                    height: isMobile ? "30px" : "34px",
-                                    borderRadius: "10px",
-                                    background: "#28A745",
-                                    color: "#E3E3E3",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: "7px",
-                                    border: "none",
-                                    cursor: "pointer",
-                                    fontSize: isMobile ? "14px" : "16px", 
+                                    width: "100%",
+                                    height: isMobile ? "150px" : "179px", 
+                                    borderRadius: "16px",
+                                    objectFit: "cover",
                                 }}
-                            >
-                                <CircleCheckBig size={isMobile ? 16 : 20} />
-                                Approve
-                            </button>
+                            />
 
-                            <button
-                                onClick={() => handleReject(item._id)}
+                            <div>
+                                <h3
+                                    style={{
+                                        fontSize: isMobile ? "16px" : "18px", 
+                                        fontWeight: 500,
+                                        marginTop: isMobile ? "8px" : "12px",
+                                        marginBottom: isMobile ? "4px" : "8px",
+                                    }}
+                                >
+                                    {item.courseId?.Course_title || 'N/A Course Title'}
+                                </h3>
+                                <p
+                                    style={{
+                                        fontSize: isMobile ? "14px" : "16px", 
+                                        color: "#C9C9C9",
+                                        fontWeight: 500,
+                                        margin: 0,
+                                    }}
+                                >
+                                    Student: {item.userId?.name || 'N/A Student Name'}
+                                </p>
+                            </div>
+
+                            <div
                                 style={{
-                                    width: isMobile ? "48%" : "100px",
-                                    height: isMobile ? "30px" : "34px",
-                                    borderRadius: "10px",
-                                    background: "#DC3545",
-                                    color: "#E3E3E3",
+                                    width: "100%",
+                                    height: "1px",
+                                    background: "rgba(255,255,255,0.1)",
+                                    margin: isMobile ? "8px 0" : "10px 0",
+                                }}
+                            ></div>
+
+                            <div
+                                style={{
                                     display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: "7px",
-                                    border: "none",
-                                    cursor: "pointer",
-                                    fontSize: isMobile ? "14px" : "16px",
+                                    justifyContent: "space-between",
+                                    gap: isMobile ? "8px" : "10px", 
                                 }}
                             >
-                                <CircleX size={isMobile ? 16 : 20} />
-                                Reject
-                            </button>
+                                <button
+                                    onClick={() => handleApprove(item._id)}
+                                    style={{
+                                        width: "50%", // Adjusted to 50% for mobile
+                                        height: isMobile ? "30px" : "34px",
+                                        borderRadius: "10px",
+                                        background: "#28A745",
+                                        color: "#E3E3E3",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "7px",
+                                        border: "none",
+                                        cursor: "pointer",
+                                        fontSize: isMobile ? "14px" : "16px", 
+                                        flexGrow: 1, // Added flexGrow for responsiveness
+                                    }}
+                                >
+                                    <CircleCheckBig size={isMobile ? 16 : 20} />
+                                    Approve
+                                </button>
+
+                                <button
+                                    onClick={() => handleReject(item._id)}
+                                    style={{
+                                        width: "50%", // Adjusted to 50% for mobile
+                                        height: isMobile ? "30px" : "34px",
+                                        borderRadius: "10px",
+                                        background: "#DC3545",
+                                        color: "#E3E3E3",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "7px",
+                                        border: "none",
+                                        cursor: "pointer",
+                                        fontSize: isMobile ? "14px" : "16px",
+                                        flexGrow: 1, // Added flexGrow for responsiveness
+                                    }}
+                                >
+                                    <CircleX size={isMobile ? 16 : 20} />
+                                    Reject
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
         </div>
     );

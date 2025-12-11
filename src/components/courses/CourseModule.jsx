@@ -3,7 +3,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 
 const desktopBreakpoint = 992; 
 
-export default function CourseModule({ skills, modules, faqs }) {
+export default function CourseModule({ skills, modules, faqs, learnings }) {
     const [openModule, setOpenModule] = useState(null);
     const [openFaq, setOpenFaq] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
@@ -19,6 +19,13 @@ export default function CourseModule({ skills, modules, faqs }) {
 
     const basePadding = isMobile ? "4vw" : "6vw";
     const headerFontSize = isMobile ? "28px" : "36px";
+    const checkMarkStyle = {
+        color: "#1ed85c", 
+        marginRight: "10px",
+        fontSize: "1.2em",
+        minWidth: "20px", 
+        textAlign: "center"
+    };
 
     return (
         <div
@@ -50,6 +57,45 @@ export default function CourseModule({ skills, modules, faqs }) {
                     color: "#FFFFFF",
                 }}
             >
+            </div>
+
+            {/* What You’ll Learn Section (NEW SECTION) */}
+            <div style={{ padding: `${isMobile ? "30px" : "60px"} ${basePadding} 0` }}>
+                <h2
+                    style={{
+                        fontSize: headerFontSize,
+                        fontWeight: 600,
+                        marginTop: 0,
+                        marginBottom: "24px",
+                        color: "#FFFFFF",
+                    }}
+                >
+                    What You’ll Learn
+                </h2>
+
+                <div
+                    style={{
+                        display: "grid",
+                        width: isMobile ? "100%" : "90%",
+                        gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 1fr)",
+                        gap: isMobile ? "10px" : "20px",
+                        marginBottom: "40px",
+                    }}
+                >
+                    {learnings.map((learning, index) => (
+                            <div key={index} style={{ display: "flex", alignItems: "flex-start" }}>
+                                <span style={checkMarkStyle}>✅</span>
+                                <span style={{ 
+                                    fontSize: isMobile ? "14px" : "16px", 
+                                    color: "#FFFFFF", 
+                                    opacity: 0.9,
+                                    lineHeight: "1.4"
+                                }}>
+                                    {learning}
+                                </span>
+                            </div>
+                        ))}                    
+                </div>
             </div>
 
             {/* Skills Section */}
@@ -183,7 +229,7 @@ export default function CourseModule({ skills, modules, faqs }) {
                             >
                                 {(Array.isArray(module.module_description)
                                     ? module.module_description
-                                    : module.module_description.split(" • ")
+                                    : (module.module_description || "").split(" • ")
                                 ).map((topic, tIndex) => (
                                     <li
                                         key={tIndex}
