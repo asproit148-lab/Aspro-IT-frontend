@@ -92,29 +92,43 @@ const CompanyDescriptionWrapper = styled.div`
 const RightSide = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 60px; 
+  gap: 60px;
   flex-wrap: wrap;
   justify-content: flex-start;
+  width: auto; // Reset to default
 
   @media (max-width: ${desktopBreakpoint}px) {
     width: 100%;
-    gap: 30px 20px; 
-    justify-content: flex-start;
+    /* Change to column layout but wrap the inner columns */
+    flex-direction: row; // Keep row direction for wrapping
+    flex-wrap: wrap; // Allow wrapping
+    gap: 30px 20px;
+    justify-content: space-between; /* Space out columns */
+    align-items: flex-start; /* Align columns to the start */
   }
 `;
 
 const ColumnContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   min-width: 150px;
   flex: 1;
   text-align: left;
 
   @media (max-width: ${desktopBreakpoint}px) {
+    /* Default to full width for Address */
     min-width: 100%;
     max-width: 100%;
     text-align: left;
+
+    /* New rule for Contacts and Company to share a row */
+    /* We'll use a prop to distinguish them in the component's JSX */
+    ${props => props.$halfWidthOnMobile && `
+      min-width: calc(50% - 10px); /* Roughly half-width minus half the gap */
+      max-width: calc(50% - 10px);
+      flex: 0 0 calc(50% - 10px);
+    `}
   }
 `;
 
@@ -137,11 +151,8 @@ const FooterText = styled.p`
   color: #FFFFFF99;
   font-size: 24px;
   font-weight: 500;
-  line-height: 32px;
   transition: all 0.3s ease;
   white-space: nowrap;
-
-  /* OPTIMIZATION: Adjust line height for contact/link items, controlled by a prop */
   line-height: ${props => props.$smallLineHeight ? '2px' : '32px'};
 
   @media (min-width: ${desktopBreakpoint}px) {
@@ -186,8 +197,8 @@ const SocialIconsContainer = styled.div`
 `;
 
 const SocialIcon = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -197,8 +208,8 @@ const SocialIcon = styled.img`
   }
 
   @media (max-width: ${desktopBreakpoint}px) {
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
   }
 `;
 
@@ -267,19 +278,8 @@ export default function Footer() {
           </EmbeddedMapWrapper>
         </ColumnContent>
 
-        {/* Contacts */}
-        <ColumnContent>
-          <ColumnHeading>Contacts</ColumnHeading>
-          {["+91-9128444000", "admin@asproit.com"].map((item,i)=>(
-            <FooterText key={i} as="p" $smallLineHeight>
-              {/* OPTIMIZATION: Removed inline style={{ lineHeight: "2px" }} and used $smallLineHeight prop */}
-              {item}
-            </FooterText>
-          ))}
-        </ColumnContent>
-
         {/* Company Links */}
-        <ColumnContent>
+        <ColumnContent $halfWidthOnMobile>
           <ColumnHeading>Company</ColumnHeading>
           {[
             {name:"Home", link:"/"},
@@ -293,7 +293,18 @@ export default function Footer() {
             </FooterLink>
           ))}
         </ColumnContent>
-        
+
+        {/* Contacts */}
+        <ColumnContent $halfWidthOnMobile>
+          <ColumnHeading>Contacts</ColumnHeading>
+          {["+91-9128444000", "admin@asproit.com"].map((item,i)=>(
+            <FooterText key={i} as="p" $smallLineHeight>
+              {/* OPTIMIZATION: Removed inline style={{ lineHeight: "2px" }} and used $smallLineHeight prop */}
+              {item}
+            </FooterText>
+          ))}
+        </ColumnContent>
+
       </RightSide>
 
       {/* Social Icons */}
