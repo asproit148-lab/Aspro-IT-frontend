@@ -2,13 +2,10 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Plus, Edit3, Trash2 } from "lucide-react";
 import AddBlog from "../../components/admin/AddBlog";
 
-// API (Assumed to be correctly imported)
 import { addBlog, updateBlog, deleteBlog, getBlogs } from "../../api/blog";
 
-// Define a mobile breakpoint (Constant, moved outside component for stability)
 const MOBILE_BREAKPOINT = 768;
 
-// Helper function to format data from API to UI structure
 const formatBlogData = (b) => ({
     _id: b._id,
     title: b.Blog_title,
@@ -21,27 +18,21 @@ export default function BlogManagement() {
     const [showPopup, setShowPopup] = useState(false);
     const [editingBlog, setEditingBlog] = useState(null);
     
-    // OPTIMIZATION: Use state only for the derived boolean value
     const [isMobile, setIsMobile] = useState(
         typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
     );
 
-    // --- FUNCTIONAL HANDLERS (using useCallback for stability) ---
-
-    // 1. Data Fetching
     const fetchBlogs = useCallback(async () => {
         try {
             const data = await getBlogs();
-            // Use the helper formatter
             const formatted = (data.blogs || []).map(formatBlogData);
+            formatted.reverse();
             setBlogs(formatted);
         } catch (err) {
             console.error("Fetch blogs failed:", err);
-            // Consider showing a user-friendly error message here
         }
-    }, []); // Stable function
+    }, []); 
 
-    // 2. Add Blog
     const handleAddBlog = useCallback(async (blogData) => {
         try {
             const formData = new FormData();
@@ -54,7 +45,6 @@ export default function BlogManagement() {
 
             const formatted = formatBlogData(b);
 
-            // OPTIMIZATION: Use functional update form
             setBlogs((prev) => [formatted, ...prev]);
             setShowPopup(false);
         } catch (err) {
@@ -63,7 +53,6 @@ export default function BlogManagement() {
         }
     }, []);
 
-    // 3. Edit Blog
     const handleEditBlog = useCallback(async (updatedBlog) => {
         try {
             const formData = new FormData();
@@ -79,7 +68,6 @@ export default function BlogManagement() {
 
             const formatted = formatBlogData(b);
 
-            // OPTIMIZATION: Use functional update form
             setBlogs((prev) =>
                 prev.map((x) => (x._id === updatedBlog.id ? formatted : x))
             );
@@ -90,13 +78,11 @@ export default function BlogManagement() {
         }
     }, []);
 
-    // 4. Delete Blog
     const handleDeleteBlog = useCallback(async (id) => {
         if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
         try {
             await deleteBlog(id);
-            // OPTIMIZATION: Use functional update form
             setBlogs((prev) => prev.filter((b) => b._id !== id));
         } catch (err) {
             alert("Blog deletion failed");
@@ -104,7 +90,6 @@ export default function BlogManagement() {
         }
     }, []);
 
-    // 5. Open/Close Popups (using useCallback for stability)
     const openAddPopup = useCallback(() => {
         setEditingBlog(null);
         setShowPopup(true);
@@ -115,19 +100,12 @@ export default function BlogManagement() {
         setShowPopup(true);
     }, []);
 
-
-    // --- EFFECTS ---
-
-    // 1. Initial Data Fetch
     useEffect(() => {
         fetchBlogs();
-    }, [fetchBlogs]); // Dependency is stable fetchBlogs
-
-    // 2. Screen size tracking for responsiveness
+    }, [fetchBlogs]); 
     useEffect(() => {
         const handleResize = () => {
             const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT;
-            // Only update state if the derived value changes (crossing breakpoint)
             setIsMobile(prev => (prev !== newIsMobile ? newIsMobile : prev));
         };
         
@@ -136,13 +114,9 @@ export default function BlogManagement() {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-
-    // --- RENDER START (Using original inline styles for UI consistency) ---
-
     return (
         <div
             style={{
-                // Adjusting overall width/padding to better accommodate responsive layout
                 width: "100%",
                 position: "relative",
                 background: "black",
@@ -152,12 +126,11 @@ export default function BlogManagement() {
                 paddingTop: isMobile ? "90px" : "130px",
                 paddingLeft: isMobile ? "20px" : "140px",
                 paddingRight: isMobile ? "20px" : "40px",
-                boxSizing: 'border-box', // Ensure padding is inside the width
+                boxSizing: 'border-box', 
             }}
         >
             {/* Title and Subtitle */}
             <div style={{ 
-                // Adjusted positioning for responsive layout
                 padding: isMobile ? '0' : '0 0 0 24px',
                 textAlign: isMobile ? 'center' : 'left'
             }}>
@@ -188,8 +161,8 @@ export default function BlogManagement() {
             {/* Total Blogs Card / Add Button Bar */}
             <div
                 style={{
-                    width: "100%", // Use 100% of parent container
-                    maxWidth: isMobile ? '100%' : '1300px', // Set a max-width for cleaner look on desktop
+                    width: "100%", 
+                    maxWidth: isMobile ? '100%' : '1300px', 
                     height: isMobile ? "60px" : "72px",
                     marginTop: isMobile ? "30px" : "40px",
                     marginLeft: isMobile ? "0" : "20px",

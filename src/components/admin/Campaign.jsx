@@ -42,7 +42,6 @@ const deleteButtonStyle = (isMobile) => ({
     fontSize: isMobile ? "12px" : "14px",
     alignSelf: 'flex-start',
     transition: 'background 0.2s ease',
-    // Note: Inline styles don't support pseudo-classes like :hover easily in React without state/external library
 });
 
 
@@ -52,9 +51,7 @@ export default function Campaign() {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
     const isMobile = screenWidth < tabletBreakpoint;
-    // const isTablet = screenWidth < largeBreakpoint;
 
-    // Effect to track screen size for responsiveness
     useEffect(() => {
         const handleResize = () => {
             setScreenWidth(window.innerWidth);
@@ -68,13 +65,17 @@ export default function Campaign() {
     const fetchCampaigns = useCallback(async () => {
         try {
             const res = await getBanners(); // Using original imported function name
-            setCampaigns(
-                res.data.banners.map((b) => ({
-                    id: b._id,
-                    img: b.image,
-                    title: b.title,
-                })) || []
-            );
+            
+            let loadedCampaigns = (res.data.banners || []).map((b) => ({
+                id: b._id,
+                img: b.image,
+                title: b.title,
+            }));
+            
+            // 🚀 FIX APPLIED: Reverse the array to display newest items first.
+            loadedCampaigns.reverse(); 
+            
+            setCampaigns(loadedCampaigns);
         } catch (err) {
             console.error("Error loading campaigns:", err);
             // Optional: Set a state for error message
@@ -86,9 +87,7 @@ export default function Campaign() {
         fetchCampaigns();
     }, [fetchCampaigns]);
 
-    // Add new campaign to UI (LIFO: New items appear at the start)
     const handleAddCampaign = (newCampaign) => {
-        // Assuming newCampaign is the fully formatted object { id, img, title }
         setCampaigns((prev) => [newCampaign, ...prev]); 
         setShowAddModal(false);
     };

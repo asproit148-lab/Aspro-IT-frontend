@@ -28,6 +28,8 @@ export default function CouponManagement() {
     const loadCoupons = useCallback(async () => {
         try {
             const res = await getAllCoupons();
+            let fetchedCoupons = res.coupons || [];
+            fetchedCoupons.reverse();
             setCoupons(res.coupons || []);
         } catch (err) {
             console.error("Failed to load coupons:", err);

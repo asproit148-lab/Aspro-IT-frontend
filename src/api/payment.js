@@ -1,7 +1,10 @@
 import axios from "axios";
 
-// const API = "http://localhost:3000/api/payment";
-const API = "https://aspro-it-backend.onrender.com/api/payment";
+const isProduction = process.env.NODE_ENV === "production"; 
+
+const API = isProduction
+  ? "https://aspro-it-backend.onrender.com/api/payment" // Live/Production URL
+  : "http://localhost:3000/api/payment";
 
 // Axios config
 const config = {

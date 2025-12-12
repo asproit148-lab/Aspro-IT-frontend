@@ -1,7 +1,10 @@
 import axios from "axios";
 
-// const API = "http://localhost:3000/api/banner";
-const API = "https://aspro-it-backend.onrender.com/api/banner";
+const isProduction = process.env.NODE_ENV === "production"; 
+
+const API = isProduction
+  ? "https://aspro-it-backend.onrender.com/api/banner" // Live/Production URL
+  : "http://localhost:3000/api/banner";
 
 export const getBanners = () => axios.get(API);
 

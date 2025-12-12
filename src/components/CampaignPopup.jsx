@@ -163,7 +163,10 @@ useEffect(() => {
     getBanners()
       .then((res) => {
         if (res.data?.banners?.length > 0) {
-          setBanner(res.data.banners[0]);
+          const allBanners = res.data.banners;
+          const newestBanner = [...allBanners].reverse()[0]; 
+
+          setBanner(newestBanner);
         }
       })
       .catch((err) => console.error("Banner Fetch Error:", err));

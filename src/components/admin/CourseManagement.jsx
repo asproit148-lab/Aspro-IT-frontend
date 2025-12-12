@@ -87,7 +87,8 @@ export default function CourseManagement() {
     const fetchCourses = useCallback(async () => {
         try {
             const data = await getAllCourses();
-            // Ensure data.courses is an array before mapping
+            let fetchedCourses = data?.courses || [];
+            fetchedCourses.reverse();
             setCourses(data?.courses?.map(c => ({
                 ...c,
                 _id: c._id,

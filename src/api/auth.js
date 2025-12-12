@@ -1,9 +1,14 @@
 // src/api/auth.js
 import axios from "axios";
 
+const isProduction = process.env.NODE_ENV === "production"; 
+
+const BASE_URL = isProduction
+  ? "https://aspro-it-backend.onrender.com/api/user"
+  : "http://localhost:3000/api/user";
+
 const api = axios.create({
-  // baseURL: "http://localhost:3000/api/user", 
-  baseURL: "https://aspro-it-backend.onrender.com/api/user", 
+  baseURL: BASE_URL,
 
   withCredentials: true,
   headers: {

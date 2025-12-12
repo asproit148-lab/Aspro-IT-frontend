@@ -1,7 +1,10 @@
 import axios from "axios";
 
-// const API = "http://localhost:3000/api/email";
-const API = "https://aspro-it-backend.onrender.com/api/email";
+const isProduction = process.env.NODE_ENV === "production"; 
+
+const API = isProduction
+  ? "https://aspro-it-backend.onrender.com/api/email" // Live/Production URL
+  : "http://localhost:3000/api/email";
 
 const config = {
   withCredentials: true,

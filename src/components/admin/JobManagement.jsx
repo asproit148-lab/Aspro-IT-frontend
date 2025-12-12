@@ -7,11 +7,9 @@ import {
   deleteOpportunity,
 } from "../../api/job";
 
-// Define breakpoints (Constant, moved outside component)
 const LARGE_BREAKPOINT = 1200;
 const TABLET_BREAKPOINT = 768;
 
-// Helper function for responsive columns
 const getColumnCount = (width) => {
   if (width < TABLET_BREAKPOINT) return 1;
   if (width < LARGE_BREAKPOINT) return 2;
@@ -24,7 +22,6 @@ export default function JobManagement() {
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [jobs, setJobs] = useState([]);
   
-  // OPTIMIZATION: Use responsive states instead of raw screenWidth state
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < TABLET_BREAKPOINT : false
   );
@@ -32,29 +29,26 @@ export default function JobManagement() {
     typeof window !== "undefined" ? getColumnCount(window.innerWidth) : 3
   );
 
-  // 1. Data Fetching (useCallback): Stable function for fetching data
   const loadJobs = useCallback(async () => {
     try {
       const res = await getAllOpportunities();
       if (res?.success) {
-        // ASSUMPTION: The original implementation did NOT sort the data,
-        // so we maintain the order returned by the API to avoid imposing
-        // a sort rule that wasn't explicitly requested (like LCFS/latest-first).
+
         setJobs(res.data);
       }
     } catch (err) {
       console.log("Error loading jobs:", err);
     }
-  }, []); // Empty dependency array means this function is stable
+  }, []); 
 
-  // 2. Data Filtering (useMemo): Efficiently filters jobs based on type
+  // Data Filtering 
   const filteredJobs = useMemo(() => {
     return filterType === "All"
       ? jobs
       : jobs.filter((item) => item.type === filterType);
   }, [jobs, filterType]); // Recalculates only when jobs or the filter changes
 
-  // 3. Delete Handler (useCallback): Stable function for deleting
+  // Delete Handler 
   const handleDelete = useCallback(async (id) => {
     if (!window.confirm("Delete this opportunity?")) return;
 
@@ -66,25 +60,21 @@ export default function JobManagement() {
     }
   }, []); // Empty dependency array means this function is stable
 
-  // 4. Add Handler (useCallback): Stable function for adding a new job
+  // Add Handler 
   const handleSaveJob = useCallback((newJob) => {
-    // We assume the new job should appear at the top/start of the list (LCFS/Latest-First)
-    // to match the pattern from the previous example optimization.
     setJobs((prev) => [newJob, ...prev]);
   }, []);
 
-  // 5. Effect for Fetching and Responsive Resize Handling
+  // Effect for Fetching and Responsive Resize Handling
   useEffect(() => {
     // Initial Data Fetch
     loadJobs();
 
-    // OPTIMIZATION: Handle resize logic to minimize re-renders
     const handleResize = () => {
       const width = window.innerWidth;
       const newIsMobile = width < TABLET_BREAKPOINT;
       const newColumns = getColumnCount(width);
 
-      // Only update state if the value actually changes (i.e., crossing a breakpoint)
       if (newIsMobile !== isMobile) setIsMobile(newIsMobile);
       if (newColumns !== columns) setColumns(newColumns);
     };
@@ -94,8 +84,6 @@ export default function JobManagement() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [loadJobs, isMobile, columns]); // Dependencies ensure stability of the effect
-
-  // --- RENDER START (Using original inline styles for UI consistency) ---
 
   return (
     <div
