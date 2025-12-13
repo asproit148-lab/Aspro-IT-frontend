@@ -161,7 +161,7 @@ export default function CourseInfo({ course }) {
                             flexWrap: "wrap", // Allow wrapping on small screens
                         }}
                     >
-                        <div style={{ fontSize: isMobile ? "36px" : "48px", fontWeight: 600 }}>Price</div>
+                        <div style={{ fontSize: isMobile ? "30px" : "48px", fontWeight: 600 }}>Price</div>
                         <div style={{ fontSize: isMobile ? "24px" : "32px", fontWeight: 600, color: "#0DA745" }}>
                             ₹{course.price}
                         </div>
@@ -178,14 +178,14 @@ export default function CourseInfo({ course }) {
                             style={{
                                 // Pushed to the right on desktop, kept in flow on mobile
                                 marginLeft: isMobile ? "0" : "auto", 
-                                width: "81px",
+                                width: isMobile ? "64px" : "81px", 
                                 height: "32px",
                                 borderRadius: "8px",
                                 background: "rgba(255,255,255,0.25)",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                fontSize: "16px",
+                                fontSize: isMobile ? "12px" : "16px", 
                                 fontWeight: 500,
                             }}
                         >
@@ -208,7 +208,7 @@ export default function CourseInfo({ course }) {
                             <button
                                 style={{
                                     minWidth: isMobile ? "100%" : "520px", //  ADJUSTED: 100% width on mobile
-                                    width: isMobile ? "100%" : "auto", // Added full width fallback
+                                    width: isMobile ? "320px" : "auto", // Added full width fallback
                                     height: isMobile ? "50px" : "66px", //  ADJUSTED HEIGHT
                                     borderRadius: "8px",
                                     border: "1px solid #FFFFFF",
@@ -252,10 +252,9 @@ export default function CourseInfo({ course }) {
                     <div
                         style={{
                             display: "grid",
-                            // ⬅️ ADJUSTED: Single column on mobile
                             gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", 
-                            rowGap: isMobile ? "16px" : "24px", //  ADJUSTED GAP
-                            columnGap: isMobile ? "20px" : "40px", //  ADJUSTED GAP
+                            rowGap: isMobile ? "16px" : "24px", 
+                            columnGap: isMobile ? "20px" : "40px", 
                         }}
                     >
                         <div style={{ width: "100%", height: "auto" }}>
@@ -329,7 +328,6 @@ export default function CourseInfo({ course }) {
                             display: "flex",
                             justifyContent: "space-around",
                             marginTop: isMobile ? "20px" : "28px", //  ADJUSTED MARGIN
-                            flexWrap: "wrap", // Allow wrapping on mobile
                             gap: isMobile ? "20px" : "0",
                         }}
                     >
@@ -345,7 +343,6 @@ export default function CourseInfo({ course }) {
                                     flexDirection: "column",
                                     alignItems: "center",
                                     gap: "8px",
-                                    // Give some width for wrapping consistency on mobile
                                     width: isMobile ? '30%' : 'auto', 
                                 }}
                             >

@@ -373,7 +373,7 @@ export default function Enroll() {
                     </div>
                 </div>
 
-                {/* PRICE DETAILS CONTAINER (Reverted to original logic) */}
+                {/* PRICE DETAILS CONTAINER */}
                 <div 
                     style={{ 
                         width: isMobile ? "95%" : "36%", 
@@ -389,7 +389,7 @@ export default function Enroll() {
                 >
                     {/* Prices - ORIGINAL LOGIC (no change from initial state) */}
                     <div style={{ display: "flex", width: "100%", alignItems: "baseline", gap: "20px", marginBottom: "5px", marginTop: isMobile ? "10px" : "40px" }}>
-                        <div style={{ fontSize: isMobile ? "36px" : "42px", width: "auto", fontWeight: 700, color: "#FFFFFF" }}>₹{price}</div>
+                        <div style={{ fontSize: isMobile ? "30px" : "42px", width: "auto", fontWeight: 700, color: "#FFFFFF" }}>₹{price}</div>
                         <div style={{ fontSize: isMobile ? "20px" : "24px", width: "auto", fontWeight: 700, color: "rgba(255,255,255,0.5)", textDecoration: "line-through" }}>₹{originalPrice}</div>
                         
                         <div style={{ 

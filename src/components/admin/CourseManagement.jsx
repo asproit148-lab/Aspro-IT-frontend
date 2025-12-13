@@ -152,7 +152,6 @@ export default function CourseManagement() {
                 minHeight: "100vh",
                 marginBottom: "50px",
                 boxSizing: 'border-box',
-                // Removed the fixed width from original for better centering/flexibility
             }}
             >
             {/* Heading */}
@@ -262,6 +261,7 @@ export default function CourseManagement() {
                         key={course._id}
                         style={{
                             width: "100%", 
+                            maxWidth: "350px",
                             minHeight: isMobile ? "300px" : "350px",
                             background: "#343434",
                             borderRadius: "20px",
