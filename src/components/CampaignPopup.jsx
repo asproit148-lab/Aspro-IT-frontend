@@ -140,6 +140,28 @@ const ActionButton = styled.button`
   }
 `;
 
+// Function to add Cloudinary URL transformation parameters
+const optimizeCloudinaryUrl = (url) => {
+  // Check if the URL is from Cloudinary
+  if (url && url.includes("res.cloudinary.com")) {
+    const pathIndex = url.indexOf("/upload/");
+    if (pathIndex !== -1) {
+      const baseUrl = url.substring(0, pathIndex + 8); // .../upload/
+      const pathAndResource = url.substring(pathIndex + 8);
+      
+      // Transformation parameters:
+      // c_fill: Crop to fill container.
+      // g_auto: Auto-gravity (smart cropping).
+      // w_550, h_300: Resize to fit max desktop container size (548x300 container size).
+      // f_auto: Automatically deliver the best format (WebP/AVIF).
+      const transformation = `c_fill,g_auto,w_550,h_300,f_auto`; 
+      
+      return `${baseUrl}${transformation}/${pathAndResource}`;
+    }
+  }
+  return url;
+};
+
 export default function CampaignPopup() {
   const [show, setShow] = useState(true);
   const [banner, setBanner] = useState(null);
@@ -176,11 +198,13 @@ useEffect(() => {
 
   if (!show) return null;
 
-  const image = banner?.image?.startsWith("http")
+  const urlToOptimize = banner?.image?.startsWith("http")
   ? banner.image
   : `${import.meta.env.VITE_API_URL}/uploads/${banner?.image}`;
 
-  const title = banner?.title || "Limited Time Christmas Deal!";
+const image = optimizeCloudinaryUrl(urlToOptimize); // Use the optimization function
+
+const title = banner?.title || "Limited Time Christmas Deal!";
 
   const handleButtonClick = () => {
     if (banner?.url) {
@@ -211,7 +235,13 @@ useEffect(() => {
           </CloseButton>
 
           <BannerImageContainer>
-            <BannerImage src={image} alt={title} />
+            <BannerImage 
+    src={image} 
+    alt={title} 
+    // ADDED: Explicit dimensions to reserve space and fix CLS
+    width="548" 
+    height="300" 
+  />
           </BannerImageContainer>
 
           <BottomSection>

@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { askChatbot } from "../api/chatbot";
-import whatsappLogo from "../assets/whatsapp.png";
-import chatBot from '../assets/chatBot.png';
+import whatsappLogo from "../assets/whatsapp.webp";
+import chatBot from '../assets/chatBot.webp';
 
 export default function ChatbotWidget() {
   const [open, setOpen] = useState(false);

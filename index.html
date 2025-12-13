@@ -1,26 +1,45 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" as="style" />
-    <link 
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" 
-      rel="stylesheet" 
-      media="print" 
-      onload="this.media='all'" 
-    />
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    </noscript>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+  <style>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>asproit</title>
-    <meta name="description" content="Join Aspro IT to master future-ready skills, including full-stack development, data science, and more. Online courses designed for growth and success." />
-    
-    <link rel="modulepreload" href="/src/main.jsx" />
-  </head>
+    #root {
+      background-image: url('/assets/homeBg.webp');
+      min-height: 100vh; 
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+  <link 
+    rel="preload" 
+    as="image" 
+    href="/assets/homeBg.webp" 
+    fetchpriority="high" 
+    type="image/webp" 
+  />
+  
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" as="style" />
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" 
+    rel="stylesheet" 
+    media="print" 
+    onload="this.media='all'" 
+  />
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  </noscript>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>asproit</title>
+  <meta name="description" content="Join Aspro IT to master future-ready skills, including full-stack development, data science, and more. Online courses designed for growth and success." />
+  
+  <link rel="modulepreload" href="/src/main.jsx" />
+</head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { ChevronLeft } from "lucide-react";
 import Header from "../components/Header";
-import bg from "../assets/homeBg.jpg";
+import bg from "../assets/homeBg.WebP";
 import { getAllResources } from '../api/resource';
 import Footer from '../components/Footer';
 

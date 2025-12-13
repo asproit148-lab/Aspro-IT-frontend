@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { ChevronLeft } from "lucide-react"; // Import for the back button
 import Header from "../components/Header";
-import bg from "../assets/homeBg.jpg";
+import bg from "../assets/homeBg.WebP";
 import { downloadCertificate } from "../api/certificate";
 import Footer from '../components/Footer';
 

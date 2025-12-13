@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "@emotion/styled";
 import { ChevronLeft } from "lucide-react";
-import { useParams, useNavigate } from "react-router-dom"; // Import hooks for routing
+import { useParams, useNavigate } from "react-router-dom"; 
 import Header from "../components/Header";
 import Footer from '../components/Footer';
-import bg from "../assets/homeBg.jpg";
-// Import the new API function
+import bg from "../assets/homeBg.webp";
 import { getQuestionsByCourseId } from "../api/practiceque"; 
 
 const desktopBreakpoint = 992;
-
-/* RE-USED STYLED COMPONENTS */
 
 const PageContainer = styled.div`
   background-color: black;
@@ -133,8 +130,6 @@ const FallbackText = styled.p`
   text-align: ${props => props.$isMobile ? "center" : "left"};
 `;
 
-
-// Helper to convert slug to readable title
 const slugToTitle = (slug) => {
     return slug
         .split('-')

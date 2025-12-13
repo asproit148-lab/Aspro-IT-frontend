@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "@emotion/styled";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.webp";
 import { Link, useLocation } from "react-router-dom";
 import LoginPopup from "../components/LoginPopup";
 import SignupPopup from "../components/SignupPopup";

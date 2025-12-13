@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import bg from "../assets/homeBg.jpg";
+import bg from "../assets/homeBg.WebP";
 import contactImg from "../assets/contact.png";
 import Footer from "../components/Footer";
 import { sendContact } from "../api/email";
