@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom"; 
 import Header from "../components/Header";
-import bg from "../assets/homeBg.WebP";
+import bg from "../assets/homeBg.Webp";
 import { getAllCourses } from "../api/course"; 
 import {getAllQuestions} from '../api/practiceque';
 import Footer from '../components/Footer';

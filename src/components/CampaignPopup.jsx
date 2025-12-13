@@ -148,12 +148,7 @@ const optimizeCloudinaryUrl = (url) => {
     if (pathIndex !== -1) {
       const baseUrl = url.substring(0, pathIndex + 8); // .../upload/
       const pathAndResource = url.substring(pathIndex + 8);
-      
-      // Transformation parameters:
-      // c_fill: Crop to fill container.
-      // g_auto: Auto-gravity (smart cropping).
-      // w_550, h_300: Resize to fit max desktop container size (548x300 container size).
-      // f_auto: Automatically deliver the best format (WebP/AVIF).
+
       const transformation = `c_fill,g_auto,w_550,h_300,f_auto`; 
       
       return `${baseUrl}${transformation}/${pathAndResource}`;

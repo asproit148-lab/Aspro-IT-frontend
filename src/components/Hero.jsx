@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import bg from "../assets/homeBg.WebP";
+import bg from "../assets/homeBg.Webp";
 
 const desktopBreakpoint = 768;
 
