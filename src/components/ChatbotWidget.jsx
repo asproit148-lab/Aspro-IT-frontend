@@ -7,14 +7,9 @@ import chatBot from '../assets/chatBot.webp';
 export default function ChatbotWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { 
-      sender: "bot", 
-      text: "👋 Hi! How can we help you today?",
-      links: []
-    },
+    { sender: "bot", text: "👋 Hi! How can we help you today?" },
   ]);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -24,32 +19,21 @@ export default function ChatbotWidget() {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMsg = { sender: "user", text: input.trim(), links: [] };
+    const userMsg = { sender: "user", text: input.trim() };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
-    setLoading(true);
 
     try {
       const res = await askChatbot({ message: input.trim() });
-      
-      // Handle the response object {text, links, type}
-      const botMsg = { 
-        sender: "bot", 
-        text: res.text || res.reply || "Sorry, I couldn't understand that.",
-        links: res.links || []
-      };
-      
+      const botMsg = { sender: "bot", text: res.reply };
       setMessages((prev) => [...prev, botMsg]);
     } catch (err) {
       console.error("Chatbot request failed:", err);
       const botMsg = {
         sender: "bot",
         text: "❌ Sorry, something went wrong. Please try again.",
-        links: []
       };
       setMessages((prev) => [...prev, botMsg]);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -59,6 +43,7 @@ export default function ChatbotWidget() {
 
   return (
     <>
+
       {/* Chat Open Button */}
       {!open && (
         <button
@@ -82,7 +67,7 @@ export default function ChatbotWidget() {
             overflow: "hidden",
           }}
         >
-          <img src={chatBot} alt="Chatbot" style={{ width: "64px", height: "64px" }} />
+          <img src={chatBot} alt="WhatsApp" style={{ width: "64px", height: "64px" }} />
         </button>
       )}
 
@@ -121,7 +106,7 @@ export default function ChatbotWidget() {
             right: "24px",
             width: "350px",
             maxWidth: "92vw",
-            height: "500px",
+            height: "450px",
             background: "#fff",
             borderRadius: "18px",
             boxShadow: "0 6px 22px rgba(0,0,0,0.25)",
@@ -163,101 +148,23 @@ export default function ChatbotWidget() {
                 style={{
                   display: "flex",
                   justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
-                  marginBottom: "12px",
+                  marginBottom: "10px",
                 }}
               >
                 <div
                   style={{
-                    maxWidth: "80%",
-                    padding: "10px 14px",
+                    maxWidth: "70%",
+                    padding: "9px 13px",
                     borderRadius: "12px",
                     background: msg.sender === "user" ? "#3D96E0" : "#E6E6E6",
                     color: msg.sender === "user" ? "white" : "black",
                     fontSize: "14px",
-                    whiteSpace: "pre-line",
                   }}
                 >
-                  {/* Message Text */}
-                  <div>{msg.text}</div>
-                  
-                  {/* Links/Buttons */}
-                  {msg.links && msg.links.length > 0 && (
-                    <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "6px" }}>
-                      {msg.links.map((link, linkIdx) => (
-                        <a
-                          key={linkIdx}
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            display: "block",
-                            padding: "8px 12px",
-                            background: msg.sender === "user" ? "#fff" : "#3D96E0",
-                            color: msg.sender === "user" ? "#3D96E0" : "#fff",
-                            textAlign: "center",
-                            borderRadius: "8px",
-                            textDecoration: "none",
-                            fontSize: "13px",
-                            fontWeight: "600",
-                            transition: "all 0.2s",
-                          }}
-                          onMouseOver={(e) => {
-                            e.target.style.transform = "scale(1.02)";
-                            e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
-                          }}
-                          onMouseOut={(e) => {
-                            e.target.style.transform = "scale(1)";
-                            e.target.style.boxShadow = "none";
-                          }}
-                        >
-                          {link.text}
-                        </a>
-                      ))}
-                    </div>
-                  )}
+                  {msg.text}
                 </div>
               </div>
             ))}
-            
-            {/* Loading Indicator */}
-            {loading && (
-              <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: "12px" }}>
-                <div
-                  style={{
-                    padding: "10px 14px",
-                    borderRadius: "12px",
-                    background: "#E6E6E6",
-                    display: "flex",
-                    gap: "4px",
-                  }}
-                >
-                  <div style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    background: "#3D96E0",
-                    animation: "bounce 1.4s infinite ease-in-out both",
-                  }}></div>
-                  <div style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    background: "#3D96E0",
-                    animation: "bounce 1.4s infinite ease-in-out both",
-                    animationDelay: "0.16s",
-                  }}></div>
-                  <div style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    background: "#3D96E0",
-                    animation: "bounce 1.4s infinite ease-in-out both",
-                    animationDelay: "0.32s",
-                  }}></div>
-                </div>
-              </div>
-            )}
-            
             <div ref={messagesEndRef} />
           </div>
 
@@ -276,7 +183,6 @@ export default function ChatbotWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              disabled={loading}
               style={{
                 flex: 1,
                 height: "38px",
@@ -288,33 +194,21 @@ export default function ChatbotWidget() {
             />
             <button
               onClick={handleSend}
-              disabled={loading || !input.trim()}
               style={{
                 padding: "0 14px",
-                background: loading ? "#ccc" : "#3D96E0",
+                background: "#3D96E0",
                 color: "#fff",
                 border: "none",
                 borderRadius: "8px",
-                cursor: loading ? "not-allowed" : "pointer",
+                cursor: "pointer",
                 fontWeight: "600",
               }}
             >
-              {loading ? "..." : "Send"}
+              Send
             </button>
           </div>
         </div>
       )}
-
-      <style>{`
-        @keyframes bounce {
-          0%, 80%, 100% { 
-            transform: scale(0);
-          } 
-          40% { 
-            transform: scale(1.0);
-          }
-        }
-      `}</style>
     </>
   );
 }
