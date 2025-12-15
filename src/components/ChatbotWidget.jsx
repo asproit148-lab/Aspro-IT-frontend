@@ -16,26 +16,40 @@ export default function ChatbotWidget() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = async () => {
-    if (!input.trim()) return;
+const handleSend = async () => {
+  if (!input.trim()) return;
 
-    const userMsg = { sender: "user", text: input.trim() };
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
+  const userMsg = { sender: "user", text: input.trim() };
+  setMessages((prev) => [...prev, userMsg]);
+  setInput("");
 
-    try {
-      const res = await askChatbot({ message: input.trim() });
-      const botMsg = { sender: "bot", text: res.reply };
-      setMessages((prev) => [...prev, botMsg]);
-    } catch (err) {
-      console.error("Chatbot request failed:", err);
-      const botMsg = {
-        sender: "bot",
-        text: "❌ Sorry, something went wrong. Please try again.",
-      };
-      setMessages((prev) => [...prev, botMsg]);
+  try {
+    const res = await askChatbot({ message: input.trim() });
+    
+    let replyText;
+    
+    if (typeof res.reply === 'object' && res.reply !== null) {
+        replyText = res.reply.content || res.reply.text;
+
+        if (!replyText) {
+            replyText = `[Error: Reply object received] ${JSON.stringify(res.reply)}`;
+        }
+    } else {
+        replyText = res.reply;
     }
-  };
+    
+    const botMsg = { sender: "bot", text: replyText };
+    setMessages((prev) => [...prev, botMsg]);
+    
+  } catch (err) {
+    console.error("Chatbot request failed:", err);
+    const botMsg = {
+      sender: "bot",
+      text: "❌ Sorry, something went wrong. Please try again.",
+    };
+    setMessages((prev) => [...prev, botMsg]);
+  }
+};
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") handleSend();
