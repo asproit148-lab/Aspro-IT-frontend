@@ -235,7 +235,7 @@ export default function Footer() {
             lineHeight: "160%",
             color: "#FFFFFF",
             whiteSpace: 'normal',
-            textAlign: isMobile ? "center" : "left",
+            textAlign: "justify",
           }}>
             “AsproIT is an IT training and internship company dedicated to
             empowering students and professionals with practical skills in

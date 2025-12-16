@@ -180,7 +180,7 @@ export default function CourseInfo({ course }) {
                                 width: isMobile ? "64px" : "81px", 
                                 height: "32px",
                                 borderRadius: "8px",
-                                background: "rgba(255,255,255,0.25)",
+                                background: "#0DA745",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",

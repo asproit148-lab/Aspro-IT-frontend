@@ -88,7 +88,7 @@ export default function LiveLearning() {
         flexDirection: "column",
         alignItems: "center",
         overflow: "hidden",
-        padding: "60px 20px 40px 20px",
+        padding: isMobile ? "60px 20px 20px 20px" : "60px 20px 20px 0px",
         transition: "all 0.4s ease",
         gap: "30px",
       }}
@@ -151,7 +151,7 @@ export default function LiveLearning() {
           display: isMobile ? "flex" : "grid", 
           gridTemplateColumns: isMobile 
             ? "unset" 
-            : "repeat(auto-fit, minmax(350px, 1fr))", 
+            : "repeat(auto-fit, minmax(300px, 1fr))", 
           overflowX: isMobile ? "auto" : "unset", 
           scrollSnapType: isMobile ? "x mandatory" : "unset", 
           paddingBottom: isMobile ? "10px" : "unset", 
@@ -173,7 +173,7 @@ export default function LiveLearning() {
             to={`/courses/${slugify(course.Course_title)}/${course._id}`}
             style={{
               flexShrink: isMobile ? 0 : 1, 
-              width: isMobile ? "300px" : "100%", 
+              width: isMobile ? "100%" : "100%", 
               height: "auto", 
               maxWidth: isMobile ? "300px" : "407px", 
               borderRadius: "24px",

@@ -70,7 +70,7 @@ const LogoWrapper = styled('div', { shouldForwardProp: customShouldForwardProp }
 `;
 
 const LogoImage = styled('img', { shouldForwardProp: customShouldForwardProp })`
-  width: ${props => props.$isMobile ? "120px" : "210px"};
+  width: ${props => props.$isMobile ? "150px" : "180px"};
   height: ${props => props.$isMobile ? "auto" : "60px"};
   object-fit: contain;
 `;

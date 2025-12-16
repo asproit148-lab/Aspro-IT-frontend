@@ -393,12 +393,11 @@ export default function Enroll() {
                         <div style={{ fontSize: isMobile ? "20px" : "24px", width: "auto", fontWeight: 700, color: "rgba(255,255,255,0.5)", textDecoration: "line-through" }}>₹{originalPrice}</div>
                         
                         <div style={{ 
-                            marginLeft: "auto", 
+                            marginRight: "auto", 
                             minWidth: isMobile ? "60px" : "70px", 
                             height: isMobile ? "28px" : "32px", 
-                            borderRadius: "25px", 
-                            color: "#0DA745", 
-                            background: "#0DA74540", 
+                            borderRadius: "8px", 
+                            background: "#0DA745",
                             display: "flex", 
                             alignItems: "center", 
                             justifyContent: "center", 
