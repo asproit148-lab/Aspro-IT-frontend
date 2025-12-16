@@ -131,7 +131,7 @@ const DropdownWrapper = styled.div`
   width: 110%;
 
   @media(max-width:${desktopBreakpoint}) {
-    width: 100%;
+    width: 110%;
   }
 `;
 

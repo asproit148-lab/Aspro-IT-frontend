@@ -99,12 +99,11 @@ const RightSide = styled.div`
 
   @media (max-width: ${desktopBreakpoint}px) {
     width: 100%;
-    /* Change to column layout but wrap the inner columns */
-    flex-direction: row; // Keep row direction for wrapping
-    flex-wrap: wrap; // Allow wrapping
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 30px 20px;
-    justify-content: space-between; /* Space out columns */
-    align-items: flex-start; /* Align columns to the start */
+    justify-content: space-between;
+    align-items: flex-start; 
   }
 `;
 
@@ -122,10 +121,8 @@ const ColumnContent = styled.div`
     max-width: 100%;
     text-align: left;
 
-    /* New rule for Contacts and Company to share a row */
-    /* We'll use a prop to distinguish them in the component's JSX */
     ${props => props.$halfWidthOnMobile && `
-      min-width: calc(50% - 10px); /* Roughly half-width minus half the gap */
+      min-width: calc(50% - 10px);
       max-width: calc(50% - 10px);
       flex: 0 0 calc(50% - 10px);
     `}
@@ -223,7 +220,6 @@ const EmbeddedMapWrapper = styled.div`
 export default function Footer() {
   const isMobile = useIsMobile(desktopBreakpoint);
   
-  // Static Map Embed URL for the given address (Patna, India)
   const mapEmbedUrl = 
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3106.041403323105!2d85.07795399999999!3d25.606630400000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed575b37041b3d%3A0x52e04703ab113cfd!2sAspro%20IT%20Training%20%E2%80%93%20Python%20%26%20Programming%20Classes%20Online%20%7C%20Offline%20Free%20%26%20Paid%20in%20Patna%20(India)!5e1!3m2!1sen!2sin!4v1765138051676!5m2!1sen!2sin";
 
@@ -233,7 +229,6 @@ export default function Footer() {
       <LeftSide>
         <CompanyDescriptionWrapper>
           <LogoImage src={logo} alt="AsproIT Logo" />
-          {/* OPTIMIZATION: FooterText used as base paragraph, inline styles removed/consolidated */}
           <FooterText as="p" $isMobile={isMobile} style={{ 
             fontWeight: 400, 
             fontSize: isMobile ? "14px" : "16px",
@@ -264,7 +259,6 @@ export default function Footer() {
           
           {/* Embedded Map */}
           <EmbeddedMapWrapper>
-            {/* OPTIMIZATION: Fixed map source URL */}
             <iframe
               title="AsproIT Location"
               src={mapEmbedUrl}
@@ -288,7 +282,6 @@ export default function Footer() {
             {name:"Contact", link:"/contact"},
           ].map((item,i)=>(
             <FooterLink to={item.link} key={i}> 
-              {/* OPTIMIZATION: Removed redundant style={{textDecoration:"none"}} and used $smallLineHeight prop */}
               <FooterText $smallLineHeight>{item.name}</FooterText> 
             </FooterLink>
           ))}
@@ -299,7 +292,6 @@ export default function Footer() {
           <ColumnHeading>Contacts</ColumnHeading>
           {["+91-9128444000", "admin@asproit.com"].map((item,i)=>(
             <FooterText key={i} as="p" $smallLineHeight>
-              {/* OPTIMIZATION: Removed inline style={{ lineHeight: "2px" }} and used $smallLineHeight prop */}
               {item}
             </FooterText>
           ))}

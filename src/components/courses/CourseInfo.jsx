@@ -89,8 +89,8 @@ export default function CourseInfo({ course }) {
                             alignItems: "center",
                             gap: "8px",
                             color: "#B272DEBF",
-                            fontSize: isMobile ? "16px" : "20px", //  ADJUSTED FONT SIZE
-                            marginBottom: isMobile ? "10px" : "14px", //  ADJUSTED MARGIN
+                            fontSize: isMobile ? "16px" : "20px", 
+                            marginBottom: isMobile ? "10px" : "14px", 
                         }}
                     >
                         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
@@ -105,9 +105,9 @@ export default function CourseInfo({ course }) {
                         <h1
                             style={{
                                 margin: 0,
-                                fontSize: isMobile ? "32px" : "48px", //  ADJUSTED FONT SIZE
+                                fontSize: isMobile ? "32px" : "48px", 
                                 fontWeight: 700,
-                                lineHeight: "1.2", // Tightened line height on mobile
+                                lineHeight: "1.2", 
                                 color: "#FFFFFF",
                             }}
                         >
@@ -124,7 +124,7 @@ export default function CourseInfo({ course }) {
                             flexWrap: "wrap",
                             gap: "10px",
                             marginBottom: "18px",
-                            width: isMobile ? "100%" : "460px", //  ADJUSTED WIDTH
+                            width: isMobile ? "100%" : "460px", 
                         }}
                     >
                         {[
@@ -156,9 +156,9 @@ export default function CourseInfo({ course }) {
                         style={{
                             display: "flex",
                             alignItems: "baseline",
-                            gap: isMobile ? "10px" : "20px", // ADJUSTED GAP
+                            gap: isMobile ? "10px" : "20px", 
                             marginBottom: "14px",
-                            flexWrap: "wrap", // Allow wrapping on small screens
+                            flexWrap: "wrap", 
                         }}
                     >
                         <div style={{ fontSize: isMobile ? "30px" : "48px", fontWeight: 600 }}>Price</div>
@@ -167,7 +167,7 @@ export default function CourseInfo({ course }) {
                         </div>
                         <div
                             style={{
-                                fontSize: isMobile ? "16px" : "20px", //  ADJUSTED FONT SIZE
+                                fontSize: isMobile ? "16px" : "20px", 
                                 color: "rgba(255,255,255,0.5)",
                                 textDecoration: "line-through",
                             }}
@@ -176,7 +176,6 @@ export default function CourseInfo({ course }) {
                         </div>
                         <div
                             style={{
-                                // Pushed to the right on desktop, kept in flow on mobile
                                 marginLeft: isMobile ? "0" : "auto", 
                                 width: isMobile ? "64px" : "81px", 
                                 height: "32px",
@@ -348,13 +347,14 @@ export default function CourseInfo({ course }) {
                             >
                                 <div
                                     style={{
-                                        width: isMobile ? "60px" : "70px", //  ADJUSTED SIZE
-                                        height: isMobile ? "60px" : "70px", //  ADJUSTED SIZE
+                                        width: isMobile ? "60px" : "70px", 
+                                        height: isMobile ? "60px" : "70px", 
                                         borderRadius: "50%",
                                         background: circle.color,
                                         boxShadow: `0px 1px 12px 0px ${circle.color}`,
                                         display: "flex",
                                         alignItems: "center",
+                                        textAlign: "center",
                                         justifyContent: "center",
                                     }}
                                 >
@@ -362,8 +362,8 @@ export default function CourseInfo({ course }) {
                                         src={circle.img}
                                         alt={circle.label}
                                         style={{
-                                            width: isMobile ? "30px" : "40px", //  ADJUSTED ICON SIZE
-                                            height: isMobile ? "30px" : "40px", //  ADJUSTED ICON SIZE
+                                            width: isMobile ? "30px" : "40px", 
+                                            height: isMobile ? "30px" : "40px", 
                                             objectFit: "contain",
                                         }}
                                     />
