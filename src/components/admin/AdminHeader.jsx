@@ -4,11 +4,12 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import {
     LogOut, BadgeIndianRupee, LayoutDashboard, Megaphone, BookOpen, Tag, 
-    NotebookPen, FileText, Briefcase, SquareUserRound, Menu, X, Key
+    NotebookPen, FileText, Briefcase, SquareUserRound, Menu, X
 } from "lucide-react"; 
 
 import ChangePasswordPopup from '../admin/ChangePassword.jsx'; 
 
+// --- CONFIGURATION & THEME ---
 const mobileBreakpoint = 992; 
 const sidebarWidthDesktop = 120;
 const sidebarWidthMobile = 260;
@@ -20,6 +21,7 @@ const baseColors = {
     white: "#FFFFFF",
 };
 
+// --- DYNAMIC STYLES ---
 const HeaderStyle = (isMobile) => ({
     position: "fixed",
     top: 0,
@@ -68,7 +70,7 @@ const ProfileContainerStyle = (isMobile) => ({
 const DropdownStyle = (isMobile) => ({
     position: "absolute",
     top: isMobile ? "45px" : "55px",
-    right: isMobile ? '0' : '0', 
+    right: '0', 
     background: baseColors.darkGrey,
     borderRadius: "8px",
     boxShadow: "0px 4px 12px rgba(0,0,0,0.4)",
@@ -91,9 +93,6 @@ const DropdownButtonStyle = {
     width: "100%",
     boxSizing: 'border-box',
     transition: 'background-color 0.2s',
-    "&:hover": {
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-    }
 };
 
 const SidebarStyle = (isMobile, showMobileNav) => ({
@@ -101,10 +100,8 @@ const SidebarStyle = (isMobile, showMobileNav) => ({
     top: isMobile ? "60px" : "105px", 
     left: isMobile ? (showMobileNav ? "0" : `-${sidebarWidthMobile}px`) : "0", 
     transition: 'left 0.3s ease',
-    
     width: isMobile ? `${sidebarWidthMobile}px` : `${sidebarWidthDesktop}px`,
     height: isMobile ? "calc(100vh - 60px)" : "calc(100vh - 105px)",
-    
     backgroundColor: baseColors.black,
     alignItems: isMobile ? "flex-start" : "center", 
     display: 'flex', 
@@ -153,6 +150,8 @@ export default function AdminHeader() {
     const { signOut } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    
+    // --- UI STATE ---
     const [hovered, setHovered] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
@@ -160,31 +159,24 @@ export default function AdminHeader() {
     const [showChangePasswordPopup, setShowChangePasswordPopup] = useState(false); 
     const dropdownRef = useRef(null);
 
+    // --- RESPONSIVE & CLICK EFFECTS ---
     useEffect(() => {
         const handleResize = () => {
             const mobile = window.innerWidth < mobileBreakpoint;
             setIsMobile(mobile);
-            if (!mobile && showMobileNav) {
-                setShowMobileNav(false);
-            }
+            if (!mobile && showMobileNav) setShowMobileNav(false);
         };
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, [showMobileNav]);
 
-    // Effect to close mobile nav when navigating or screen size changes
     useEffect(() => {
-        if (showMobileNav && isMobile) {
-            setShowMobileNav(false);
-        }
-        // Close dropdown and popup on navigation
+        if (showMobileNav && isMobile) setShowMobileNav(false);
         setShowDropdown(false);
         setShowChangePasswordPopup(false); 
+    }, [location.pathname, isMobile]);
 
-    }, [location.pathname]);
-
-    // Effect to close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -193,9 +185,9 @@ export default function AdminHeader() {
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [dropdownRef]);
+    }, []);
 
-
+    // --- NAVIGATION CONFIG ---
     const navItems = [
         { label: "Dashboard", icon: <LayoutDashboard />, path: "/admin/dashboard" },
         { label: "Campaigns", icon: <Megaphone />, path: "/admin/campaigns" },
@@ -210,23 +202,13 @@ export default function AdminHeader() {
 
     const handleNavItemClick = (path) => {
         navigate(path);
-        if (isMobile) {
-            setShowMobileNav(false);
-        }
-    };
-
-    const handleChangePassword = (e) => {
-        e.stopPropagation();
-        setShowChangePasswordPopup(true); 
-        setShowDropdown(false);
+        if (isMobile) setShowMobileNav(false);
     };
 
     return (
         <>
-            {/* Top Header */}
+            {/* TOP HEADER */}
             <div style={HeaderStyle(isMobile)}>
-                
-                {/* Mobile Menu Icon (Hamburger) */}
                 {isMobile && (
                     <div style={{ order: 1 }}>
                         <Menu 
@@ -238,18 +220,13 @@ export default function AdminHeader() {
                     </div>
                 )}
                 
-                {/* Logo Section */}
                 <div style={LogoContainerStyle(isMobile)}>
                     <Link to="/admin/dashboard">
-                        <img
-                            src={logo}
-                            alt="Admin Logo"
-                            style={LogoImageStyle(isMobile)}
-                        />
+                        <img src={logo} alt="Admin Logo" style={LogoImageStyle(isMobile)} />
                     </Link>
                 </div>
 
-                {/* Right Section - Profile/Logout */}
+                {/* PROFILE & DROPDOWN */}
                 <div style={ProfileContainerStyle(isMobile)} ref={dropdownRef}>
                     <div
                         style={{
@@ -262,8 +239,7 @@ export default function AdminHeader() {
                         onClick={() => setShowDropdown(prev => !prev)}
                     >
                         <SquareUserRound size={isMobile ? 30 : 40} color={baseColors.white} />
-                        <span
-                            style={{
+                        <span style={{
                                 fontFamily: "Poppins, sans-serif",
                                 fontWeight: 300,
                                 fontSize: isMobile ? "16px" : "24px",
@@ -273,24 +249,10 @@ export default function AdminHeader() {
                             Admin
                         </span>
 
-                        {/* Dropdown */}
                         {showDropdown && (
                             <div style={DropdownStyle(isMobile)}>
                                 <button
-                                    style={{
-                                        ...DropdownButtonStyle, 
-                                        ':hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' } 
-                                    }}
-                                    onClick={handleChangePassword}
-                                >
-                                    <Key size={16} />
-                                    Change Password
-                                </button>
-                                <button
-                                    style={{
-                                        ...DropdownButtonStyle, 
-                                        ':hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' }
-                                    }}
+                                    style={DropdownButtonStyle}
                                     onClick={(e) => {
                                         e.stopPropagation(); 
                                         signOut();
@@ -306,9 +268,8 @@ export default function AdminHeader() {
                 </div>
             </div>
 
-            {/* Left Sidebar */}
+            {/* SIDEBAR NAVIGATION */}
             <div style={SidebarStyle(isMobile, showMobileNav)}>
-                {/* Close Button for Mobile */}
                 {isMobile && (
                     <div style={{ position: 'absolute', top: '15px', right: '15px' }}>
                         <X 
@@ -332,13 +293,10 @@ export default function AdminHeader() {
                             onMouseLeave={() => setHovered(null)}
                             style={NavItemStyle(isMobile, isActive, isHovered)}
                         >
-                            {/* Icon */}
                             {React.cloneElement(item.icon, {
                                 size: isMobile ? 20 : 25,
                                 color: isActive || isHovered ? baseColors.primary : baseColors.white,
                             })}
-
-                            {/* Text Label */}
                             <p style={NavLabelStyle(isMobile)}>
                                 {item.label}
                             </p>
@@ -347,13 +305,12 @@ export default function AdminHeader() {
                 })}
             </div>
             
-            {/* Mobile Overlay when drawer is open */}
+            {/* OVERLAYS & POPUPS */}
             {isMobile && showMobileNav && (
                 <div
                     style={{
                         position: "fixed",
-                        top: 0,
-                        left: 0,
+                        inset: 0,
                         width: "100vw",
                         height: "100vh",
                         backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -362,6 +319,7 @@ export default function AdminHeader() {
                     onClick={() => setShowMobileNav(false)}
                 />
             )}
+            
             {showChangePasswordPopup && (
                 <ChangePasswordPopup 
                     onClose={() => setShowChangePasswordPopup(false)}

@@ -3,11 +3,13 @@ import { Upload } from "lucide-react";
 import { addBanner } from "../../api/campaign";
 
 export default function AddCampaign({ onClose, onSave }) {
-  const [imagePreview, setImagePreview] = useState(null); // for showing preview
-  const [imageFile, setImageFile] = useState(null); // actual file to send
+  // --- STATE MANAGEMENT ---
+  const [imagePreview, setImagePreview] = useState(null); 
+  const [imageFile, setImageFile] = useState(null); 
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
 
+  // --- IMAGE PROCESSING ---
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -18,19 +20,22 @@ export default function AddCampaign({ onClose, onSave }) {
     }
   };
 
+  // --- FORM SUBMISSION & API CALL ---
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Input Validation
     if (!title || !imageFile) {
       alert("Please upload an image and enter a title.");
       return;
     }
 
     try {
+      // Prepare Multipart Form Data
       const formData = new FormData();
       formData.append("title", title);
       formData.append("url", url);
-      formData.append("image", imageFile); // Multer reads this
+      formData.append("image", imageFile); 
 
       const banner = await addBanner(formData);
 
@@ -45,6 +50,7 @@ export default function AddCampaign({ onClose, onSave }) {
   };
 
   return (
+    // --- MODAL OVERLAY ---
     <div
       style={{
         position: "fixed",
@@ -57,6 +63,7 @@ export default function AddCampaign({ onClose, onSave }) {
         zIndex: 1000,
       }}
     >
+      {/* MODAL CONTAINER */}
       <div
         style={{
           width: "600px",
@@ -82,7 +89,7 @@ export default function AddCampaign({ onClose, onSave }) {
           Add Campaigns
         </h2>
 
-        {/* Upload Area */}
+        {/* DRAG & DROP / UPLOAD SECTION */}
         <label
           htmlFor="campaign-image"
           style={{
@@ -135,7 +142,7 @@ export default function AddCampaign({ onClose, onSave }) {
           />
         </label>
 
-        {/* Title Input */}
+        {/* INPUT FIELDS (TITLE & URL) */}
         <div
           style={{
             width: "97%",
@@ -166,7 +173,6 @@ export default function AddCampaign({ onClose, onSave }) {
           />
         </div>
 
-        {/* URL Input */}
         <div
           style={{
             width: "97%",
@@ -197,7 +203,7 @@ export default function AddCampaign({ onClose, onSave }) {
           />
         </div>
 
-        {/* Buttons */}
+        {/* FOOTER ACTIONS */}
         <div
           style={{
             display: "flex",

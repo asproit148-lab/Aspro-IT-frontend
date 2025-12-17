@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Upload } from "lucide-react";
 
 export default function AddBlog({ onClose, onSave, existingBlog }) {
+  // --- STATE MANAGEMENT ---
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  // --- INITIALIZATION (For Editing Mode) ---
   useEffect(() => {
     if (existingBlog) {
       setTitle(existingBlog.title || "");
@@ -15,6 +17,7 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
     }
   }, [existingBlog]);
 
+  // --- EVENT HANDLERS ---
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -26,6 +29,7 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Validation logic
     if (!title || !description || (!selectedFile && !existingBlog)) {
       alert("Please fill all fields.");
       return;
@@ -41,6 +45,7 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
   };
 
   return (
+    // --- MODAL OVERLAY ---
     <div
       style={{
         position: "fixed",
@@ -53,6 +58,7 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
         zIndex: 1000,
       }}
     >
+      {/* MODAL CONTAINER */}
       <div
         style={{
           width: "600px",
@@ -77,6 +83,7 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
           {existingBlog ? "Edit Blog" : "Add Blog"}
         </h2>
 
+        {/* IMAGE UPLOAD SECTION */}
         <label
           htmlFor="blog-image"
           style={{
@@ -130,6 +137,7 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
           />
         </label>
 
+        {/* TEXT INPUTS */}
         <input
           type="text"
           placeholder="Blog Title"
@@ -168,6 +176,7 @@ export default function AddBlog({ onClose, onSave, existingBlog }) {
           }}
         />
 
+        {/* ACTION BUTTONS */}
         <div
           style={{
             display: "flex",

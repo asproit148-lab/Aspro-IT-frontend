@@ -2,23 +2,30 @@ import React, { useState } from "react";
 import { Upload } from "lucide-react";
 
 export default function AddResource({ onClose, onSave, existingResource }) {
+  // --- STATE MANAGEMENT ---
   const [file, setFile] = useState(existingResource?.file || "");
   const [fileRaw, setFileRaw] = useState(null);
   const [fileName, setFileName] = useState(existingResource?.fileName || "");
   const [title, setTitle] = useState(existingResource?.title || "");
   const [description, setDescription] = useState(existingResource?.description || "");
 
+  // --- FILE HANDLING ---
   const handleFileChange = (e) => {
     const uploadedFile = e.target.files[0];
     if (uploadedFile) {
-      setFile(URL.createObjectURL(uploadedFile)); // for preview/open
-      setFileRaw(uploadedFile); // raw file to send to backend
+      // Create local URL for preview/viewing
+      setFile(URL.createObjectURL(uploadedFile)); 
+      // Store raw file object for backend multipart/form-data
+      setFileRaw(uploadedFile); 
       setFileName(uploadedFile.name);
     }
   };
 
+  // --- FORM SUBMISSION ---
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Validation: Ensure all fields and files are present
     if (!title || !file || !description) {
       alert("Please fill all fields and upload a document.");
       return;
@@ -37,6 +44,7 @@ export default function AddResource({ onClose, onSave, existingResource }) {
   };
 
   return (
+    // --- MODAL OVERLAY ---
     <div
       style={{
         position: "fixed",
@@ -49,6 +57,7 @@ export default function AddResource({ onClose, onSave, existingResource }) {
         zIndex: 1000,
       }}
     >
+      {/* MODAL CONTAINER */}
       <div
         style={{
           width: "600px",
@@ -62,7 +71,6 @@ export default function AddResource({ onClose, onSave, existingResource }) {
           gap: "24px",
         }}
       >
-        {/* Heading */}
         <h2
           style={{
             fontFamily: "Poppins, sans-serif",
@@ -72,10 +80,10 @@ export default function AddResource({ onClose, onSave, existingResource }) {
             textAlign: "left",
           }}
         >
-          Add Resource
+          {existingResource ? "Edit Resource" : "Add Resource"}
         </h2>
 
-        {/* Upload Document */}
+        {/* DOCUMENT UPLOAD SECTION */}
         <label
           htmlFor="resource-file"
           style={{
@@ -106,13 +114,7 @@ export default function AddResource({ onClose, onSave, existingResource }) {
               >
                 {fileName}
               </p>
-              <p
-                style={{
-                  color: "#C9C9C9",
-                  fontSize: "13px",
-                  marginTop: "4px",
-                }}
-              >
+              <p style={{ color: "#C9C9C9", fontSize: "13px", marginTop: "4px" }}>
                 (Click again to replace file)
               </p>
             </>
@@ -141,7 +143,7 @@ export default function AddResource({ onClose, onSave, existingResource }) {
           />
         </label>
 
-        {/* Title */}
+        {/* RESOURCE TITLE INPUT */}
         <input
           type="text"
           placeholder="Resource Title"
@@ -161,7 +163,7 @@ export default function AddResource({ onClose, onSave, existingResource }) {
           }}
         />
 
-        {/* Description */}
+        {/* RESOURCE DESCRIPTION INPUT */}
         <textarea
           placeholder="Short Description"
           value={description}
@@ -181,7 +183,7 @@ export default function AddResource({ onClose, onSave, existingResource }) {
           }}
         />
 
-        {/* Buttons */}
+        {/* ACTION BUTTONS */}
         <div
           style={{
             display: "flex",

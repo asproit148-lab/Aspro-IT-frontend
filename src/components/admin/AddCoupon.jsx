@@ -2,16 +2,20 @@ import React, { useState } from "react";
 import { addCoupon, editCoupon } from "../../api/coupon";
 
 export default function AddCoupon({ onClose, existingData, onSaved }) {
+  // --- STATE MANAGEMENT ---
   const [code, setCode] = useState(existingData?.Code || "");
   const [discount, setDiscount] = useState(existingData?.Discount || "");
   const [expiry, setExpiry] = useState(existingData?.Expiry_date || "");
   const [loading, setLoading] = useState(false);
 
+  // --- DERIVED STATE ---
   const isEditing = !!existingData?._id;
 
+  // --- FORM SUBMISSION LOGIC ---
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation
     if (!code || !discount || !expiry) {
       alert("Please fill all fields.");
       return;
@@ -26,6 +30,7 @@ export default function AddCoupon({ onClose, existingData, onSaved }) {
     try {
       setLoading(true);
 
+      // Handle API request based on mode (Edit vs Add)
       if (isEditing) {
         await editCoupon(existingData._id, payload);
         alert("Coupon updated successfully!");
@@ -34,11 +39,12 @@ export default function AddCoupon({ onClose, existingData, onSaved }) {
         alert("Coupon added successfully!");
       }
 
+      // Callback to refresh parent list
       if (typeof onSaved === "function") {
         await onSaved(); 
       }
 
-      onClose(); // close modal
+      onClose(); 
     } catch (error) {
       console.error(error);
       alert(error?.response?.data?.message || "Something went wrong");
@@ -48,6 +54,7 @@ export default function AddCoupon({ onClose, existingData, onSaved }) {
   };
 
   return (
+    // --- MODAL OVERLAY ---
     <div
       style={{
         position: "fixed",
@@ -60,6 +67,7 @@ export default function AddCoupon({ onClose, existingData, onSaved }) {
         zIndex: 1000,
       }}
     >
+      {/* MODAL CONTAINER */}
       <div
         style={{
           width: "600px",
@@ -72,7 +80,7 @@ export default function AddCoupon({ onClose, existingData, onSaved }) {
           gap: "24px",
         }}
       >
-        {/* Heading */}
+        {/* HEADER SECTION */}
         <div>
           <h2
             style={{
@@ -84,7 +92,7 @@ export default function AddCoupon({ onClose, existingData, onSaved }) {
               marginBottom: "8px",
             }}
           >
-            Add New Coupon
+            {isEditing ? "Edit Coupon" : "Add New Coupon"}
           </h2>
           <p
             style={{
@@ -95,11 +103,11 @@ export default function AddCoupon({ onClose, existingData, onSaved }) {
               textAlign: "left",
             }}
           >
-            Enter details below to create a new discount offer.
+            Enter details below to manage your discount offer.
           </p>
         </div>
 
-        {/* Code */}
+        {/* INPUT FIELDS */}
         <input
           type="text"
           placeholder="Enter coupon code"
@@ -119,7 +127,6 @@ export default function AddCoupon({ onClose, existingData, onSaved }) {
           }}
         />
 
-        {/* Discount */}
         <input
           type="tel"
           placeholder="Enter discount %"
@@ -140,7 +147,6 @@ export default function AddCoupon({ onClose, existingData, onSaved }) {
           }}
         />
 
-        {/* Expiry Date */}
         <input
           type="date"
           value={expiry}
@@ -160,7 +166,7 @@ export default function AddCoupon({ onClose, existingData, onSaved }) {
           }}
         />
 
-        {/* Buttons */}
+        {/* FOOTER ACTIONS */}
         <div
           style={{
             display: "flex",
@@ -199,7 +205,8 @@ export default function AddCoupon({ onClose, existingData, onSaved }) {
               fontSize: "18px",
               fontWeight: 600,
               border: "none",
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
+              opacity: loading ? 0.7 : 1,
             }}
           >
             {loading ? "Saving..." : "Save"}

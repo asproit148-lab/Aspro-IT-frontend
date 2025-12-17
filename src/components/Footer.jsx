@@ -274,7 +274,7 @@ export default function Footer() {
 
         {/* Company Links */}
         <ColumnContent $halfWidthOnMobile>
-          <ColumnHeading>Company</ColumnHeading>
+          <ColumnHeading>AsproIT</ColumnHeading>
           {[
             {name:"Home", link:"/"},
             {name:"Courses", link:"/courses"},

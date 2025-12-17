@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { addOpportunity } from "../../api/job";
 
 export default function AddJob({ onClose, onSave }) {
+  // --- STATE MANAGEMENT ---
   const [type, setType] = useState("Job");
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
@@ -9,29 +10,32 @@ export default function AddJob({ onClose, onSave }) {
   const [website, setWebsite] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // --- FORM SUBMISSION LOGIC ---
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Field Validation
     if (!company || !role || !ctc || !website) {
       alert("Please fill out all fields.");
       return;
     }
 
+    // Prepare payload (Mapping local state to API expected keys)
     const formData = {
-  type,
-  companyName: company,
-  roleTitle: role,
-  ctcOrStipend: ctc, // rename your variable
-  companyWebsite: website
-};
+      type,
+      companyName: company,
+      roleTitle: role,
+      ctcOrStipend: ctc, 
+      companyWebsite: website
+    };
 
     try {
       setLoading(true);
 
-      // 🔥 API CALL
+      // API Request
       const res = await addOpportunity(formData);
 
-      // Send back the saved job to parent so UI updates
+      // Update Parent UI
       if (onSave) onSave(res.data);
 
       setLoading(false);
@@ -44,6 +48,7 @@ export default function AddJob({ onClose, onSave }) {
   };
 
   return (
+    // --- MODAL OVERLAY ---
     <div
       style={{
         position: "fixed",
@@ -56,6 +61,7 @@ export default function AddJob({ onClose, onSave }) {
         zIndex: 1000,
       }}
     >
+      {/* MODAL CONTAINER */}
       <div
         style={{
           height: "95%",
@@ -80,7 +86,7 @@ export default function AddJob({ onClose, onSave }) {
           Add Job / Internship
         </h2>
 
-        {/* TYPE */}
+        {/* OPPORTUNITY TYPE SELECTOR */}
         <label style={{ color: "#C9C9C9", fontFamily: "Poppins" }}>
           Type
         </label>
@@ -104,7 +110,7 @@ export default function AddJob({ onClose, onSave }) {
           <option value="Internship">Internship</option>
         </select>
 
-        {/* FIELDS */}
+        {/* DYNAMIC INPUT FIELDS */}
         {[
           { label: "Company Name", state: company, set: setCompany },
           { label: "Role", state: role, set: setRole },
@@ -136,7 +142,7 @@ export default function AddJob({ onClose, onSave }) {
           </div>
         ))}
 
-        {/* BUTTONS */}
+        {/* ACTION BUTTONS */}
         <div
           style={{
             display: "flex",
