@@ -108,9 +108,9 @@ const ForgotPasswordLink = styled.span`
   align-self: flex-start;
   transition: color 0.2s ease;
 
-  &:hover {
-    color: #5aa1e3;
-  }
+  &:hover {
+    color: #5aa1e3;
+  }
 `;
 
 const Button = styled.button`
@@ -209,17 +209,17 @@ export default function LoginPopup({ onClose, onSignup }) {
   };
 
   const handleForgotPasswordClick = () => {
-    setIsForgotFlowOpen(true);
-    setError(""); // Clear any login error when starting the flow
-  };
+setIsForgotFlowOpen(true);
+setError(""); // Clear any login error when starting the flow
+};
 
-  const handlePasswordResetSuccess = () => {
-    setIsForgotFlowOpen(false); // Close the Forgot Password flow
-    // Optionally: Keep the LoginPopup open if you want the user to log in immediately
-    // If you want to close the whole stack and rely on the alert/toast: 
-    onClose(); 
-    alert("Password reset successful! You can now log in with your new password.");
-  };
+  const handlePasswordResetSuccess = () => {
+    setIsForgotFlowOpen(false); // Close the Forgot Password flow
+// Optionally: Keep the LoginPopup open if you want the user to log in immediately
+// If you want to close the whole stack and rely on the alert/toast: 
+    onClose(); 
+    alert("Password reset successful! You can now log in with your new password.");
+  };
 
   const handleGoogleSuccess = async (res) => {
     setLoading(true);
@@ -230,7 +230,7 @@ export default function LoginPopup({ onClose, onSignup }) {
       else {
         onClose();
       }
-    } catch (e) {
+    } catch{
       setError("Google login failed"); // ⬅️ CHANGED from alert()
     } finally {
       setLoading(false);
@@ -241,64 +241,63 @@ export default function LoginPopup({ onClose, onSignup }) {
 
 // ... (all functions) ...
 
-  // 1. Check if the Forgot Password flow should be open
-  if (isForgotFlowOpen) {
-    return (
-      <ForgotPasswordPopup 
-        onClose={() => setIsForgotFlowOpen(false)} // Closes the ForgotPasswordPopup
-        onResetSuccess={handlePasswordResetSuccess} // Calls the success handler defined above
-      />
-    );
-  }
+// 1. Check if the Forgot Password flow should be open
+if (isForgotFlowOpen) {
+  return (
+    <ForgotPasswordPopup 
+      onClose={() => setIsForgotFlowOpen(false)} // Closes the ForgotPasswordPopup
+      onResetSuccess={handlePasswordResetSuccess} // Calls the success handler defined above
+    />
+  );
+  }
 
-  // 2. Render the original Login form if the forgot flow is NOT open
-  return (
-    <PopupOverlay>
-      <PopupContainer>
+// 2. Render the original Login form if the forgot flow is NOT open
+return (
+<PopupOverlay>
+<PopupContainer>
 
-        <CloseButton onClick={onClose}>×</CloseButton>
+<CloseButton onClick={onClose}>×</CloseButton>
 
-        <Title>Welcome Back</Title>
-        <SubTitle>Login to your account to continue</SubTitle>
+<Title>Welcome Back</Title>
+<SubTitle>Login to your account to continue</SubTitle>
 
-        <Label>Email Address</Label>
-        <Input
-          type="email"
-          placeholder="You@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+<Label>Email Address</Label>
+<Input
+  type="email"
+  placeholder="You@example.com"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+/>
 
-        <Label>Password</Label>
-        <Input
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+<Label>Password</Label>
+<Input
+  type="password"
+  placeholder="Enter your password"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+       />
+      {error && <ErrorMessage>{error}</ErrorMessage>}
 
-        {/* ⭐ NEW: Forgot Password Link */}
-        <ForgotPasswordLink onClick={handleForgotPasswordClick}>
-          Forgot password?
-        </ForgotPasswordLink>
+      {/* Forgot Password Link */}
+      <ForgotPasswordLink onClick={handleForgotPasswordClick}>
+        Forgot password?
+      </ForgotPasswordLink>
 
-        <Button disabled={loading} onClick={handleLogin}>
-          {loading ? "Logging in..." : "Login"}
-        </Button>
+      <Button disabled={loading} onClick={handleLogin}>
+        {loading ? "Logging in..." : "Login"}
+      </Button>
 
-        <div style={{ marginTop: "12px" }}>
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={() => setError("Google sign-in failed")}
-          />
-        </div>
+      <div style={{ marginTop: "12px" }}>
+        <GoogleLogin
+          onSuccess={handleGoogleSuccess}
+          onError={() => setError("Google sign-in failed")}
+        />
+      </div>
 
-        <SignupText>
-          New user? <span onClick={onSignup}>Signup</span>
-        </SignupText>
-      </PopupContainer>
-    </PopupOverlay>
-  );
+      <SignupText>
+        New user? <span onClick={onSignup}>Signup</span>
+      </SignupText>
+    </PopupContainer>
+  </PopupOverlay>
+);
 }

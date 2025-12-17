@@ -7,20 +7,6 @@ import { getAllCourses, deleteCourse } from "../../api/course";
 const largeBreakpoint = 1200; 
 const tabletBreakpoint = 768; 
 
-// Base styles for the component's main container
-const mainContainerStyle = (isMobile) => ({
-    background: "black",
-    color: "white",
-    fontFamily: "Poppins, sans-serif",
-    paddingTop: isMobile ? "80px" : "140px",
-    paddingLeft: isMobile ? "20px" : "120px", // Pushed content from the left on desktop
-    paddingRight: isMobile ? "20px" : "40px",
-    paddingBottom: "100px",
-    minHeight: "100vh",
-    boxSizing: 'border-box',
-    width: '100%', // Take full width
-});
-
 // Styles for the section heading/description
 const headingSectionStyle = (isMobile) => ({
     padding: isMobile ? '0' : '0 0 0 4px', // Slight adjustment for alignment

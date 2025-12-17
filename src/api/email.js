@@ -30,12 +30,12 @@ export const sendEnrollment = async (data) => {
 
 // Request OTP
 export const requestPasswordOtp = async (email) => {
-  const res = await axios.post(`${API}/request-email-otp`, { email }, config);
-  return res.data;
+  const res = await axios.post(`${API}/request-email-otp`, { email }, config);
+  return res.data;
 };
 
 // Verify OTP
 export const verifyPasswordOtp = async (email, otp) => {
-  const res = await axios.post(`${API}/verify-email-otp`, { email, otp }, config);
-  return res.data;
+  const res = await axios.post(`${API}/verify-email-otp`, { email, otp }, config);
+  return res.data;
 };

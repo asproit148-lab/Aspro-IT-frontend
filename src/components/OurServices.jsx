@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import styled from "@emotion/styled";
 import service1 from "../assets/service1.png";
 import service2 from "../assets/service2.jpg";
@@ -7,7 +6,7 @@ import service3 from "../assets/service3.jpg";
 import service4 from "../assets/service4.jpg";
 import service5 from "../assets/service5.jpg";
 
-const desktopBreakpoint = 992; 
+const desktopBreakpoint = 992;
 
 const ServicesContainer = styled.div`
   width: 100%;
@@ -82,7 +81,6 @@ const SectionText = styled.p`
   line-height: 1.6; 
   color: white;
   text-align: justify;
-  /* Use $isIntroText prop to conditionally remove padding only for the Intro section */
   padding: ${props => props.$isIntroText ? "0" : (props.$isMobile ? "0" : "24px")};
 `;
 
@@ -99,17 +97,16 @@ const SectionImage = styled.img`
   object-fit: cover;
   border-radius: 12px;
   margin: 0;
-  /* Image ordering matches original logic */
   order: ${props => props.$isMobile ? 1 : 'unset'}; 
 `;
 
 const TextBlock = styled.div`
-  /* Text block ordering matches original logic */
   order: ${props => props.$isMobile ? 2 : 'unset'}; 
   text-align: ${props => props.$isMobile ? "left" : "center"};
 `;
 
 const Separator = styled.hr`
+  border: none;
   border-top: 1px solid #333; 
   margin: ${props => props.$isMobile ? '40px 20px' : '80px 86px'};
 `;
@@ -128,21 +125,12 @@ export default function OurServices() {
 
   return (
     <ServicesContainer>
-
       {/* Hero Section */}
       <HeroSection $isMobile={isMobile}>
-        <HeroImage
-          src={service1}
-          alt="service hero"
-        />
-
+        <HeroImage src={service1} alt="service hero" />
         <HeroOverlay $isMobile={isMobile}>
-          <HeroHeading $isMobile={isMobile}>
-            Learn IT
-          </HeroHeading>
-          <HeroSubHeading $isMobile={isMobile}>
-            with AsproIT Learning!
-          </HeroSubHeading>
+          <HeroHeading $isMobile={isMobile}>Learn IT</HeroHeading>
+          <HeroSubHeading $isMobile={isMobile}>with AsproIT Learning!</HeroSubHeading>
         </HeroOverlay>
       </HeroSection>
 
@@ -152,7 +140,7 @@ export default function OurServices() {
           Welcome to our institute — where we turn ambition into achievement.
           <br /><br />
           We specialize in IT Support, Software Development, and IT Services training that helps learners build real-world skills and launch successful tech careers. 
-          Whether you are a beginner entering IT or a professional looking to upskill, our structured training and placement-focused approach supports you every step of the way.           
+          Whether you are a beginner entering IT or a professional looking to upskill, our structured training and placement-focused approach supports you every step of the way.           
           <br /><br />
           Our mission is to equip you with hands-on skills, industry insights, and the confidence to succeed in today’s competitive tech world.
         </SectionText>
@@ -167,21 +155,14 @@ export default function OurServices() {
 
       <Separator $isMobile={isMobile} />
 
-      {/* Section 1: IT & Support (Image Left / Text Right) */}
+      {/* Section 1: IT & Support */}
       <ContentSection $isMobile={isMobile}>
-        <SectionImage
-          src={service3}
-          alt="service3"
-          $isMobile={isMobile}
-        />
-
+        <SectionImage src={service3} alt="service3" $isMobile={isMobile} />
         <TextBlock $isMobile={isMobile}>
-          <SectionTitle $isMobile={isMobile}>
-            IT and Support
-          </SectionTitle>
+          <SectionTitle $isMobile={isMobile}>IT and Support</SectionTitle>
           <SectionText $isMobile={isMobile}>
             Our IT and Support team ensures a smooth and uninterrupted learning experience for every student. 
-            From technical assistance to platform maintenance, we make sure our e-learning systems run efficiently.             
+            From technical assistance to platform maintenance, we make sure our e-learning systems run efficiently.             
             <br /><br />
             Whether you need help accessing courses, setting up accounts, or resolving software issues, 
             our support experts are always ready to guide you. We provide quick solutions and a reliable learning 
@@ -192,7 +173,7 @@ export default function OurServices() {
 
       <Separator $isMobile={isMobile} />
 
-      {/* Section 2: Development (Text Left / Image Right) */}
+      {/* Section 2: Development */}
       <ContentSection $isMobile={isMobile}>
         <TextBlock $isMobile={isMobile}>
           <SectionTitle $isMobile={isMobile}>Development</SectionTitle>
@@ -206,30 +187,20 @@ export default function OurServices() {
             Our goal is to build a digital learning environment that is powerful and enjoyable.
           </SectionText>
         </TextBlock>
-
-        <SectionImage
-          src={service4}
-          alt="service4"
-          $isMobile={isMobile}
-        />
+        <SectionImage src={service4} alt="service4" $isMobile={isMobile} />
       </ContentSection>
 
       <Separator $isMobile={isMobile} />
 
-      {/* Section 3: Training (Image Left / Text Right) */}
+      {/* Section 3: Training */}
       <ContentSection $isMobile={isMobile}>
-        <SectionImage
-          src={service5}
-          alt="service5"
-          $isMobile={isMobile}
-        />
-
+        <SectionImage src={service5} alt="service5" $isMobile={isMobile} />
         <TextBlock $isMobile={isMobile}>
           <SectionTitle $isMobile={isMobile}>Training</SectionTitle>
           <SectionText $isMobile={isMobile}>
             Our training programs are designed to equip learners with in-demand IT and software skills 
             through practical, hands-on learning. Each course is led by industry professionals who bring 
-            real-world experience into the classroom.             
+            real-world experience into the classroom.             
             <br /><br />
             We offer skill-based training in programming, web development, software testing, and 
             project management. With flexible learning options, personalized mentoring, and 
@@ -237,7 +208,6 @@ export default function OurServices() {
           </SectionText>
         </TextBlock>
       </ContentSection>
-      
     </ServicesContainer>
   );
 }

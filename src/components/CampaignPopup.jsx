@@ -160,16 +160,6 @@ const optimizeCloudinaryUrl = (url) => {
 export default function CampaignPopup() {
   const [show, setShow] = useState(true);
   const [banner, setBanner] = useState(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < desktopBreakpoint);
-
-useEffect(() => {
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < desktopBreakpoint);
-  };
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
-
 
   useEffect(() => {
     const timer = setTimeout(() => setShow(false), 15000); 
@@ -183,7 +173,7 @@ useEffect(() => {
           const allBanners = res.data.banners;
           const newestBanner = [...allBanners].reverse()[0]; 
 
-          setBanner(newestBanner);
+          setBanner(newestBanner);
         }
       })
       .catch((err) => console.error("Banner Fetch Error:", err));

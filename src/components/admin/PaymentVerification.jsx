@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { CircleCheckBig, CircleX } from "lucide-react";
 import { getPendingPayments, approvePayment, rejectPayment } from "../../api/payment";
 

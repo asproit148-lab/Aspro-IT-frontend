@@ -339,7 +339,7 @@ export default function Header() {
   const { user, signOut } = useAuth();
   const location = useLocation();
   const slugify = (title) =>
-    title.trim().toLowerCase().replace(/\s+/g, "-");
+    title.trim().toLowerCase().replace(/\s+/g, "-");
 
   const isMobile = useIsMobile(desktopBreakpoint);
 
@@ -466,14 +466,14 @@ useEffect(() => {
                 onMouseLeave={() => setIsCoursesOpen(false)}
               >
                 <NavLinkWithDropdown 
-                  to="/courses-all" // <-- ADDED: The main courses link
-                  onClick={handleLinkClick} // Click the main link, which closes dropdowns
-                  $isMobile={false}
-                  $isActive={location.pathname.startsWith("/courses")} // Check for all /courses/* paths
-                >
-                  <BookOpen size={20} /> Courses{" "}
-                  {isCoursesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                </NavLinkWithDropdown>
+                  to="/courses-all" // <-- ADDED: The main courses link
+                  onClick={handleLinkClick} // Click the main link, which closes dropdowns
+                  $isMobile={false}
+                  $isActive={location.pathname.startsWith("/courses")} // Check for all /courses/* paths
+                >
+                  <BookOpen size={20} /> Courses{" "}
+                  {isCoursesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </NavLinkWithDropdown>
 
                 {isCoursesOpen && (
                   <DropdownContainer $isMobile={false}>

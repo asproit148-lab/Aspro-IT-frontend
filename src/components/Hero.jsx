@@ -1,25 +1,9 @@
 // src/components/Hero.jsx
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import bg from "../assets/homeBg.webp";
 
 const desktopBreakpoint = 768;
-
-const useIsMobile = (breakpoint) => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < breakpoint);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < breakpoint);
-    };
-    handleResize(); 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [breakpoint]);
-
-  return isMobile;
-};
 
 const HeroContainer = styled.section`
   background-image: url(${bg});
@@ -155,7 +139,6 @@ const CTAButton = styled(motion.a)`
 `;
 
 export default function Hero() {
-  const isMobile = useIsMobile(desktopBreakpoint);
 
   const handleScrollToSection = (e, id) => {
     e.preventDefault();

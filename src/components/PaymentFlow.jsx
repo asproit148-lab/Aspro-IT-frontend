@@ -185,7 +185,6 @@ export default function PaymentFlow({ open, onClose, price, courseId }) {
   const isMobile = screenWidth < mobileBreakpoint;
 
   // Unused state (but kept for clarity in case discount logic is added later)
-  const [coupon] = useState("");
   const [finalPrice] = useState(price);
   const [discountPercent] = useState(0);
   // const [couponError] = useState(""); // Removed unused state
@@ -259,7 +258,7 @@ export default function PaymentFlow({ open, onClose, price, courseId }) {
     <ModalOverlay onClick={closeAll}> 
       <div onClick={e => e.stopPropagation()}> 
         
-        {/*  QR POPUP  */}
+{/* QR POPUP */}
         {stage === "qr" && (
           <BaseModal $isMobile={isMobile} $stage="qr">
             {renderCloseBtn}
@@ -327,15 +326,13 @@ export default function PaymentFlow({ open, onClose, price, courseId }) {
               />
             </UploadLabel>
             
-            
-
             <SubmitButton onClick={handleSubmitProof}>
               Submit Payment
             </SubmitButton>
           </BaseModal>
         )}
 
-        {/*  Loading  */}
+        {/* Loading */}
         {stage === "loading" && (
           <BaseModal $isMobile={isMobile} $stage="loading">
             {renderCloseBtn}

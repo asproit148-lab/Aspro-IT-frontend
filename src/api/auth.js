@@ -51,8 +51,8 @@ export const refreshToken = async () => {
 
 // Reset Password
 export const resetPassword = async (email, newPassword) => {
-  const res = await api.post("/change-password", { email, newPassword });
-  return res.data;
+  const res = await api.post("/change-password", { email, newPassword });
+  return res.data;
 };
 
 export default api;

@@ -17,7 +17,7 @@ export default function AdminRoute({ children }) {
         if (res.data?.user?.role === "admin") {
           setIsAdmin(true);
         }
-      } catch (err) {
+      } catch {
         setIsAdmin(false);
       } finally {
         setLoading(false);

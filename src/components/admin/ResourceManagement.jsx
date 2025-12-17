@@ -22,7 +22,6 @@ export default function ResourceManagement() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < TABLET_BREAKPOINT);
   const [columns, setColumns] = useState(getColumnCount(window.innerWidth));
 
-  const isTablet = columns === 2; 
   const sortedResources = useMemo(() => {
 
     return [...resources].sort((a, b) => (b._id > a._id ? 1 : -1));

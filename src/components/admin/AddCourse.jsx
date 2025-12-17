@@ -73,16 +73,12 @@ export default function AddCourse({ onClose, onSave, existingCourse }) {
         return;
       }
     }
-    if (step === 2) {
-    }
     if (step === 3) {
       const c = parseFloat(String(cost).replace(/[^0-9.]/g, ""));
       if (isNaN(c)) {
         setError("Please enter a valid Course Cost.");
         return;
       }
-    }
-    if (step === 4) {
     }
     if (step < 5) setStep((s) => s + 1);
   };
@@ -530,190 +526,190 @@ const removeLearning = (index) => {
               </div>
 
               {/* Modules list */}
-              <div style={{ marginTop: "12px" }}>
-                <h4 style={{ color: "#FFFFFF", fontFamily: "Poppins, sans-serif" }}>Added Modules</h4>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "8px" }}>
-                  {modules.length === 0 && <div style={{ color: "#C9C9C9" }}>No modules added yet.</div>}
-                  {modules.map((m) => (
-                    <div key={m.id} style={{ padding: "10px", background: "#222222", borderRadius: "10px", display: "flex", justifyContent: "space-between", gap: "12px" }}>
-                      <div>
-                        <div style={{ color: "#FFFFFF", fontWeight: 600 }}>{m.module_name}</div> {/* ⬅️ FIXED: Used m.module_name instead of m.title */}
-                        <div style={{ color: "#C9C9C9", marginTop: "6px", fontSize: "13px" }}>
-  {m.module_description}
-</div>
+              <div style={{ marginTop: "12px" }}>
+                <h4 style={{ color: "#FFFFFF", fontFamily: "Poppins, sans-serif" }}>Added Modules</h4>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "8px" }}>
+                  {modules.length === 0 && <div style={{ color: "#C9C9C9" }}>No modules added yet.</div>}
+                  {modules.map((m) => (
+                    <div key={m.id} style={{ padding: "10px", background: "#222222", borderRadius: "10px", display: "flex", justifyContent: "space-between", gap: "12px" }}>
+                      <div>
+                        <div style={{ color: "#FFFFFF", fontWeight: 600 }}>{m.module_name}</div> {/* ⬅️ FIXED: Used m.module_name instead of m.title */}
+                        <div style={{ color: "#C9C9C9", marginTop: "6px", fontSize: "13px" }}>
+                  {m.module_description}
+              </div>
 
-                      </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <button
-                          onClick={() => removeModule(m.id)}
-                          title="Remove module"
-                          style={{
-                            height: "36px",
-                            width: "40px",
-                            borderRadius: "8px",
-                            background: "#414141",
-                            color: "#fff",
-                            border: "none",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: 0,
-                          }}
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <button
+                    onClick={() => removeModule(m.id)}
+                      title="Remove module"
+                      style={{
+                      height: "36px",
+                      width: "40px",
+                      borderRadius: "8px",
+                      background: "#414141",
+                      color: "#fff",
+                      border: "none",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: 0,
+                    }}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+                </div>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 
           {/* STEP 3 - PRICING */}
-          {step === 3 && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              <div style={{ display: "flex", gap: "12px" }}>
-                <input
-                  type="text"
-                  placeholder="Course Cost *"
-                  value={cost}
-                  onChange={(e) => setCost(e.target.value)}
-                  style={{
-                    flex: 1,
-                    height: "46px",
-                    borderRadius: "10px",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    background: "#2E2E2E",
-                    color: "#FFFFFF",
-                    paddingLeft: "12px",
-                    fontFamily: "Poppins, sans-serif",
-                    outline: "none",
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Offer / Discount (%)"
-                  value={discount}
-                  onChange={(e) => setDiscount(e.target.value)}
-                  style={{
-                    width: "220px",
-                    height: "46px",
-                    borderRadius: "10px",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    background: "#2E2E2E",
-                    color: "#FFFFFF",
-                    paddingLeft: "12px",
-                    fontFamily: "Poppins, sans-serif",
-                    outline: "none",
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Final Cost"
-                  value={finalCost}
-                  readOnly
-                  style={{
-                    width: "180px",
-                    height: "46px",
-                    borderRadius: "10px",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    background: "#141414",
-                    color: "#FFFFFF",
-                    paddingLeft: "12px",
-                    fontFamily: "Poppins, sans-serif",
-                    outline: "none",
-                  }}
-                />
-              </div>
-              
-              {/* 🟢 START: What You Will Learn Section (Moved to Step 3) */}
-              <div style={{ width: "100%", marginTop: "8px" }}>
-                <h4 style={{ color: "#FFFFFF", fontFamily: "Poppins, sans-serif", margin: "0 0 12px 0" }}>
-                  What You Will Learn
-                </h4>
+{step === 3 && (
+  <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+    <div style={{ display: "flex", gap: "12px" }}>
+      <input
+        type="text"
+        placeholder="Course Cost *"
+        value={cost}
+        onChange={(e) => setCost(e.target.value)}
+        style={{
+          flex: 1,
+          height: "46px",
+          borderRadius: "10px",
+          border: "1px solid rgba(255,255,255,0.06)",
+          background: "#2E2E2E",
+          color: "#FFFFFF",
+          paddingLeft: "12px",
+          fontFamily: "Poppins, sans-serif",
+          outline: "none",
+        }}
+      />
+      <input
+        type="text"
+        placeholder="Offer / Discount (%)"
+        value={discount}
+        onChange={(e) => setDiscount(e.target.value)}
+        style={{
+          width: "220px",
+          height: "46px",
+          borderRadius: "10px",
+          border: "1px solid rgba(255,255,255,0.06)",
+          background: "#2E2E2E",
+          color: "#FFFFFF",
+          paddingLeft: "12px",
+          fontFamily: "Poppins, sans-serif",
+          outline: "none",
+        }}
+      />
+      <input
+        type="text"
+        placeholder="Final Cost"
+        value={finalCost}
+        readOnly
+        style={{
+          width: "180px",
+          height: "46px",
+          borderRadius: "10px",
+          border: "1px solid rgba(255,255,255,0.06)",
+          background: "#141414",
+          color: "#FFFFFF",
+          paddingLeft: "12px",
+          fontFamily: "Poppins, sans-serif",
+          outline: "none",
+        }}
+      />
+    </div>
 
-                <div style={{ display: "flex", gap: "8px" }}>
-                  <input
-                    type="text"
-                    placeholder="Learning Objective"
-                    value={learningInput}
-                    onChange={(e) => setLearningInput(e.target.value)}
-                    style={{
-                      flex: 1,
-                      height: "46px",
-                      borderRadius: "10px",
-                      border: "1px solid rgba(255,255,255,0.06)",
-                      background: "#2E2E2E",
-                      color: "#FFFFFF",
-                      paddingLeft: "12px",
-                      fontFamily: "Poppins, sans-serif",
-                      outline: "none",
-                    }}
-                  />
-                  <button
-                    onClick={addLearning}
-                    style={{
-                      width: "110px",
-                      height: "46px",
-                      borderRadius: "10px",
-                      background: "#2B6EF0",
-                      color: "#FFFFFF",
-                      border: "none",
-                      cursor: "pointer",
-                      fontFamily: "Poppins, sans-serif",
-                      fontWeight: 600,
-                    }}
-                  >
-                    + Add
-                  </button>
-                </div>
+    {/* What You Will Learn Section */}
+    <div style={{ width: "100%", marginTop: "8px" }}>
+      <h4 style={{ color: "#FFFFFF", fontFamily: "Poppins, sans-serif", margin: "0 0 12px 0" }}>
+        What You Will Learn
+      </h4>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "12px" }}>
-                  {learnings.length === 0 && (
-                    <div style={{ color: "#C9C9C9", fontFamily: "Poppins, sans-serif" }}>
-                      No learning objectives added yet.
-                    </div>
-                  )}
-                  {learnings.map((l, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        padding: "10px",
-                        background: "#222222",
-                        borderRadius: "10px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <span style={{ color: "#FFFFFF", fontFamily: "Poppins, sans-serif" }}>{l}</span>
-                      <button
-                        onClick={() => removeLearning(i)}
-                        title="Remove objective"
-                        style={{
-                          height: "30px",
-                          width: "36px",
-                          borderRadius: "8px",
-                          background: "#414141",
-                          color: "#fff",
-                          border: "none",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          padding: 0,
-                        }}
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+      <div style={{ display: "flex", gap: "8px" }}>
+        <input
+          type="text"
+          placeholder="Learning Objective"
+          value={learningInput}
+          onChange={(e) => setLearningInput(e.target.value)}
+          style={{
+            flex: 1,
+            height: "46px",
+            borderRadius: "10px",
+            border: "1px solid rgba(255,255,255,0.06)",
+            background: "#2E2E2E",
+            color: "#FFFFFF",
+            paddingLeft: "12px",
+            fontFamily: "Poppins, sans-serif",
+            outline: "none",
+          }}
+        />
+        <button
+          onClick={addLearning}
+          style={{
+            width: "110px",
+            height: "46px",
+            borderRadius: "10px",
+            background: "#2B6EF0",
+            color: "#FFFFFF",
+            border: "none",
+            cursor: "pointer",
+            fontFamily: "Poppins, sans-serif",
+            fontWeight: 600,
+          }}
+        >
+          + Add
+        </button>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "12px" }}>
+        {learnings.length === 0 && (
+          <div style={{ color: "#C9C9C9", fontFamily: "Poppins, sans-serif" }}>
+            No learning objectives added yet.
+          </div>
+        )}
+        {learnings.map((l, i) => (
+          <div
+            key={i}
+            style={{
+              padding: "10px",
+              background: "#222222",
+              borderRadius: "10px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <span style={{ color: "#FFFFFF", fontFamily: "Poppins, sans-serif" }}>{l}</span>
+            <button
+              onClick={() => removeLearning(i)}
+              title="Remove objective"
+              style={{
+                height: "30px",
+                width: "36px",
+                borderRadius: "8px",
+                background: "#414141",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 0,
+              }}
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
 
           {/* STEP 4 - FAQS */}
           {step === 4 && (

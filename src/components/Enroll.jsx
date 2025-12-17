@@ -82,7 +82,7 @@ export default function Enroll() {
             setFinalPrice(price); // Revert to base price
             setCouponError(res.message || "Invalid coupon");
           }
-        } catch (err) {
+        } catch {
           setDiscountPercent(0);
           setFinalPrice(price); // Revert to base price
           setCouponError("Invalid or expired coupon");

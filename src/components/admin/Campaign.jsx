@@ -7,20 +7,6 @@ import { getBanners, deleteBanner } from "../../api/campaign"; // Renamed getBan
 const largeBreakpoint = 1200; 
 const tabletBreakpoint = 768;
 
-// Base styles for the component's main container (extracted for cleaner component body)
-const mainContainerStyle = (isMobile) => ({
-    background: "black",
-    color: "white",
-    fontFamily: "Poppins, sans-serif",
-    paddingTop: isMobile ? "80px" : "140px",
-    paddingLeft: isMobile ? "20px" : "120px",
-    paddingRight: isMobile ? "20px" : "40px",
-    paddingBottom: "100px",
-    minHeight: "100vh",
-    boxSizing: 'border-box',
-    width: '100%',
-});
-
 // Styles for the section heading/description
 const headingSectionStyle = (isMobile) => ({
     padding: isMobile ? '0' : '0 0 0 4px',

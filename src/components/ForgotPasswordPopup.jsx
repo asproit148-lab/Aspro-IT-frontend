@@ -121,14 +121,14 @@ const Button = styled.button`
 `;
 
 const ErrorMessage = styled.p`
-  font-family: Poppins, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: #ff5555;
-  margin-top: -8px;
-  margin-bottom: 12px;
-  width: 100%;
-  text-align: center;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ff5555;
+  margin-top: -8px;
+  margin-bottom: 12px;
+  width: 100%;
+  text-align: center;
 `;
 
 const OtpInputsContainer = styled.div`
@@ -155,7 +155,7 @@ const OtpInput = styled.input`
 `;
 
 const ResendText = styled.p`
-  font-family: Poppins, sans-serif;
+  font-family: Poppins, sans-serif;
   font-size: 16px;
   font-weight: 500;
   color: #3f7ec8; 
@@ -164,216 +164,216 @@ const ResendText = styled.p`
   margin-bottom: 8px; 
   transition: color 0.2s ease;
 
-  &:hover {
-    color: #5aa1e3;
-  }
+  &:hover {
+    color: #5aa1e3;
+  }
 `;
 
 export default function ForgotPasswordPopup({ onClose, onResetSuccess }) {
-  const [step, setStep] = useState('email'); // 'email', 'otp', or 'reset'
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [step, setStep] = useState('email'); // 'email', 'otp', or 'reset'
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // Email Input Logic 
-  const handleSendOtp = async () => {
-    setError("");
+  // Email Input Logic 
+  const handleSendOtp = async () => {
+    setError("");
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return setError("Invalid email format");
-    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return setError("Invalid email format");
+    }
 
-    try {
-      setLoading(true);
-      await requestPasswordOtp(email);
-      setStep('otp'); // Move to OTP step on success
-    } catch (err) {
-      const message = err.response?.data?.error || "Failed to send OTP.";
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-  // OTP Verification Logic 
-
-  const [otp, setOtp] = useState(new Array(6).fill(""));
-  const [resendLoading, setResendLoading] = useState(false);
-  const inputRefs = useRef([]);
-
-  const handleOtpChange = (element, index) => {
-    if (isNaN(element.value)) return false;
-
-    const newOtp = [...otp];
-    newOtp[index] = element.value;
-    setOtp(newOtp);
-
-    if (element.value !== "" && index < 5) {
-      inputRefs.current[index + 1].focus();
-    }
-  };
-
-  const handleOtpKeyDown = (e, index) => {
-    if (e.key === "Backspace" && otp[index] === "" && index > 0) {
-      inputRefs.current[index - 1].focus();
-    }
-  };
-
-  const handleVerifyOtp = async () => {
-    setError("");
-    const fullOtp = otp.join("");
-
-    if (fullOtp.length !== 6) {
-      return setError("Please enter the 6-digit OTP.");
-    }
-
-    try {
-      setLoading(true);
-      await verifyPasswordOtp(email, fullOtp);
-      setStep('reset'); 
-    } catch (err) {
-      const message = err.response?.data?.error || "OTP verification failed.";
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleResendOtp = async () => {
-    setError("");
-    try {
-      setResendLoading(true);
-      await requestPasswordOtp(email);
-      setError("New OTP sent successfully!");
-      setOtp(new Array(6).fill("")); // Clear OTP input fields
-    } catch (err) {
-      const message = err.response?.data?.error || "Failed to resend OTP.";
-      setError(message);
-    } finally {
-      setResendLoading(false);
-    }
-  };
+    try {
+      setLoading(true);
+      await requestPasswordOtp(email);
+      setStep('otp'); // Move to OTP step on success
+    } catch (err) {
+      const message = err.response?.data?.error || "Failed to send OTP.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
-  // Password Reset Logic 
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  // OTP Verification Logic 
 
-  const handleResetPassword = async () => {
-    setError("");
+  const [otp, setOtp] = useState(new Array(6).fill(""));
+  const [resendLoading, setResendLoading] = useState(false);
+  const inputRefs = useRef([]);
 
-    if (newPassword.length < 6) {
-      return setError("Password must be at least 6 characters.");
-    }
+  const handleOtpChange = (element, index) => {
+    if (isNaN(element.value)) return false;
 
-    if (newPassword !== confirmPassword) {
-      return setError("Passwords do not match.");
-    }
+    const newOtp = [...otp];
+    newOtp[index] = element.value;
+    setOtp(newOtp);
 
-    try {
-      setLoading(true);
-      await resetPassword(email, newPassword); 
-      onResetSuccess(); // Notify LoginPopup to close and show success message
-    } catch (err) {
-      const message = err.response?.data?.message || "Password reset failed.";
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    if (element.value !== "" && index < 5) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
 
-  const renderContent = () => {
-    switch (step) {
-      case 'email':
-        return (
-          <>
-            <Title>Forgot Password</Title>
-            <SubTitle>Enter your email to receive a verification code.</SubTitle>
-            <Label>Email Address</Label>
-            <Input
-              type="email"
-              placeholder="You@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-            <Button disabled={loading} onClick={handleSendOtp}>
-              {loading ? "Sending OTP..." : "Send OTP"}
-            </Button>
-          </>
-        );
+  const handleOtpKeyDown = (e, index) => {
+    if (e.key === "Backspace" && otp[index] === "" && index > 0) {
+      inputRefs.current[index - 1].focus();
+    }
+  };
 
-      case 'otp':
-        return (
-          <>
-            <Title>Verify Code</Title>
-            <SubTitle>A 6-digit code has been sent to {email}</SubTitle>
-            <Label>OTP</Label>
-            <OtpInputsContainer>
-              {otp.map((data, index) => (
-                <OtpInput
-                  key={index}
-                  type="text"
-                  maxLength="1"
-                  value={data}
-                  onChange={(e) => handleOtpChange(e.target, index)}
-                  onKeyDown={(e) => handleOtpKeyDown(e, index)}
-                  ref={(el) => (inputRefs.current[index] = el)}
-                />
-              ))}
-            </OtpInputsContainer>
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-            <Button disabled={loading} onClick={handleVerifyOtp}>
-              {loading ? "Verifying..." : "Verify"}
-            </Button>
-            <ResendText>
-              Didn't receive code? 
-              <span onClick={resendLoading ? null : handleResendOtp}>
-                {resendLoading ? "Sending..." : "Resend OTP"}
-              </span>
-            </ResendText>
-          </>
-        );
+  const handleVerifyOtp = async () => {
+    setError("");
+    const fullOtp = otp.join("");
 
-      case 'reset':
-        return (
-          <>
-            <Title>Set New Password</Title>
-            <SubTitle>Enter a new password for **{email}**</SubTitle>
-            <Label>New Password</Label>
-            <Input
-              type="password"
-              placeholder="New Password (min 6 characters)"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <Label>Confirm Password</Label>
-            <Input
-              type="password"
-              placeholder="Confirm New Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-            <Button disabled={loading} onClick={handleResetPassword}>
-              {loading ? "Confirming..." : "Confirm New Password"}
-            </Button>
-          </>
-        );
+    if (fullOtp.length !== 6) {
+      return setError("Please enter the 6-digit OTP.");
+    }
 
-      default:
-        return null;
-    }
-  };
+    try {
+      setLoading(true);
+      await verifyPasswordOtp(email, fullOtp);
+      setStep('reset'); 
+    } catch (err) {
+      const message = err.response?.data?.error || "OTP verification failed.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  return (
-    <PopupOverlay>
-      <PopupContainer>
-        <CloseButton onClick={onClose}>×</CloseButton>
-        {renderContent()}
-      </PopupContainer>
-    </PopupOverlay>
-  );
+  const handleResendOtp = async () => {
+    setError("");
+    try {
+      setResendLoading(true);
+      await requestPasswordOtp(email);
+      setError("New OTP sent successfully!");
+      setOtp(new Array(6).fill("")); // Clear OTP input fields
+    } catch (err) {
+      const message = err.response?.data?.error || "Failed to resend OTP.";
+      setError(message);
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
+
+  // Password Reset Logic 
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleResetPassword = async () => {
+    setError("");
+
+    if (newPassword.length < 6) {
+      return setError("Password must be at least 6 characters.");
+    }
+
+    if (newPassword !== confirmPassword) {
+      return setError("Passwords do not match.");
+    }
+
+    try {
+      setLoading(true);
+      await resetPassword(email, newPassword); 
+      onResetSuccess(); // Notify LoginPopup to close and show success message
+    } catch (err) {
+      const message = err.response?.data?.message || "Password reset failed.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderContent = () => {
+    switch (step) {
+      case 'email':
+        return (
+          <>
+            <Title>Forgot Password</Title>
+            <SubTitle>Enter your email to receive a verification code.</SubTitle>
+            <Label>Email Address</Label>
+            <Input
+              type="email"
+              placeholder="You@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+            <Button disabled={loading} onClick={handleSendOtp}>
+              {loading ? "Sending OTP..." : "Send OTP"}
+            </Button>
+          </>
+        );
+
+      case 'otp':
+        return (
+          <>
+            <Title>Verify Code</Title>
+            <SubTitle>A 6-digit code has been sent to {email}</SubTitle>
+            <Label>OTP</Label>
+            <OtpInputsContainer>
+              {otp.map((data, index) => (
+                <OtpInput
+                  key={index}
+                  type="text"
+                  maxLength="1"
+                  value={data}
+                  onChange={(e) => handleOtpChange(e.target, index)}
+                  onKeyDown={(e) => handleOtpKeyDown(e, index)}
+                  ref={(el) => (inputRefs.current[index] = el)}
+                />
+              ))}
+            </OtpInputsContainer>
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+            <Button disabled={loading} onClick={handleVerifyOtp}>
+              {loading ? "Verifying..." : "Verify"}
+            </Button>
+            <ResendText>
+              Didn't receive code? 
+              <span onClick={resendLoading ? null : handleResendOtp}>
+                {resendLoading ? "Sending..." : "Resend OTP"}
+              </span>
+            </ResendText>
+          </>
+        );
+
+      case 'reset':
+        return (
+          <>
+            <Title>Set New Password</Title>
+            <SubTitle>Enter a new password for **{email}**</SubTitle>
+            <Label>New Password</Label>
+            <Input
+              type="password"
+              placeholder="New Password (min 6 characters)"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <Label>Confirm Password</Label>
+            <Input
+              type="password"
+              placeholder="Confirm New Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+            <Button disabled={loading} onClick={handleResetPassword}>
+              {loading ? "Confirming..." : "Confirm New Password"}
+            </Button>
+          </>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <PopupOverlay>
+      <PopupContainer>
+        <CloseButton onClick={onClose}>×</CloseButton>
+        {renderContent()}
+      </PopupContainer>
+    </PopupOverlay>
+  );
 }

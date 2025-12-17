@@ -177,7 +177,7 @@ export default function ChangePasswordPopup({ onClose }) {
             // Close the popup after success message is displayed
             setTimeout(() => onClose(), 2500);
 
-        } catch (err) {
+        } catch {
             const message = "Failed to change password. Please check your old password and try again.";
             setError(message);
         } finally {

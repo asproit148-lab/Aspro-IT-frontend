@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import { useNavigate } from "react-router-dom"; 
 import { getInternships } from "../api/job"; 
 import Footer from '../components/Footer';
 

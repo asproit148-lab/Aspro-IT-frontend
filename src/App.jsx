@@ -35,7 +35,7 @@ import ChatbotWidget from "./components/ChatbotWidget";
 
 
 export default function App() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
 
   const LoadingFallback = () => <div style={{ 
       textAlign: 'center', 

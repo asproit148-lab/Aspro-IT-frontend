@@ -111,16 +111,15 @@ const CourseDescription = styled.span`
 `;
 
 const QuestionCount = styled.span`
-    font-size: 14px;
-    font-weight: 500;
-    color: #4CAF50; /* Green */
-    background: rgba(76, 175, 80, 0.2);
-    padding: 2px 8px;
-    border-radius: 4px;
-    display: inline-block; /* Keep it inline-block for its own width */
-    margin-left: 0; /* Remove any previous margin */
-    align-self: flex-start; /* Ensures it is aligned to the left within the flex column */
-    /* Remove the dynamic margin-left from the props */
+    font-size: 14px;
+    font-weight: 500;
+    color: #4CAF50; /* Green */
+    background: rgba(76, 175, 80, 0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block; /* Keep it inline-block for its own width */
+    margin-left: 0; /* Remove any previous margin */
+    align-self: flex-start; /* Ensures it is aligned to the left within the flex column */
 `;
 
 const GetQuestionsButton = styled.button`
@@ -147,31 +146,31 @@ const FallbackText = styled.p`
 `;
 
 export default function PracticeQue() {
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
-  const navigate = useNavigate();
+ const [courses, setCourses] = useState([]);
+ const [loading, setLoading] = useState(true);
+ const [isMobile, setIsMobile] = useState(false);
+ const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < desktopBreakpoint);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+ useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < desktopBreakpoint);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  useEffect(() => {
-    const fetchCoursesAndCounts = async () => {
-      try {
-        // 1. Fetch all courses
-        const coursesRes = await getAllCourses();
-        let courseData = Array.isArray(coursesRes.courses) ? coursesRes.courses : (Array.isArray(coursesRes) ? coursesRes : []);
+  useEffect(() => {
+    const fetchCoursesAndCounts = async () => {
+      try {
+        // 1. Fetch all courses
+        const coursesRes = await getAllCourses();
+        let courseData = Array.isArray(coursesRes.courses) ? coursesRes.courses : (Array.isArray(coursesRes) ? coursesRes : []);
         courseData = courseData.filter(c => c.Course_title);
         
         // 2. Fetch ALL questions
-        const questionsRes = await getAllQuestions();
-        const allQuestions = Array.isArray(questionsRes) ? questionsRes : (Array.isArray(questionsRes.questions) ? questionsRes.questions : []);
+        const questionsRes = await getAllQuestions();
+        const allQuestions = Array.isArray(questionsRes) ? questionsRes : (Array.isArray(questionsRes.questions) ? questionsRes.questions : []);
 
         // =============== START DEBUG LOGGING ===============
         console.log("--- DEBUG START ---");
@@ -197,68 +196,68 @@ export default function PracticeQue() {
         // =============== END DEBUG LOGGING ===============
 
 
-        // 3. Calculate counts on the frontend
-        const countMap = allQuestions.reduce((acc, question) => {
-            const categoryId = question.category; 
-            acc[categoryId] = (acc[categoryId] || 0) + 1;
-            return acc;
-        }, {});
-        
-        // 4. Merge counts into course data - FIX IS HERE
-        const coursesWithCount = courseData.map(course => ({
-            ...course,
-            // This line is the focus of the mismatch
-            questionCount: countMap[course._id.toString()] || 0 
-        }));
+        // 3. Calculate counts on the frontend
+        const countMap = allQuestions.reduce((acc, question) => {
+          const categoryId = question.category; 
+          acc[categoryId] = (acc[categoryId] || 0) + 1;
+          return acc;
+        }, {});
+   
+        // 4. Merge counts into course data - FIX IS HERE
+        const coursesWithCount = courseData.map(course => ({
+          ...course,
+          // This line is the focus of the mismatch
+          questionCount: countMap[course._id.toString()] || 0 
+        }));
 
-        setCourses(coursesWithCount);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setCourses([]); 
-      } finally {
-        setLoading(false);
-      }
-    };
+        setCourses(coursesWithCount);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setCourses([]); 
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    fetchCoursesAndCounts();
-  }, []);
+    fetchCoursesAndCounts();
+  }, []);
 
-  const handleGetQuestions = (course) => {
-    // Navigate only if there are questions available
+  const handleGetQuestions = (course) => {
+    // Navigate only if there are questions available
     if (course.questionCount > 0) {
         navigate(`/practice-questions/${slugify(course.Course_title)}/${course._id}`);
     }
-  };
+  };
 
-  const goBack = () => {
-    window.history.back();
-  };
+  const goBack = () => {
+    window.history.back();
+  };
 
-  return (
-    <PageContainer>
-      <Header />
+  return (
+    <PageContainer>
+      <Header />
 
-      <MainContent $isMobile={isMobile}>
+      <MainContent $isMobile={isMobile}>
 
-        <ContentHeader $isMobile={isMobile}>
-          <BackButton onClick={goBack} $isMobile={isMobile}>
-            <ChevronLeft size={isMobile ? 24 : 32} />
-          </BackButton>
-          <Heading $isMobile={isMobile}>
-            Practice Questions
-          </Heading>
-        </ContentHeader>
+        <ContentHeader $isMobile={isMobile}>
+          <BackButton onClick={goBack} $isMobile={isMobile}>
+            <ChevronLeft size={isMobile ? 24 : 32} />
+          </BackButton>
+          <Heading $isMobile={isMobile}>
+            Practice Questions
+          </Heading>
+        </ContentHeader>
 
 
-        <QuestionsListContainer $isMobile={isMobile}>
-          {loading ? (
-            <FallbackText $isMobile={isMobile}>Loading available courses...</FallbackText>
-          ) : courses.length === 0 ? (
-            <FallbackText $isMobile={isMobile}>No Courses available for practice questions.</FallbackText>
-          ) : (
-            courses.map((course) => (
-              <CourseItem key={course._id} $isMobile={isMobile}>
-                <TitleContainer $isMobile={isMobile}>
+        <QuestionsListContainer $isMobile={isMobile}>
+          {loading ? (
+            <FallbackText $isMobile={isMobile}>Loading available courses...</FallbackText>
+          ) : courses.length === 0 ? (
+            <FallbackText $isMobile={isMobile}>No Courses available for practice questions.</FallbackText>
+          ) : (
+            courses.map((course) => (
+              <CourseItem key={course._id} $isMobile={isMobile}>
+                <TitleContainer $isMobile={isMobile}>
     <CourseTitle>
         {course.Course_title}
     </CourseTitle>
@@ -271,20 +270,20 @@ export default function PracticeQue() {
     )}
 </TitleContainer> 
 
-                <GetQuestionsButton
-                  onClick={() => handleGetQuestions(course)}
-                  $isMobile={isMobile}
+              <GetQuestionsButton
+                onClick={() => handleGetQuestions(course)}
+                $isMobile={isMobile}
                     disabled={course.questionCount === 0}
                     style={{ opacity: course.questionCount === 0 ? 0.5 : 1, cursor: course.questionCount === 0 ? 'not-allowed' : 'pointer' }}
-                >
-                  {course.questionCount === 0 ? 'No Questions' : 'Get Questions'}
-                </GetQuestionsButton>
-              </CourseItem>
-            ))
-          )}
-        </QuestionsListContainer>
-      </MainContent>
-      <Footer/>
-    </PageContainer>
-  );
+               >
+                  {course.questionCount === 0 ? 'No Questions' : 'Get Questions'}
+                </GetQuestionsButton>
+            </CourseItem>
+            ))
+           )}
+        </QuestionsListContainer>
+      </MainContent>
+      <Footer/>
+    </PageContainer>
+  );
 }

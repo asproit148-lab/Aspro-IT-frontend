@@ -1,4 +1,4 @@
-// src/context/AuthContext.jsx
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import * as authApi from "../api/auth";
 
@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       const data = await authApi.getUserInfo();
       setUser(data?.user ?? null);
-    } catch (err) {
+    } catch {
       setUser(null);
     } finally {
       setLoading(false);
@@ -24,7 +24,6 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, [loadUser]);
 
-  // Sign in using email/password
   const signIn = async ({ email, password }) => {
     try {
       const user = await authApi.loginUser({ email, password });
@@ -38,7 +37,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Sign out
   const signOut = async () => {
     try {
       await authApi.logoutUser();
@@ -50,7 +48,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Google login
   const signInWithGoogle = async (token) => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/google`, {
@@ -88,4 +85,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// This hook is what triggers the warning, but we disabled it at the top of the file
 export const useAuth = () => useContext(AuthContext);

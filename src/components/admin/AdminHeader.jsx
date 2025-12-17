@@ -161,21 +161,21 @@ export default function AdminHeader() {
 
     // --- RESPONSIVE & CLICK EFFECTS ---
     useEffect(() => {
-        const handleResize = () => {
-            const mobile = window.innerWidth < mobileBreakpoint;
-            setIsMobile(mobile);
-            if (!mobile && showMobileNav) setShowMobileNav(false);
-        };
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, [showMobileNav]);
+  const handleResize = () => {
+    const mobile = window.innerWidth < mobileBreakpoint;
+    setIsMobile(mobile);
+    if (!mobile && showMobileNav) setShowMobileNav(false);
+  };
+  handleResize();
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, [showMobileNav]);
 
-    useEffect(() => {
-        if (showMobileNav && isMobile) setShowMobileNav(false);
-        setShowDropdown(false);
-        setShowChangePasswordPopup(false); 
-    }, [location.pathname, isMobile]);
+useEffect(() => {
+  if (showMobileNav) setShowMobileNav(false);
+  setShowDropdown(false);
+  setShowChangePasswordPopup(false);
+}, [location.pathname, isMobile, showMobileNav]); // Added showMobileNav to satisfy dependency rules
 
     useEffect(() => {
         const handleClickOutside = (event) => {

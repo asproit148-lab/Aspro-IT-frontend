@@ -1,5 +1,5 @@
 // src/pages/Courses.jsx
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { getAllCourses } from "../api/course";
 import Header from '../components/Header';
@@ -16,7 +16,7 @@ const debounce = (fn, delay) => {
   };
 };
 
-const CourseCard = ({ course, navigate, isMobile, handleBuyNow, handleViewDetails }) => (
+const CourseCard = ({ course, isMobile, handleBuyNow, handleViewDetails }) => (
   <Link
     key={course._id}
     to={`/courses/${slugify(course.Course_title)}/${course._id}`}
@@ -261,8 +261,6 @@ export default function Courses() {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
   const [courseList, setCourseList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // --- Utility Functions ---
   const handleBuyNow = useCallback((e, course) => {
@@ -280,10 +278,7 @@ export default function Courses() {
     });
   }, [navigate]);
 
-  const handleViewDetails = useCallback((e, course) => {
-    // This handler is not strictly needed on the <Link/> component since the Link's default behavior handles navigation, 
-    // but it's kept for consistency and if you were to use it on a button.
-    // However, the <Link> element already handles the primary navigation.
+  const handleViewDetails = useCallback((e,) => {
     e.stopPropagation();
   }, []);
   
@@ -292,18 +287,12 @@ export default function Courses() {
   // API Fetch
   useEffect(() => {
     async function loadCourses() {
-      setLoading(true);
       try {
         const response = await getAllCourses();
-        // Assuming response.courses is the array of courses
-        setCourseList(response.courses);
-        setError(null);
+        setCourseList(response.courses || []);
       } catch (err) {
         console.error("Failed to fetch courses:", err);
-        setError("Failed to load courses. Please try again later.");
         setCourseList([]);
-      } finally {
-        setLoading(false);
       }
     }
     loadCourses();
@@ -372,7 +361,6 @@ export default function Courses() {
               <CourseCard 
                 key={course._id}
                 course={course}
-                navigate={navigate}
                 isMobile={isMobile}
                 handleBuyNow={handleBuyNow}
                 handleViewDetails={handleViewDetails}

@@ -13,7 +13,7 @@ const SERVER_URL =
 const mobileBreakpoint = 768;
 
 export default function BlogPage() {
-  const { slug, id } = useParams(); 
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -46,7 +46,7 @@ export default function BlogPage() {
         setBlog(null);
       }
     })();
-  }, [slug]);
+  }, [id]);
 
   if (!blog) {
     return (

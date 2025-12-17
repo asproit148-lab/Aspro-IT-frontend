@@ -283,7 +283,6 @@ export default function CourseModule({ skills, modules, faqs, learnings }) {
                             width: isMobile ? "100%" : "300px", 
                             maxWidth: "350px", 
                             minHeight: "240px",
-                            background: "#101010",
                             borderRadius: "24px",
                             border: "3px solid transparent",
                             background:
@@ -356,7 +355,6 @@ export default function CourseModule({ skills, modules, faqs, learnings }) {
                             width: isMobile ? "100%" : "300px", 
                             maxWidth: "350px", // Added max width for mobile constraint
                             minHeight: "240px",
-                            background: "#101010",
                             borderRadius: "24px",
                             border: "3px solid transparent",
                             background:
