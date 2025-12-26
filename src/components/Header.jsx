@@ -482,7 +482,7 @@ useEffect(() => {
                       .map((course, index, arr) => (
                         <DropdownItem
                           key={course._id}
-                          to={`/courses/${slugify(course.Course_title)}/${course._id}`}
+                          to={`/courses/${slugify(course.Course_title)}`} state={{ id: course._id }}
                           onClick={handleLinkClick}
                           $isMobile={false}
                           $index={index}

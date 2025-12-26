@@ -19,7 +19,8 @@ const debounce = (fn, delay) => {
 const CourseCard = ({ course, isMobile, handleBuyNow, handleViewDetails }) => (
   <Link
     key={course._id}
-    to={`/courses/${slugify(course.Course_title)}/${course._id}`}
+
+    to={`/courses/${slugify(course.Course_title)}`} state={{ id: course._id }}
     onClick={(e) => handleViewDetails(e, course)} // Use the generic details handler
     style={{
       flexShrink: isMobile ? 0 : 1,
@@ -278,10 +279,15 @@ export default function Courses() {
     });
   }, [navigate]);
 
-  const handleViewDetails = useCallback((e,) => {
-    e.stopPropagation();
-  }, []);
-  
+ const handleViewDetails = useCallback((e, course) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  navigate(`/courses/${slugify(course.Course_title)}`, {
+    state: { id: course._id }
+  });
+}, [navigate]);
+
   // --- Effects ---
 
   // API Fetch

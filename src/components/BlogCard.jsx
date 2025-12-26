@@ -115,7 +115,7 @@ export default function BlogCard() {
         {blogs.map((blog) => (
           <div
             key={blog._id}
-            onClick={() => navigate(`/blogs/${blog.slug}/${blog._id}`)}
+            onClick={() => navigate(`/blogs/${blog.slug}`, { state: { id: blog._id } })}
             style={blogCardStyle}
           >
             <img

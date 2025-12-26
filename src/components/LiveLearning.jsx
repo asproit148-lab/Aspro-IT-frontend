@@ -70,7 +70,8 @@ export default function LiveLearning() {
     e.preventDefault(); 
     e.stopPropagation(); 
 
-    navigate(`/courses/${slugify(course.Course_title)}/${course._id}`);
+    navigate(`/courses/${slugify(course.Course_title)}`, {
+  state: { id: course._id }});
   }, [navigate]);
 
 

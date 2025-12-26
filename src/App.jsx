@@ -79,7 +79,7 @@ export default function App() {
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/our-services" element={<Services />} />
                 <Route path="/blogs" element={<Blogs />} />
-                <Route path="/blogs/:slug/:id" element={<BlogPage />} />
+                <Route path="/blogs/:slug" element={<BlogPage />} />
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/certificates" element={<Certificates />} />
                 <Route path="/practice-questions" element={<PracticeQue />} />
@@ -88,7 +88,7 @@ export default function App() {
                 <Route path="/jobs" element={<Jobs />} />
                 <Route path="/internships" element={<Internships />} />
                 <Route path="/courses-all" element={<Courses />} />
-                <Route path="/courses/:slug/:id" element={<CourseDetails />} />
+                <Route path="/courses/:slug" element={<CourseDetails />} />
                 <Route path="/courses/enrollment" element={<Enrollment />} />
                 <Route path="/courses/enrollment-successful" element={<ConfirmedEnroll />} />
                 <Route path="/courses/payment-failed" element={<PaymentFail />} />

@@ -277,8 +277,8 @@ export default function Footer() {
           <ColumnHeading>AsproIT</ColumnHeading>
           {[
             {name:"Home", link:"/"},
-            {name:"Courses", link:"/courses"},
-            {name:"About", link:"/about"},
+            {name:"Courses", link:"/courses-all"},
+            {name:"About", link:"/about-us"},
             {name:"Contact", link:"/contact"},
           ].map((item,i)=>(
             <FooterLink to={item.link} key={i}> 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import IndividualBlog from "../components/IndividualBlog"; // 🔥 REQUIRED IMPORT
 import { getBlog } from "../api/blog";
@@ -13,7 +13,10 @@ const SERVER_URL =
 const mobileBreakpoint = 768;
 
 export default function BlogPage() {
-  const { id } = useParams(); 
+  const { slug } = useParams(); 
+  const location = useLocation();
+  const id  = location.state?.id;
+   
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);

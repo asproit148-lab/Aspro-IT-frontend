@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation} from "react-router-dom";
 import CourseInfo from "../components/courses/CourseInfo";
 import CourseHeader from "../components/courses/CourseHeader";
 import CourseModule from "../components/courses/CourseModule";
 import CourseFooter from "../components/courses/CourseFooter";
 import { getCourseById } from "../api/course";
 
+
 export default function CourseDetails() {
-  const { slug, id } = useParams(); 
+  const { slug } = useParams(); 
+  const location = useLocation();
+  const id  = location.state?.id;
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
